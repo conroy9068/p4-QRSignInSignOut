@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Button to Open the Modal -->
+<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createLocationModal">
+    Create New Location
+</button>
+
+<h2>Locations</h2>
+<ul>
+    {% for location in locations %}
+    <li>{{ location.name }}</li>
+    {% endfor %}
+</ul>
+
+<!-- The Modal -->
+<div class="modal" id="createLocationModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Location</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="createLocationForm">
+                    <!-- Your form fields here. For example: -->
+                    <input type="text" id="locationName" placeholder="Location Name">
+                    <!-- ... -->
+                </form>
+            </div>
+
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="createLocation()">Create</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+<script>
+    function createLocation() {
+        // Handle form submission logic here
+        // For example, you could use AJAX to send the form data to your Django view
+
+        // Close the modal
+        $("#createLocationModal").modal('hide');
+    }
+</script>
+
+{% endblock %}

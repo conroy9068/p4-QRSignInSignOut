@@ -25,3 +25,8 @@ def sign_out(request, register_id):
         register_entry.save()
         return redirect('location_list')
     return render(request, 'register_app/sign_out.html')
+
+@login_required
+def location_list(request):
+    locations = Location.objects.all()
+    return render(request, 'location_list.html', {'locations': locations})

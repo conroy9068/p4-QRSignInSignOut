@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from .models import Location, SignInOutRegister
 from django.utils import timezone
+from django.http import JsonResponse
+from .forms import LocationForm
 # Create your views here.
 
 
@@ -30,3 +32,14 @@ def sign_out(request, register_id):
 def location_list(request):
     locations = Location.objects.all()
     return render(request, 'location_list.html', {'locations': locations})
+
+def create_location(request):
+    if request.method == 'POST':
+        form = LocationForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return JsonResponse({'status': 'success'})
+        else:
+            return JsonResponse({'status': 'error', 'errors': form.errors})
+    return JsonResponse({'status': 'error'})
+

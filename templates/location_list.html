@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 
+{% load static %}
+
 {% block content %}
 <!-- Button to Open the Modal -->
 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#createLocationModal">
@@ -12,6 +14,7 @@
     <li>{{ location.name }}</li>
     {% endfor %}
 </ul>
+
 
 <!-- The Modal -->
 <div class="modal" id="createLocationModal">
@@ -27,9 +30,10 @@
             <!-- Modal body -->
             <div class="modal-body">
                 <form id="createLocationForm">
-                    <!-- Your form fields here. For example: -->
+                    {% csrf_token %}
                     <input type="text" id="locationName" placeholder="Location Name">
-                    <!-- ... -->
+                    <input type="text" id="locationAddress" placeholder="Address">
+                    <input type="text" id="locationDescription" placeholder="Description">
                 </form>
             </div>
 
@@ -43,10 +47,25 @@
     </div>
 </div>
 
+
+
 <script>
 
 function createLocation() {
     $("#createLocationModal").modal('hide');
+}
+
+function createLocation() {
+    var name = $("#locationName").val();
+    var address = $("#locationAddress").val();
+    var description = $("#locationDescription").val();
+    $.post("/create_location/", {name: name, address: address, description: description, csrfmiddlewaretoken: '{{ csrf_token }}'}, function(data){
+        if (data.status === 'success') {
+            location.reload();
+        } else {
+            alert("Error: " + data.errors);
+        }
+    });
 }
 
 </script>

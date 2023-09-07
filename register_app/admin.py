@@ -1,10 +1,12 @@
 from django.contrib import admin
 from .models import Location, SignInOutRegister
 
-# Register your models here.
+
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):
-    list_display = ['name', 'address', 'description']
+    list_display = ('name', 'address', 'is_active') 
+    list_editable = ('is_active',) 
+
 
 # Register the SignInOutRegister model
 @admin.register(SignInOutRegister)

@@ -9,7 +9,7 @@ from .forms import LocationForm
 
 @login_required
 def location_list(request):
-    locations = Location.objects.all()
+    locations = Location.objects.filter(is_active=True)
     return render(request, 'register_app/location_list.html', {'locations': locations})
 
 @login_required
@@ -28,11 +28,6 @@ def sign_out(request, register_id):
         return redirect('location_list')
     return render(request, 'register_app/sign_out.html')
 
-@login_required
-def location_list(request):
-    locations = Location.objects.all()
-    return render(request, 'location_list.html', {'locations': locations})
-
 def create_location(request):
     if request.method == 'POST':
         form = LocationForm(request.POST)
@@ -43,3 +38,13 @@ def create_location(request):
             return JsonResponse({'status': 'error', 'errors': form.errors})
     return JsonResponse({'status': 'error'})
 
+def register(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('location_list')
+    else:
+        form = UserCreationForm()
+    return render(request, 'register_app/register.html', {'form': form})

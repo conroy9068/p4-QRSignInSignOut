@@ -7,6 +7,8 @@ from .forms import LocationForm
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
+from django.contrib.auth import login
+from django.contrib.auth.forms import UserCreationForm
 
 # Create your views here.
 
@@ -19,6 +21,8 @@ def add_to_group(sender, instance, created, **kwargs):
 
 def is_admin(user):
     return user.is_superuser or user.is_staff
+
+post_save.connect(add_to_group, sender=User)
 
 @user_passes_test(is_admin, login_url='/no_access/')
 @login_required
@@ -45,6 +49,7 @@ def sign_out(request, register_id):
         return redirect('location_list')
     return render(request, 'register_app/sign_out.html')
 
+@login_required
 def create_location(request):
     if request.method == 'POST':
         form = LocationForm(request.POST)

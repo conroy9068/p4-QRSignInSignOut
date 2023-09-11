@@ -80,6 +80,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'QRCodeRegister.wsgi.application'
 
+LOGIN_REDIRECT_URL = '/dashboard/'
+
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1>Your Dashboard</h1>
+    {% if current_signin %}
+        <h2>Current Sign-in</h2>
+        <p>Location: {{ current_signin.location.name }}</p>
+        <p>Sign-in Time: {{ current_signin.sign_in_time }}</p>
+    {% else %}
+        <p>You are currently not signed in.</p>
+    {% endif %}
+
+    <h2>Past Sign-ins</h2>
+    <ul>
+    {% for signin in past_signins %}
+        <li>
+            Location: {{ signin.location.name }},
+            Sign-in Time: {{ signin.sign_in_time }},
+            Sign-out Time: {{ signin.sign_out_time }}
+        </li>
+    {% endfor %}
+    </ul>
+{% endblock %}

@@ -50,6 +50,17 @@ def sign_out(request, register_id):
     return render(request, 'register_app/sign_out.html')
 
 @login_required
+def user_dashboard(request):
+    current_signin = SignInOutRegister.objects.filter(user=request.user, sign_out_time__isnull=True).first()
+    past_signins = SignInOutRegister.objects.filter(user=request.user, sign_out_time__isnull=False).order_by('-sign_in_time')
+
+    context = {
+        'current_signin': current_signin,
+        'past_signins': past_signins,
+    }
+    return render(request, 'register_app/user_dashboard.html', context)
+
+@login_required
 def create_location(request):
     if request.method == 'POST':
         form = LocationForm(request.POST)

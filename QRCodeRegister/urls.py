@@ -28,5 +28,7 @@ urlpatterns = [
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='passwordChangeDone'),
     path('register/', register_views.register, name='register'),
     path('', include('register_app.urls')), 
+    path('dashboard/', register_views.user_dashboard, name='user_dashboard'),
+
 ]
 

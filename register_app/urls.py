@@ -6,5 +6,5 @@ urlpatterns = [
     path('sign_in/<int:location_id>/', views.sign_in, name='sign_in'),
     path('sign_out/<int:register_id>/', views.sign_out, name='sign_out'),
     path('create_location/', views.create_location, name='create_location'),
-
+    path('no_access/', views.no_access, name='no_access'),
 ]

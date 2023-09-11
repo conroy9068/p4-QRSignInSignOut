@@ -22,8 +22,8 @@ from register_app import views as register_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', auth_views.LoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(), name='logout'),
+    path('login/', auth_views.LoginView.as_view(template_name='register_app/login.html'), name='login'),
+    path('logout/', auth_views.LogoutView.as_view( template_name='register_app/logout.html'), name='logout'),
     path('password_change/', auth_views.PasswordChangeView.as_view(), name='passwordChangeForm'),
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='passwordChangeDone'),
     path('register/', register_views.register, name='register'),

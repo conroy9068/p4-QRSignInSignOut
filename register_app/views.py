@@ -4,13 +4,30 @@ from .models import Location, SignInOutRegister
 from django.utils import timezone
 from django.http import JsonResponse
 from .forms import LocationForm
+from django.contrib.auth.decorators import user_passes_test
+from django.db.models.signals import post_save
+from django.contrib.auth.models import User, Group
+
 # Create your views here.
 
+def add_to_group(sender, instance, created, **kwargs):
+    if created:
+        if instance.is_superuser or instance.is_staff:
+            instance.groups.add(Group.objects.get(name='Admin'))
+        else:
+            instance.groups.add(Group.objects.get(name='External User'))
 
+def is_admin(user):
+    return user.is_superuser or user.is_staff
+
+@user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def location_list(request):
     locations = Location.objects.filter(is_active=True)
     return render(request, 'register_app/location_list.html', {'locations': locations})
+
+def no_access(request):
+    return render(request, 'register_app/no_access.html')
 
 @login_required
 def sign_in(request, location_id):

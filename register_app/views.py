@@ -9,6 +9,8 @@ from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
+from .forms import UserUpdateForm
+
 
 # Create your views here.
 
@@ -33,6 +35,8 @@ def location_list(request):
 def no_access(request):
     return render(request, 'register_app/no_access.html')
 
+
+# Sign in and sign out views
 @login_required
 def sign_in(request, location_id):
     if request.method == "POST":
@@ -49,6 +53,8 @@ def sign_out(request, register_id):
         return redirect('location_list')
     return render(request, 'register_app/sign_out.html')
 
+
+# User dashboard and profile views
 @login_required
 def user_dashboard(request):
     current_signin = SignInOutRegister.objects.filter(user=request.user, sign_out_time__isnull=True).first()
@@ -60,6 +66,21 @@ def user_dashboard(request):
     }
     return render(request, 'register_app/user_dashboard.html', context)
 
+@login_required
+def edit_profile(request):
+    if request.method == 'POST':
+        form = UserUpdateForm(request.POST, instance=request.user)
+        
+        if form.is_valid():
+            form.save()
+            return redirect('user_dashboard')
+    else:
+        form = UserUpdateForm(instance=request.user)
+        
+    return render(request, 'register_app/edit_profile.html', {'form': form})
+
+
+# Location views
 @login_required
 def create_location(request):
     if request.method == 'POST':

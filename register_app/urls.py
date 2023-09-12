@@ -7,4 +7,6 @@ urlpatterns = [
     path('sign_out/<int:register_id>/', views.sign_out, name='sign_out'),
     path('create_location/', views.create_location, name='create_location'),
     path('no_access/', views.no_access, name='no_access'),
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
+
 ]

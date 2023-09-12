@@ -18,8 +18,13 @@ from django.contrib import admin
 from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from register_app import views as register_views
+from django.conf import settings
+from django.urls import include, path  # For django versions from 2.0 and up
+import debug_toolbar
 
 urlpatterns = [
+    path('__debug__/', include(debug_toolbar.urls)),
+
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(template_name='register_app/login.html'), name='login'),
     path('logout/', auth_views.LogoutView.as_view(template_name='register_app/logout.html'), name='logout'),

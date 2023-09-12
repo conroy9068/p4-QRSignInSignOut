@@ -80,7 +80,11 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'QRCodeRegister.wsgi.application'
 
+# Login redirect url
 LOGIN_REDIRECT_URL = '/dashboard/'
+
+# Console email backend testing locally
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 
 # Database

@@ -21,6 +21,8 @@ from register_app import views as register_views
 from django.conf import settings
 from django.urls import include, path  # For django versions from 2.0 and up
 import debug_toolbar
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('__debug__/', include(debug_toolbar.urls)),
@@ -40,3 +42,5 @@ urlpatterns = [
     path('reset/done/', auth_views.PasswordResetCompleteView.as_view(), name='password_reset_complete'),
 ]
 
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

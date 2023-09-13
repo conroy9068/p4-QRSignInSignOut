@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 
+import os
 from pathlib import Path
 import django
 print("Django version:", django.get_version())
@@ -91,6 +92,11 @@ LOGIN_REDIRECT_URL = '/dashboard/'
 # Console email backend testing locally
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
+# Debug toolbar settings
 DEBUG_TOOLBAR_PANELS = [
     'debug_toolbar.panels.versions.VersionsPanel',
     'debug_toolbar.panels.timer.TimerPanel',

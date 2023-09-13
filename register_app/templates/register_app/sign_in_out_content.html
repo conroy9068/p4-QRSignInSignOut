@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-target="#signinout-section" hx-swap="outerHTML">
+    {% csrf_token %}
+    <div id="signinout-section">
+        <h2>{{ location.name }}</h2>
+        <p>{{ location.description }}</p>
+        {% if not current_signin %}
+        <button type="submit" class="btn btn-primary">Clock In</button>
+        {% else %}
+        <button type="submit" class="btn btn-danger">Clock Out</button>
+        {% endif %}
+    </div>
+</form>
+{% endblock %}

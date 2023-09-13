@@ -121,15 +121,11 @@ def generate_qr_code(sender, instance, created, **kwargs):
         img = qr.make_image(fill='black', back_color='white')
         img_path = os.path.join(settings.BASE_DIR, f"media/qr_codes/{instance.id}.png")
         directory = os.path.dirname(img_path)
-        # if not os.path.exists(directory):
-        #     os.makedirs(directory)
         img.save(img_path)
         instance.qr_code = img_path
         instance.save()
-        with open(img_path, 'rb') as f:
-            instance.qr_code.save(f"qr_codes/{instance.id}.png", File(f))
 
-
+# QR code view
 def view_qr_code(request, location_id):
     location = Location.objects.get(id=location_id)
     qr = qrcode.QRCode(version=1, box_size=10, border=5)

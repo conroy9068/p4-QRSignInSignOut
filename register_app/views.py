@@ -48,22 +48,22 @@ def no_access(request):
 @login_required
 def sign_in_out_view(request, location_id):
     location = get_object_or_404(Location, id=location_id)
-    current_signin = SignInOutRegister.objects.filter(user=request.user, location=location, sign_out_time__isnull=True).first()
-
+    
+    current_signin = SignInOutRegister.objects.filter(user=request.user, location_id=location_id, sign_out_time__isnull=True).first()
     if request.method == "POST":
-        if current_signin:
-            # Clock out
+        if not current_signin:
+            # Clock in the user
+            SignInOutRegister.objects.create(user=request.user, location=location, sign_in_time=timezone.now())
+            return redirect('user_dashboard') 
+        else:
+            # Clock out the user
             current_signin.sign_out_time = timezone.now()
             current_signin.save()
-            return redirect('user_dashboard')  # or wherever you want to redirect after clocking out
-        else:
-            # Clock in
-            SignInOutRegister.objects.create(user=request.user, location=location, sign_in_time=timezone.now())
-            return redirect('user_dashboard')  # or wherever you want to redirect after clocking in
+            return redirect('user_dashboard')
 
     context = {
         'location': location,
-        'current_signin': current_signin
+        'current_signin': current_signin,
     }
     return render(request, 'register_app/sign_in_out.html', context)
 

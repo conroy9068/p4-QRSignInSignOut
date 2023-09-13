@@ -10,6 +10,10 @@ from django.contrib.auth.models import User, Group
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserUpdateForm
+import qrcode
+from django.dispatch import receiver
+from django.http import HttpResponse
+
 
 
 # Create your views here.
@@ -86,7 +90,7 @@ def create_location(request):
     if request.method == 'POST':
         form = LocationForm(request.POST)
         if form.is_valid():
-            form.save()
+            form.save()  
             return JsonResponse({'status': 'success'})
         else:
             return JsonResponse({'status': 'error', 'errors': form.errors})
@@ -102,3 +106,31 @@ def register(request):
     else:
         form = UserCreationForm()
     return render(request, 'register_app/register.html', {'form': form})
+
+# QR code generation
+@receiver(post_save, sender=Location)
+def generate_qr_code(sender, instance, created, **kwargs):
+    if created:
+        qr = qrcode.QRCode(version=1, box_size=10, border=5)
+        url = f"http://127.0.0.0/sign_in/{instance.id}/"
+        qr.add_data(url)
+        qr.make(fit=True)
+        img = qr.make_image(fill='black', back_color='white')
+        img_path = f"qr_codes/{instance.id}.png"
+        img.save(img_path)
+        instance.qr_code = img_path
+        instance.save()
+
+
+def generate_qr_code(request, location_id):
+    location = Location.objects.get(id=location_id)
+    qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    url = f"http://127.0.0.0/sign_in/{location.id}/"
+    qr.add_data(url)
+    qr.make(fit=True)
+    img = qr.make_image(fill='black', back_color='white')
+    
+    response = HttpResponse(content_type="image/png")
+    img.save(response, "PNG")
+    return response
+

@@ -7,6 +7,8 @@ class Location(models.Model):
     address = models.TextField()
     description = models.TextField()
     is_active = models.BooleanField(default=True)
+    qr_code = models.FileField(upload_to='qr_codes/', null=True, blank=True)
+
 
     def __str__(self):
         return self.name

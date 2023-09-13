@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h1>{{ location.name }}</h1>
+    <p>{{ location.description }}</p>
+
+    {% if current_signin %}
+        <button type="submit">Clock Out</button>
+    {% else %}
+        <button type="submit">Clock In</button>
+    {% endif %}
+{% endblock %}

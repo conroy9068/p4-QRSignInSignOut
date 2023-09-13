@@ -15,6 +15,7 @@ from django.dispatch import receiver
 from django.http import HttpResponse
 from django.core.files import File
 from django.conf import settings
+from django.shortcuts import get_object_or_404
 import os
 
 
@@ -45,20 +46,42 @@ def no_access(request):
 
 # Sign in and sign out views
 @login_required
-def sign_in(request, location_id):
-    if request.method == "POST":
-        SignInOutRegister.objects.create(user=request.user, location_id=location_id, sign_in_time=timezone.now())
-        return redirect('location_list')
-    return render(request, 'register_app/login.html')
+def sign_in_out_view(request, location_id):
+    location = get_object_or_404(Location, id=location_id)
+    current_signin = SignInOutRegister.objects.filter(user=request.user, location=location, sign_out_time__isnull=True).first()
 
-@login_required
-def sign_out(request, register_id):
     if request.method == "POST":
-        register_entry = SignInOutRegister.objects.get(id=register_id)
-        register_entry.sign_out_time = timezone.now()
-        register_entry.save()
-        return redirect('location_list')
-    return render(request, 'register_app/sign_out.html')
+        if current_signin:
+            # Clock out
+            current_signin.sign_out_time = timezone.now()
+            current_signin.save()
+            return redirect('user_dashboard')  # or wherever you want to redirect after clocking out
+        else:
+            # Clock in
+            SignInOutRegister.objects.create(user=request.user, location=location, sign_in_time=timezone.now())
+            return redirect('user_dashboard')  # or wherever you want to redirect after clocking in
+
+    context = {
+        'location': location,
+        'current_signin': current_signin
+    }
+    return render(request, 'register_app/sign_in_out.html', context)
+
+# @login_required
+# def sign_in(request, location_id):
+#     if request.method == "POST":
+#         SignInOutRegister.objects.create(user=request.user, location_id=location_id, sign_in_time=timezone.now())
+#         return redirect('location_list')
+#     return render(request, 'register_app/login.html')
+
+# @login_required
+# def sign_out(request, register_id):
+#     if request.method == "POST":
+#         register_entry = SignInOutRegister.objects.get(id=register_id)
+#         register_entry.sign_out_time = timezone.now()
+#         register_entry.save()
+#         return redirect('location_list')
+#     return render(request, 'register_app/sign_out.html')
 
 
 # User dashboard and profile views

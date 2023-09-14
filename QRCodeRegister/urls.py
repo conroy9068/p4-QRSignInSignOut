@@ -19,7 +19,7 @@ from django.urls import path, include
 from django.contrib.auth import views as auth_views
 from register_app import views as register_views
 from django.conf import settings
-from django.urls import include, path  # For django versions from 2.0 and up
+from django.urls import include, path
 import debug_toolbar
 from django.conf import settings
 from django.conf.urls.static import static

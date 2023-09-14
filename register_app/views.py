@@ -16,6 +16,7 @@ from django.http import HttpResponse
 from django.core.files import File
 from django.conf import settings
 from django.shortcuts import get_object_or_404
+from datetime import datetime, time
 import os
 
 
@@ -52,25 +53,27 @@ def sign_in_out_view(request, location_id):
 
     if request.method == "POST":
         if not current_signin:
-            # Clock in the user
             SignInOutRegister.objects.create(user=request.user, location=location, sign_in_time=timezone.now())
+            current_signin = SignInOutRegister.objects.filter(user=request.user, location_id=location_id, sign_out_time__isnull=True).first()
         else:
-            # Clock out the user
             current_signin.sign_out_time = timezone.now()
             current_signin.save()
+            current_signin = None  
+
+    today_min = datetime.combine(datetime.today(), time.min)
+    today_max = datetime.combine(datetime.today(), time.max)
+    todays_signins = SignInOutRegister.objects.filter(user=request.user, sign_in_time__range=(today_min, today_max))
 
     context = {
         'location': location,
         'current_signin': current_signin,
+        'todays_signins': todays_signins
     }
     
-    # Check if it's an AJAX request by htmx
-    if request.headers.get('HX-Request'):
-        template_name = 'register_app/sign_in_out_content.html'
+    if 'HTTP_HX_REQUEST' in request.META:
+        return render(request, 'register_app/sign_in_out_content.html', context)
     else:
-        template_name = 'register_app/sign_in_out.html'
-
-    return render(request, template_name, context)
+        return render(request, 'register_app/sign_in_out.html', context)
 
 
 

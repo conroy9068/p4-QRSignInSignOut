@@ -1,17 +1,31 @@
-{% extends "base.html" %}
-
-{% block content %}
-
-<form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-target="#signinout-section" hx-swap="outerHTML">
-    {% csrf_token %}
-    <div id="signinout-section">
-        <h2>{{ location.name }}</h2>
-        <p>{{ location.description }}</p>
+<div hx-target="this" id="clockingDiv">
+    <h2>{{ location.name }}</h2>
+    <p>{{ location.description }}</p>
+    <form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-swap="outerHTML" hx-target="#clockingDiv">
+        {% csrf_token %}
+        <div>
+            <strong>Current Session:</strong>
+            <p>Started: {{ current_signin.sign_in_time }}</p>
+            {% if current_signin and current_signin.sign_out_time is None %}
+            <p>End: Still clocked in</p>
+        {% elif current_signin %}
+            <p>End: {{ current_signin.sign_out_time|date:"Y-m-d H:i" }}</p>
+        {% endif %}        </div>
         {% if not current_signin %}
-        <button type="submit" class="btn btn-primary">Clock In</button>
+            <button type="submit" class="btn btn-primary">Clock In</button>
         {% else %}
-        <button type="submit" class="btn btn-danger">Clock Out</button>
+            <button type="submit" class="btn btn-danger">Clock Out</button>
         {% endif %}
+    </form>
+    <div>
+        <h3>Today's Clock-ins</h3>
+        <ul>
+        {% for signin in todays_signins %}
+            <li>
+                Started: {{ signin.sign_in_time }} - 
+                Ended: {{ signin.sign_out_time|default:"Ongoing" }}
+            </li>
+        {% endfor %}
+        </ul>
     </div>
-</form>
-{% endblock %}
+</div>

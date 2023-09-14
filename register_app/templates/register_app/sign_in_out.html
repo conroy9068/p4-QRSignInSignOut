@@ -1,11 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-target="#signinout-section" hx-swap="outerHTML">
-    {% csrf_token %}
-    <div id="signinout-section">
-        {% include "register_app/sign_in_out_content.html" %}
-    </div>
-</form>
-
+<div id="signinout-section">
+    {% include "register_app/sign_in_out_content.html" %}
+</div>
 {% endblock %}

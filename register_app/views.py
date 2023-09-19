@@ -75,6 +75,12 @@ def sign_in_out_view(request, location_id):
     else:
         return render(request, 'register_app/sign_in_out.html', context)
 
+# Admin dashboard view
+@login_required
+@user_passes_test(is_admin, login_url='/no_access/')
+def admin_dashboard(request):
+    return render(request, 'register_app/admin_dashboard.html')
+
 
 
 # @login_required

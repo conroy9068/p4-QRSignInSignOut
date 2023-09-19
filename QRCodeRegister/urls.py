@@ -34,7 +34,7 @@ urlpatterns = [
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='passwordChangeDone'),
     path('register/', register_views.register, name='register'),
     path('', include('register_app.urls')), 
-    path('dashboard/', register_views.user_dashboard, name='user_dashboard'),
+    path('user_dashboard/', register_views.user_dashboard, name='user_dashboard'),
     path('sign_in_out/<int:location_id>/', register_views.sign_in_out_view, name='sign_in_out'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),

@@ -1,23 +1,39 @@
 {% extends 'base.html' %}
 
 {% block content %}
+<div class="container mt-5">
     <h1>Your Dashboard</h1>
-    {% if current_signin %}
-        <h2>Current Sign-in</h2>
-        <p>Location: {{ current_signin.location.name }}</p>
-        <p>Sign-in Time: {{ current_signin.sign_in_time }}</p>
-    {% else %}
-        <p>You are currently not signed in.</p>
-    {% endif %}
+    <div class="mt-4">
+        {% if current_signin %}
+            <h2 class="mb-3">Current Sign-in</h2>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ current_signin.location.name }}</h5>
+                    <p class="card-text">Sign-in Time: {{ current_signin.sign_in_time }}</p>
+                </div>
+            </div>
+            <hr>
+        {% else %}
+            <div class="alert alert-info" role="alert">
+                You are currently not signed in.
+            </div>
+        {% endif %}
+    </div>
 
-    <h2>Past Sign-ins</h2>
-    <ul>
+    <h2 class="mt-4 mb-3">Past Sign-ins</h2>
+    <div>
     {% for signin in past_signins %}
-        <li>
-            Location: {{ signin.location.name }},
-            Sign-in Time: {{ signin.sign_in_time }},
-            Sign-out Time: {{ signin.sign_out_time }}
-        </li>
+        <div class="mb-2">
+            <h6>{{ signin.sign_in_time|date:"d M Y" }}</h6>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title">{{ signin.location.name }}</h5>
+                    <p class="card-text">Sign-in Time: {{ signin.sign_in_time }}</p>
+                    <p class="card-text">Sign-out Time: {{ signin.sign_out_time }}</p>
+                </div>
+            </div>
+        </div>
     {% endfor %}
-    </ul>
+    </div>
+</div>
 {% endblock %}

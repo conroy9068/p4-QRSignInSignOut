@@ -10,7 +10,8 @@
             <p>End: Still clocked in</p>
         {% elif current_signin %}
             <p>End: {{ current_signin.sign_out_time|date:"Y-m-d H:i" }}</p>
-        {% endif %}        </div>
+        {% endif %}        
+        </div>
         {% if not current_signin %}
             <button type="submit" class="btn btn-primary">Clock In</button>
         {% else %}

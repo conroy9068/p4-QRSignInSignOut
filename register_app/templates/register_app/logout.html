@@ -1,7 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2>You are now logged out</h2>
-<a href="{% url 'login' %}">Login</a>
+<div class="container d-flex h-100 mt-4">
+    <div class="row align-self-center w-100">
+        <div class="col-lg-6 mx-auto">
+            <div class="card text-center">
+                <div class="card-body">
+                    <h2 class="card-title">You are now logged out</h2>
+                    <p class="card-text">Click the button below if you wish to log back in.</p>
+                    <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
-```

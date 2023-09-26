@@ -1,32 +1,52 @@
-<div hx-target="this" id="clockingDiv">
-    <h2>{{ location.name }}</h2>
-    <p>{{ location.description }}</p>
-    <form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-swap="outerHTML" hx-target="#clockingDiv">
-        {% csrf_token %}
-        <div>
-            <strong>Current Session:</strong>
-            <p>Started: {{ current_signin.sign_in_time }}</p>
-            {% if current_signin and current_signin.sign_out_time is None %}
-            <p>End: Still clocked in</p>
-        {% elif current_signin %}
-            <p>End: {{ current_signin.sign_out_time|date:"Y-m-d H:i" }}</p>
-        {% endif %}        
+<div class="container mt-5">
+    <div class="d-flex justify-content-center align-items-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title text-center">{{ location.name }}</h2>
+                    <p class="card-text">{{ location.description }}</p>
+                    
+                    <form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-swap="outerHTML" hx-target="#clockingDiv">
+                        {% csrf_token %}
+                        <div class="my-3">
+                            <strong>Current Session:</strong>
+                            <div class="d-flex justify-content-between">
+                                <p class="mb-0">Started: {{ current_signin.sign_in_time }}</p>
+                                {% if current_signin %}
+                                    {% if current_signin.sign_out_time %}
+                                        <p class="mb-0">End: {{ current_signin.sign_out_time|date:"Y-m-d H:i" }}</p>
+                                    {% else %}
+                                        <p class="mb-0">End: Still clocked in</p>
+                                    {% endif %}
+                                {% else %}
+                                    <p class="mb-0">End: -</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            {% if not current_signin %}
+                                <button type="submit" class="btn btn-primary btn-lg">Clock In</button>
+                            {% else %}
+                                <button type="submit" class="btn btn-danger btn-lg">Clock Out</button>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-body">
+                    <h3 class="card-title">Today's Clock-ins</h3>
+                    <ul class="list-group">
+                    {% for signin in todays_signins %}
+                        <li class="list-group-item">
+                            Started: {{ signin.sign_in_time }} - Ended: {{ signin.sign_out_time|default:"Ongoing" }}
+                        </li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
         </div>
-        {% if not current_signin %}
-            <button type="submit" class="btn btn-primary">Clock In</button>
-        {% else %}
-            <button type="submit" class="btn btn-danger">Clock Out</button>
-        {% endif %}
-    </form>
-    <div>
-        <h3>Today's Clock-ins</h3>
-        <ul>
-        {% for signin in todays_signins %}
-            <li>
-                Started: {{ signin.sign_in_time }} - 
-                Ended: {{ signin.sign_out_time|default:"Ongoing" }}
-            </li>
-        {% endfor %}
-        </ul>
     </div>
 </div>

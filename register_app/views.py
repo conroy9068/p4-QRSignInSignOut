@@ -113,6 +113,14 @@ def user_dashboard(request):
     return render(request, 'register_app/user_dashboard.html', context)
 
 @login_required
+def view_profile(request):
+    user = request.user
+    context = {
+        'user': user,
+    }
+    return render(request, 'register_app/view_profile.html', context)
+
+@login_required
 def edit_profile(request):
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)

@@ -87,7 +87,7 @@ WSGI_APPLICATION = 'QRCodeRegister.wsgi.application'
 INTERNAL_IPS = ('127.0.0.1', '0.0.0.0', 'localhost',)
 
 # Login redirect url
-LOGIN_REDIRECT_URL = '/dashboard/'
+LOGIN_REDIRECT_URL = '/user_dashboard/'
 
 # Console email backend testing locally
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

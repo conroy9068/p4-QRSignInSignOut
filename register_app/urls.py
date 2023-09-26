@@ -11,5 +11,7 @@ urlpatterns = [
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('view_qr_code/<int:location_id>/', views.view_qr_code, name='view_qr_code'),
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
+    path('view_profile/', views.view_profile, name='view_profile'),
+
 
 ]

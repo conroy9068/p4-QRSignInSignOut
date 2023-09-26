@@ -1,9 +1,10 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.urls import reverse
 from .models import Location, SignInOutRegister
 from django.utils import timezone
-from django.http import JsonResponse
-from .forms import LocationForm
+from django.http import HttpResponseRedirect, JsonResponse
+from .forms import LocationForm, SelectLocationSignInOut
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
@@ -74,8 +75,22 @@ def sign_in_out_view(request, location_id):
         return render(request, 'register_app/sign_in_out_content.html', context)
     else:
         return render(request, 'register_app/sign_in_out.html', context)
+    
+@login_required
+def select_location_view(request):
+    form = SelectLocationSignInOut()
+    if request.method == "POST":
+        form = SelectLocationSignInOut(request.POST)
+        if form.is_valid():
+            location_id = form.cleaned_data['location'].id
+            redirect_url = reverse('sign_in_out', args=[location_id])
+            return HttpResponseRedirect(redirect_url)
 
-# Admin dashboard view
+    return render(request, 'register_app/select_location.html', {'form': form})
+
+
+# Admin dashboard 
+
 @login_required
 @user_passes_test(is_admin, login_url='/no_access/')
 def admin_dashboard(request):

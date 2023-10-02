@@ -4,13 +4,12 @@ from django.urls import reverse
 from .models import Location, SignInOutRegister
 from django.utils import timezone
 from django.http import HttpResponseRedirect, JsonResponse
-from .forms import LocationForm, SelectLocationSignInOut
+from .forms import LocationForm, SelectLocationSignInOut, SelectProjectForm, UserUpdateForm
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
 from django.contrib.auth import login
 from django.contrib.auth.forms import UserCreationForm
-from .forms import UserUpdateForm
 import qrcode
 from django.dispatch import receiver
 from django.http import HttpResponse
@@ -19,6 +18,7 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404
 from datetime import datetime, time
 import os
+
 
 
 
@@ -153,13 +153,21 @@ def edit_profile(request):
 @login_required
 def create_location(request):
     if request.method == 'POST':
-        form = LocationForm(request.POST)
-        if form.is_valid():
-            form.save()  
-            return JsonResponse({'status': 'success'})
+        project_form = SelectProjectForm(request.POST)
+        if project_form.is_valid():
+            project_id = project_form.cleaned_data.get('project')
+            location_form = LocationForm(request.POST, project_id=project_id)
+            if location_form.is_valid():
+                location_form.save()
+                return JsonResponse({'status': 'success'})
+            else:
+                return JsonResponse({'status': 'error', 'errors': location_form.errors})
         else:
-            return JsonResponse({'status': 'error', 'errors': form.errors})
-    return JsonResponse({'status': 'error'})
+            return JsonResponse({'status': 'error', 'errors': project_form.errors})
+    else:
+        project_form = SelectProjectForm()
+        location_form = LocationForm()
+    return render(request, 'your_template.html', {'project_form': project_form, 'location_form': location_form})
 
 def register(request):
     if request.method == 'POST':

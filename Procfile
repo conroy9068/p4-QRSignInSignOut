@@ -1,0 +1,1 @@
+web: gunicorn p4-QRCodeRegister.wsgi:application

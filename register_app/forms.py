@@ -3,6 +3,7 @@ from .models import Location, Project, UserProfile
 from django.contrib.auth.models import User
 from django import forms
 
+
 class UserRegistrationForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
@@ -27,16 +28,17 @@ class UserProfileForm(forms.ModelForm):
 class SelectProjectForm(forms.Form):
     project = forms.ModelChoiceField(queryset=Project.objects.all())
 
-class LocationForm(forms.ModelForm):
-    def __init__(self, *args, **kwargs):
-        project_id = kwargs.pop('project_id', None)
-        super(LocationForm, self).__init__(*args, **kwargs)
-        if project_id:
-            self.fields['name'].queryset = Location.objects.filter(project_id=project_id)
-
+class ProjectForm(forms.ModelForm):
     class Meta:
-        model = Location
-        fields = ['name', 'address', 'description']
+        model = Project
+        fields = ['project_name', 'project_code', 'project_status', 'project_url', 'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email']
+
+LocationFormSet = forms.inlineformset_factory(
+    Project, Location,
+    fields=('name', 'address', 'description'),
+    extra=1,
+    can_delete=True
+)
 
 
 class UserUpdateForm(forms.ModelForm):

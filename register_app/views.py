@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import Location, SignInOutRegister
 from django.utils import timezone
 from django.http import HttpResponseRedirect, JsonResponse
-from .forms import LocationForm, SelectLocationSignInOut, SelectProjectForm, UserProfileForm, UserRegistrationForm, UserUpdateForm
+from .forms import LocationFormSet, ProjectForm, SelectLocationSignInOut, SelectProjectForm, UserProfileForm, UserRegistrationForm, UserUpdateForm
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
@@ -18,9 +18,6 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404, HttpResponse
 from datetime import datetime, time
 import os
-
-
-
 
 # Create your views here.
 
@@ -162,25 +159,49 @@ def edit_profile(request):
     return render(request, 'register_app/edit_profile.html', {'form': form})
 
 
-# Location views
+# Project & Location views
 @login_required
-def create_location(request):
+def create_project(request):
+    project_management_group = Group.objects.get(name='Project Management')
+    project_managers = User.objects.filter(groups=project_management_group)
+    
+    context = {
+        'project_managers': project_managers,
+        # ... your other context data
+    }
+    
     if request.method == 'POST':
-        project_form = SelectProjectForm(request.POST)
-        if project_form.is_valid():
-            project_id = project_form.cleaned_data.get('project')
-            location_form = LocationForm(request.POST, project_id=project_id)
-            if location_form.is_valid():
-                location_form.save()
-                return JsonResponse({'status': 'success'})
-            else:
-                return JsonResponse({'status': 'error', 'errors': location_form.errors})
-        else:
-            return JsonResponse({'status': 'error', 'errors': project_form.errors})
+        form = ProjectForm(request.POST)
+        formset = LocationFormSet(request.POST, prefix='locations')
+        if form.is_valid() and formset.is_valid():
+            project = form.save()
+            formset.instance = project
+            formset.save()
+            return redirect('some_view')  # Redirect to wherever you want
     else:
-        project_form = SelectProjectForm()
-        location_form = LocationForm()
-    return render(request, 'your_template.html', {'project_form': project_form, 'location_form': location_form})
+        form = ProjectForm()
+        formset = LocationFormSet(prefix='locations')
+    return render(request, 'register_app/create_project.html', context)
+
+
+# @login_required
+# def create_location(request):
+#     if request.method == 'POST':
+#         project_form = SelectProjectForm(request.POST)
+#         if project_form.is_valid():
+#             project_id = project_form.cleaned_data.get('project')
+#             location_form = LocationForm(request.POST, project_id=project_id)
+#             if location_form.is_valid():
+#                 location_form.save()
+#                 return JsonResponse({'status': 'success'})
+#             else:
+#                 return JsonResponse({'status': 'error', 'errors': location_form.errors})
+#         else:
+#             return JsonResponse({'status': 'error', 'errors': project_form.errors})
+#     else:
+#         project_form = SelectProjectForm()
+#         location_form = LocationForm()
+#     return render(request, 'your_template.html', {'project_form': project_form, 'location_form': location_form})
 
 def register(request):
     if request.method == 'POST':

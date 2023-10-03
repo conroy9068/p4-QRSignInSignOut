@@ -4,7 +4,7 @@ from django.urls import reverse
 from .models import Location, SignInOutRegister
 from django.utils import timezone
 from django.http import HttpResponseRedirect, JsonResponse
-from .forms import LocationForm, SelectLocationSignInOut, SelectProjectForm, UserUpdateForm
+from .forms import LocationForm, SelectLocationSignInOut, SelectProjectForm, UserProfileForm, UserRegistrationForm, UserUpdateForm
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
@@ -15,7 +15,7 @@ from django.dispatch import receiver
 from django.http import HttpResponse
 from django.core.files import File
 from django.conf import settings
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, HttpResponse
 from datetime import datetime, time
 import os
 
@@ -23,6 +23,19 @@ import os
 
 
 # Create your views here.
+
+def register(request):
+    if request.method == 'POST':
+        user_form = UserRegistrationForm(request.POST)
+        profile_form = UserProfileForm(request.POST)
+        if user_form.is_valid() and profile_form.is_valid():
+            username = user_form.cleaned_data.get('username')
+            return render(request, 'user_dashboard.html', {'username': username})
+    else:
+        user_form = UserRegistrationForm()
+        profile_form = UserProfileForm()
+
+    return render(request, 'register.html', {'user_form': user_form, 'profile_form': profile_form})
 
 def add_to_group(sender, instance, created, **kwargs):
     if created:

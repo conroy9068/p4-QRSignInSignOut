@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h2>Register</h2>
+                </div>
+                <div class="card-body">
+                    <form method="post" hx-post="/register/" hx-swap="outerHTML">
+                        {% csrf_token %}
+                        <!-- User fields -->
+                        <div class="mb-3">
+                            <label for="id_username" class="form-label">Username</label>
+                            <input type="text" name="username" class="form-control" id="id_username">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_email" class="form-label">Email</label>
+                            <input type="email" name="email" class="form-control" id="id_email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_password" class="form-label">Password</label>
+                            <input type="password" name="password" class="form-control" id="id_password">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_confirm_password" class="form-label">Confirm Password</label>
+                            <input type="password" name="confirm_password" class="form-control" id="id_confirm_password">
+                        </div>
+                        <!-- User profile fields -->
+                        <div class="mb-3">
+                            <label for="id_company_name" class="form-label">Company Name</label>
+                            <input type="text" name="company_name" class="form-control" id="id_company_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_date_of_birth" class="form-label">Date of Birth</label>
+                            <input type="date" name="date_of_birth" class="form-control" id="id_date_of_birth">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_phone_number" class="form-label">Phone Number</label>
+                            <input type="text" name="phone_number" class="form-control" id="id_phone_number">
+                        </div>
+                        <!-- Submit button -->
+                        <button type="submit" class="btn btn-primary">Register</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

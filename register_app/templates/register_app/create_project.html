@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<!-- Include jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Button to Open the Modal -->
+<div class="d-grid gap-2 m-4">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
+    Create New Project
+</button>
+</div>
+
+<h2 class="center">Current Active Projects</h2>
+
+<div class="row">
+    {% for project in projects %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ project.project_name }}</h5>
+                <p class="card-text">{{ project.project_status }}</p>
+                <p class="card-text">{{ project.site_manager_name }}</p>
+                <!-- Add more project details here -->
+                <a href="{% url 'view_project_details' project.id %}" class="btn btn-primary">View Details</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- The Modal -->
+<div class="modal" id="createProjectModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Project</h4>
+                <button type="button" class="close" data-dismiss="modal" onClick="closeModal()">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="createProjectForm">
+                    {% csrf_token %}
+                    <!-- Project Fields -->
+                    <input type="text" id="projectName" placeholder="Project Name" class="form-control mb-2">
+                    <input type="text" id="projectCode" placeholder="Project Code" class="form-control mb-2">
+                    <select id="projectStatus" class="form-control mb-2">
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                    <input type="text" id="projectURL" placeholder="Project URL" class="form-control mb-2">
+                    <input type="text" id="siteManagerName" placeholder="Site Manager Name" class="form-control mb-2">
+                    <input type="email" id="siteManagerEmail" placeholder="Site Manager Email" class="form-control mb-2">
+                    <input type="text" id="projectManagerName" placeholder="Project Manager Name" class="form-control mb-2">
+                    <input type="email" id="projectManagerEmail" placeholder="Project Manager Email" class="form-control mb-2">
+                    
+                    <!-- Location Fields (Formset) -->
+                    <div id="locationFormSet">
+                        <!-- A single location form will go here -->
+                        <!-- You can duplicate this part for multiple locations -->
+                    </div>
+                    <button type="button" onClick="addLocationForm()">Add Another Location</button>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" onclick="createProject()">Create</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function closeModal() {
+        $("#createProjectModal").modal('hide');
+    }
+
+    function createProject() {
+        var name = $("#projectName").val();
+        var status = $("#projectStatus").val();
+        var manager = $("#siteManagerName").val();
+        $.post("/create_project/", {name: name, status: status, manager: manager, csrfmiddlewaretoken: '{{ csrf_token }}'}, function(data){
+            if (data.status === 'success') {
+                location.reload();  // Reload the page if successful
+                $("#createProjectModal").modal('hide');  // Hide the modal if successful
+            } else {
+                alert("Error: " + data.errors);
+            }
+        });
+    }
+</script>
+{% endblock %}

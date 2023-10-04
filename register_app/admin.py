@@ -20,7 +20,12 @@ admin.site.register(User, UserAdmin)
 admin.site.register(Role)
 
 
-admin.site.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    list_display = ('project_name', 'project_code', 'project_status')
+
+admin.site.register(Project, ProjectAdmin)
+
+
 
 @admin.register(Location)
 class LocationAdmin(admin.ModelAdmin):

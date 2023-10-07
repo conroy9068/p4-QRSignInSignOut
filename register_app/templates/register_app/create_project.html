@@ -42,32 +42,39 @@
             </div>
             <!-- Modal body -->
             <div class="modal-body">
-                <form id="createProjectForm">
+                <form id="createProjectForm" method="post" action="{% url 'create_project' %}">
                     {% csrf_token %}
-                    <!-- Project Fields -->
-                    <input type="text" id="projectName" placeholder="Project Name" class="form-control mb-2">
-                    <input type="text" id="projectCode" placeholder="Project Code" class="form-control mb-2">
-                    <select id="projectStatus" class="form-control mb-2">
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                    </select>
-                    <input type="text" id="projectURL" placeholder="Project URL" class="form-control mb-2">
-                    <input type="text" id="siteManagerName" placeholder="Site Manager Name" class="form-control mb-2">
-                    <input type="email" id="siteManagerEmail" placeholder="Site Manager Email" class="form-control mb-2">
-                    <input type="text" id="projectManagerName" placeholder="Project Manager Name" class="form-control mb-2">
-                    <input type="email" id="projectManagerEmail" placeholder="Project Manager Email" class="form-control mb-2">
-                    
-                    <!-- Location Fields (Formset) -->
-                    <div id="locationFormSet">
-                        <!-- A single location form will go here -->
-                        <!-- You can duplicate this part for multiple locations -->
+                    <div class="form-group">
+                        {{ form.project_name }}
+                        {{ form.project_code }}
+                        {{ form.project_status }}
+                        {{ form.project_url }}
+                        {{ form.site_manager_name }}
+                        {{ form.site_manager_email }}
+                        {{ form.project_manager_name }}
+                        {{ form.project_manager_email }}
                     </div>
-                    <button type="button" onClick="addLocationForm()">Add Another Location</button>
+                    {{ formset.management_form }}
+                    <div id="locationFormSet">
+                        {% for location_form in formset %}
+                            <div class="location-form">
+                                {{ location_form }}
+                                <button type="button" class="btn btn-danger remove-location-button">Remove Location</button>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="addLocationButton">Add Another Location</button>
                 </form>
             </div>
+            {% with empty_location_form=formset.empty_form %}
+            <div id="empty-form" style="display:none;">
+                {{ empty_location_form.as_p }}
+            </div>
+            {% endwith %}
+
             <!-- Modal footer -->
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="createProject()">Create</button>
+                <button type="submit" class="btn btn-primary">Create</button>
                 <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="closeModal()">Close</button>
             </div>
         </div>
@@ -94,4 +101,15 @@
         });
     }
 </script>
+
+<script>
+    $(document).ready(function() {
+        $('#addLocationButton').click(function() {
+            let formIdx = $('#id_locations-TOTAL_FORMS').val();
+            $('#locationFormSet').append($('#empty-form').html().replace(/__prefix__/g, formIdx));
+            $('#id_locations-TOTAL_FORMS').val(parseInt(formIdx) + 1);
+        });
+    });
+</script>
+
 {% endblock %}

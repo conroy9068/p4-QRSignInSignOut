@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="container">
+        <h2>Select a Project to Clock In/Out</h2>
+        <form method="post">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.project.label_tag }}
+                {{ form.project }}
+            </div>
+            <div class="mb-3">
+                {{ form.location.label_tag }}
+                {{ form.location }}
+            </div>
+            <button type="submit" class="btn btn-warning">Confirm Selection</button>
+        </form>
+        <script>
+            document.getElementById("id_project").addEventListener("change", function() {
+                fetch(`/get_locations/?project_id=${this.value}`).then(response => response.json()).then(data => {
+                    const locationSelect = document.getElementById("id_location");
+                    locationSelect.innerHTML = "";
+                    data.forEach(item => {
+                        const option = document.createElement("option");
+                        option.value = item.id;
+                        option.text = item.name;
+                        locationSelect.add(option);
+                    });
+                });
+            });
+        </script>
+    </div>
+{% endblock %}

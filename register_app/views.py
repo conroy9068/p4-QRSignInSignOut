@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.urls import reverse
-from .models import Location, SignInOutRegister
+from django.views import View
+from .models import Location, Project, SignInOutRegister
 from django.utils import timezone
 from django.http import HttpResponseRedirect, JsonResponse
-from .forms import LocationFormSet, ProjectForm, SelectLocationSignInOut, SelectProjectForm, UserProfileForm, UserRegistrationForm, UserUpdateForm
+from .forms import CreateProjectForm, LocationFormSet, ProjectSelectionForm, SelectLocationSignInOut, UserProfileForm, UserRegistrationForm, UserUpdateForm
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models.signals import post_save
 from django.contrib.auth.models import User, Group
@@ -18,16 +19,39 @@ from django.conf import settings
 from django.shortcuts import get_object_or_404, HttpResponse
 from datetime import datetime, time
 import os
-
-# Create your views here.
+from django.contrib import messages
+from .forms import UserRegistrationForm, UserProfileForm
 
 def register(request):
     if request.method == 'POST':
         user_form = UserRegistrationForm(request.POST)
         profile_form = UserProfileForm(request.POST)
+
         if user_form.is_valid() and profile_form.is_valid():
-            username = user_form.cleaned_data.get('username')
-            return render(request, 'user_dashboard.html', {'username': username})
+            user = user_form.save(commit=False)
+            user.set_password(user_form.cleaned_data['password'])
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+
+            messages.success(request, "Registration successful!")
+            return redirect('login')
+        else:
+            print("User Form Errors:", user_form.errors)
+            print("Profile Form Errors:", profile_form.errors)
+            user = user_form.save(commit=False)
+            user.set_password(user_form.cleaned_data['password'])
+            user.save()
+
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+
+            messages.success(request, "Registration successful!")
+            return redirect('login')
+        
     else:
         user_form = UserRegistrationForm()
         profile_form = UserProfileForm()
@@ -86,6 +110,7 @@ def sign_in_out_view(request, location_id):
     else:
         return render(request, 'register_app/sign_in_out.html', context)
     
+# LOCATION VIEWS
 @login_required
 def select_location_view(request):
     form = SelectLocationSignInOut()
@@ -98,34 +123,34 @@ def select_location_view(request):
 
     return render(request, 'register_app/select_location.html', {'form': form})
 
+class GetLocationsView(View):
+    def get(self, request, *args, **kwargs):
+        project_id = request.GET.get('project_id')
+        locations = Location.objects.filter(project_id=project_id).values('id', 'name')
+        return JsonResponse(list(locations), safe=False)
 
-# Admin dashboard 
 
+# PROJECT VIEWS
+def select_project_view(request):
+    form = ProjectSelectionForm()
+    if request.method == "POST":
+        form = SelectLocationSignInOut(request.POST)
+        if form.is_valid():
+            location_id = form.cleaned_data['location'].id
+            redirect_url = reverse('sign_in_out', args=[location_id])
+            return HttpResponseRedirect(redirect_url)
+        
+    return render(request, 'register_app/select_project.html', {'form': form})
+
+
+# ADMIN VIEWS
 @login_required
 @user_passes_test(is_admin, login_url='/no_access/')
 def admin_dashboard(request):
     return render(request, 'register_app/admin_dashboard.html')
 
 
-
-# @login_required
-# def sign_in(request, location_id):
-#     if request.method == "POST":
-#         SignInOutRegister.objects.create(user=request.user, location_id=location_id, sign_in_time=timezone.now())
-#         return redirect('location_list')
-#     return render(request, 'register_app/login.html')
-
-# @login_required
-# def sign_out(request, register_id):
-#     if request.method == "POST":
-#         register_entry = SignInOutRegister.objects.get(id=register_id)
-#         register_entry.sign_out_time = timezone.now()
-#         register_entry.save()
-#         return redirect('location_list')
-#     return render(request, 'register_app/sign_out.html')
-
-
-# User dashboard and profile views
+# USER VIEWS
 @login_required
 def user_dashboard(request):
     current_signin = SignInOutRegister.objects.filter(user=request.user, sign_out_time__isnull=True).first()
@@ -162,26 +187,19 @@ def edit_profile(request):
 # Project & Location views
 @login_required
 def create_project(request):
-    project_management_group = Group.objects.get(name='Project Management')
-    project_managers = User.objects.filter(groups=project_management_group)
-    
-    context = {
-        'project_managers': project_managers,
-        # ... your other context data
-    }
-    
     if request.method == 'POST':
-        form = ProjectForm(request.POST)
+        form = CreateProjectForm(request.POST)
         formset = LocationFormSet(request.POST, prefix='locations')
         if form.is_valid() and formset.is_valid():
             project = form.save()
             formset.instance = project
             formset.save()
-            return redirect('some_view')  # Redirect to wherever you want
+            return redirect('user_dashboard.html')  # Make sure 'user_dashboard.html' is the correct redirect URL
     else:
-        form = ProjectForm()
+        form = CreateProjectForm()
         formset = LocationFormSet(prefix='locations')
-    return render(request, 'register_app/create_project.html', context)
+    return render(request, 'register_app/create_project.html', {'form': form, 'formset': formset})
+
 
 
 # @login_required

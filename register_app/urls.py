@@ -13,6 +13,8 @@ urlpatterns = [
     path('admin_dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('view_profile/', views.view_profile, name='view_profile'),
     path('select_location/', views.select_location_view, name='select_location'),
+    path('select_project/', views.select_project_view, name='select_project'),
+    path('get_locations/', views.GetLocationsView.as_view(), name='get_locations'),
 
 
 ]

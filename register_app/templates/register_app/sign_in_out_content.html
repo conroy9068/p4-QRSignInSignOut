@@ -40,13 +40,21 @@
                     <h3 class="card-title">Today's Clock-ins</h3>
                     <ul class="list-group">
                     {% for signin in todays_signins %}
-                        <li class="list-group-item">
-                            Started: {{ signin.sign_in_time }} - Ended: {{ signin.sign_out_time|default:"Ongoing" }}
-                        </li>
+                        {% comment %} <li class="list-group-item">
+                            <strong class="text-primary">Project:</strong> <span class="font-weight-bold">{{ signin.location.name }}</span> - 
+                            <strong class="text-secondary">Started:</strong> {{ signin.sign_in_time }} - 
+                            <strong class="text-secondary">Ended:</strong> {{ signin.sign_out_time|default:"Ongoing" }}
+                        </li> {% endcomment %}
+                        <div class="list-group-item">
+                            <h5 class="card-title">{{ signin.location.name }}</h5>
+                            <p class="card-text">Sign-in Time: {{ signin.sign_in_time }}</p>
+                            <p class="card-text">Sign-out Time: {{ signin.sign_out_time }}</p>
+                        </div>
                     {% endfor %}
                     </ul>
                 </div>
             </div>
+            
         </div>
     </div>
 </div>

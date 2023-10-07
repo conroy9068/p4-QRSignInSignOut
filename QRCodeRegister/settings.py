@@ -64,6 +64,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'register_app.middleware.NoAccessMiddleware',
+
 
 ]
 
@@ -91,6 +93,9 @@ INTERNAL_IPS = ('127.0.0.1', '0.0.0.0', 'localhost',)
 
 # Login redirect url
 LOGIN_REDIRECT_URL = '/user_dashboard/'
+# Login url
+LOGIN_URL = '/login/'
+
 
 # Console email backend testing locally
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

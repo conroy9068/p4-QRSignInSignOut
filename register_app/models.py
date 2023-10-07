@@ -25,12 +25,15 @@ class UserProfile(models.Model):
     
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
+    print("create_user_profile called")  # Debugging line
     if created:
         UserProfile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
+    print("save_user_profile called")  # Debugging line
     instance.profile.save()
+
 
 
 class Project(models.Model):
@@ -50,11 +53,11 @@ class Project(models.Model):
         default=ACTIVE,
         null=True
     )
-    project_url = models.CharField(max_length=200)
-    site_manager_name = models.CharField(max_length=100)
-    site_manager_email = models.EmailField()
-    project_manager_name = models.CharField(max_length=100)
-    project_manager_email = models.EmailField()
+    project_url = models.CharField(max_length=200, null=True)
+    site_manager_name = models.CharField(max_length=100, null=True)
+    site_manager_email = models.EmailField(null=True)
+    project_manager_name = models.CharField(max_length=100, null=True)
+    project_manager_email = models.EmailField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     

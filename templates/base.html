@@ -189,6 +189,15 @@
                 <li><a class="dropdown-item" href="{% url 'logout' %}">Logout</a></li>
               </ul>
             </li>
+            {% if user.is_authenticated %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+    </li>
+  {% else %}
+    <li class="nav-item">
+      <a class="nav-link" href="{% url 'login' %}">Login</a>
+    </li>
+  {% endif %}
             
           </ul>
           {% comment %} <div class="d-lg-flex col-lg-3 justify-content-lg-end">

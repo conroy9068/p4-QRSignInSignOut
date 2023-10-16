@@ -1,6 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
+{% if messages %}
+    <div class="container mt-2">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
 <div class="container mt-5">
     <h1>Your Dashboard</h1>
     <div class="mt-4">
@@ -15,7 +24,7 @@
             <hr>
         {% else %}
             <div class="alert alert-info" role="alert">
-                You are currently not signed in.
+                You are currently not signed in to a Project Location.
             </div>
         {% endif %}
     </div>

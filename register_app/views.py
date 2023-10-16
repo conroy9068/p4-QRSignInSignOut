@@ -1,28 +1,34 @@
-from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
-from django.urls import reverse
-from django.views import View
-from .models import Location, Project, SignInOutRegister
-from django.utils import timezone
-from django.http import HttpResponseRedirect, JsonResponse
-from .forms import CreateProjectForm, LocationFormSet, ProjectSelectionForm, SelectLocationSignInOut, UserProfileForm, UserRegistrationForm, UserUpdateForm
-from django.contrib.auth.decorators import user_passes_test
-from django.db.models.signals import post_save
-from django.contrib.auth.models import User, Group
-from django.contrib.auth import login
-from django.contrib.auth.forms import UserCreationForm
-import qrcode
-from django.dispatch import receiver
-from django.http import HttpResponse
-from django.core.files import File
-from django.conf import settings
-from django.shortcuts import get_object_or_404, HttpResponse
 from datetime import datetime, time
 import os
-from django.contrib import messages
-from .forms import UserRegistrationForm, UserProfileForm
-from django.core.exceptions import ObjectDoesNotExist
+
+from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.urls import reverse
+from django.views import View
+from django.utils import timezone
+from django.db.models.signals import post_save
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.models import User, Group
+from django.contrib.auth.forms import UserCreationForm
+from django.core.files import File
+from django.conf import settings
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
+
+from .models import Location, Project, SignInOutRegister, UserProfile
+from .forms import (
+    CreateProjectForm, 
+    LocationFormSet, 
+    ProjectSelectionForm, 
+    SelectLocationSignInOut, 
+    UserProfileForm, 
+    UserRegistrationForm, 
+    UserUpdateForm, 
+    UserProfileForm
+)
+import qrcode
+from django.dispatch import receiver
 
 def home(request):
     return render(request, 'landing_page.html')
@@ -31,52 +37,75 @@ def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.first_name = request.POST.get('first_name')
+            user.last_name = request.POST.get('last_name')
+            user.email = request.POST.get('email')
+            user.save()  # Save now
+            
             login(request, user)
-            return redirect('location_list')
+
+            # Update UserProfile
+            company_name = request.POST.get('company_name')
+            date_of_birth = request.POST.get('date_of_birth')
+            phone_number = request.POST.get('phone_number')
+            
+            user_profile = UserProfile.objects.get(user=user)
+            user_profile.company_name = company_name
+            user_profile.date_of_birth = date_of_birth
+            user_profile.phone_number = phone_number
+            user_profile.save()
+
+            messages.success(request, 'You are now registered and logged in.')
+            return redirect('user_dashboard')
+        else:
+            print(form.errors)
     else:
         form = UserCreationForm()
     return render(request, 'register_app/register.html', {'form': form})
 
-def register(request):
-    print("Inside register view")
-    print(request.POST)
-    print(user_form.is_valid())
-    print(profile_form.is_valid())
-    print(user_form.errors)
-    print(profile_form.errors)
 
-    if request.method == 'POST':
 
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save(commit=False)
-            user.set_password(user_form.cleaned_data['password'])
-            user.save()
 
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.save()
+# def register(request):
+#     print("Inside register view")
+#     print(request.POST)
+#     print(user_form.is_valid())
+#     print(profile_form.is_valid())
+#     print(user_form.errors)
+#     print(profile_form.errors)
+
+#     if request.method == 'POST':
+
+#         if user_form.is_valid() and profile_form.is_valid():
+#             user = user_form.save(commit=False)
+#             user.set_password(user_form.cleaned_data['password'])
+#             user.save()
+
+#             profile = profile_form.save(commit=False)
+#             profile.user = user
+#             profile.save()
             
-            # Add user to a group
-            add_to_group(None, user, True)
+#             # Add user to a group
+#             add_to_group(None, user, True)
 
-            # Authenticate and login (optional)
-            authenticated_user = authenticate(username=user.username, password=user_form.cleaned_data['password'])
-            if authenticated_user:
-                login(request, authenticated_user)
+#             # Authenticate and login (optional)
+#             authenticated_user = authenticate(username=user.username, password=user_form.cleaned_data['password'])
+#             if authenticated_user:
+#                 login(request, authenticated_user)
 
-            messages.success(request, "Registration successful!")
-            return redirect('login')
-        else:
-            print("User Form Errors:", user_form.errors)
-            print("Profile Form Errors:", profile_form.errors)
-            return render(request, 'register.html', {'user_form': user_form, 'profile_form': profile_form})
+#             messages.success(request, "Registration successful!")
+#             return redirect('login')
+#         else:
+#             print("User Form Errors:", user_form.errors)
+#             print("Profile Form Errors:", profile_form.errors)
+#             return render(request, 'register_app/register.html', {'user_form': user_form, 'profile_form': profile_form})
         
-    else:
-        user_form = UserRegistrationForm()
-        profile_form = UserProfileForm()
+#     else:
+#         user_form = UserRegistrationForm()
+#         profile_form = UserProfileForm()
 
-    return render(request, './templates/register_app/register.html', {'user_form': user_form, 'profile_form': profile_form})
+#     return render(request, 'register_app/register.html', {'user_form': user_form, 'profile_form': profile_form})
 
 
 def is_admin(user):
@@ -94,7 +123,7 @@ def add_to_group(sender, user, created, **kwargs):
 @login_required
 def location_list(request):
     locations = Location.objects.filter(is_active=True)
-    return render(request, 'register_app/location_list.html', {'locations': locations})
+    return render(request, 'register_app/user_dashboard', {'locations': locations})
 
 def no_access(request):
     return render(request, 'register_app/no_access.html')

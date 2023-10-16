@@ -15,6 +15,7 @@ urlpatterns = [
     path('select_location/', views.select_location_view, name='select_location'),
     path('select_project/', views.select_project_view, name='select_project'),
     path('get_locations/', views.GetLocationsView.as_view(), name='get_locations'),
+    path('register/', views.register, name='register'),
 
 
 ]

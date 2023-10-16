@@ -9,12 +9,37 @@
                     <h2>Register</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post" hx-post="/register/" hx-swap="outerHTML">
+                    {% if user_form.errors %}
+                    <div class="alert alert-danger">
+                        {{ user_form.errors }}
+                    </div>
+                {% endif %}
+
+                {% if profile_form.errors %}
+                    <div class="alert alert-danger">
+                        {{ profile_form.errors }}
+                    </div>
+                {% endif %}
+
+                    <form method="post" action="{% url 'register' %}">
                         {% csrf_token %}
                         <!-- User fields -->
                         <div class="mb-3">
                             <label for="id_username" class="form-label">Username</label>
                             <input type="text" name="username" class="form-control" id="id_username">
+                            {% if user_form.username.errors %}
+                                <div class="alert alert-danger">
+                                    {{ user_form.username.errors }}
+                                </div>
+                            {% endif %}
+                        </div>                        
+                        <div class="mb-3">
+                            <label for="id_first_name" class="form-label">First Name</label>
+                            <input type="text" name="first_name" class="form-control" id="id_first_name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="id_last_name" class="form-label">Last Name</label>
+                            <input type="text" name="last_name" class="form-control" id="id_last_name">
                         </div>
                         <div class="mb-3">
                             <label for="id_email" class="form-label">Email</label>

@@ -21,11 +21,30 @@ from datetime import datetime, time
 import os
 from django.contrib import messages
 from .forms import UserRegistrationForm, UserProfileForm
+from django.core.exceptions import ObjectDoesNotExist
+from django.contrib.auth import authenticate, login
+
 
 def register(request):
     if request.method == 'POST':
-        user_form = UserRegistrationForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('location_list')
+    else:
+        form = UserCreationForm()
+    return render(request, 'register_app/register.html', {'form': form})
+
+def register(request):
+    print("Inside register view")
+    print(request.POST)
+    print(user_form.is_valid())
+    print(profile_form.is_valid())
+    print(user_form.errors)
+    print(profile_form.errors)
+
+    if request.method == 'POST':
 
         if user_form.is_valid() and profile_form.is_valid():
             user = user_form.save(commit=False)
@@ -35,41 +54,40 @@ def register(request):
             profile = profile_form.save(commit=False)
             profile.user = user
             profile.save()
+            
+            # Add user to a group
+            add_to_group(None, user, True)
+
+            # Authenticate and login (optional)
+            authenticated_user = authenticate(username=user.username, password=user_form.cleaned_data['password'])
+            if authenticated_user:
+                login(request, authenticated_user)
 
             messages.success(request, "Registration successful!")
             return redirect('login')
         else:
             print("User Form Errors:", user_form.errors)
             print("Profile Form Errors:", profile_form.errors)
-            user = user_form.save(commit=False)
-            user.set_password(user_form.cleaned_data['password'])
-            user.save()
-
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            profile.save()
-
-            messages.success(request, "Registration successful!")
-            return redirect('login')
+            return render(request, 'register.html', {'user_form': user_form, 'profile_form': profile_form})
         
     else:
         user_form = UserRegistrationForm()
         profile_form = UserProfileForm()
 
-    return render(request, 'register.html', {'user_form': user_form, 'profile_form': profile_form})
+    return render(request, './templates/register_app/register.html', {'user_form': user_form, 'profile_form': profile_form})
 
-def add_to_group(sender, instance, created, **kwargs):
-    if created:
-        if instance.is_superuser or instance.is_staff:
-            instance.groups.add(Group.objects.get(name='Admin'))
-        else:
-            instance.groups.add(Group.objects.get(name='External User'))
 
 def is_admin(user):
     return user.is_superuser or user.is_staff
 
-post_save.connect(add_to_group, sender=User)
-
+def add_to_group(sender, user, created, **kwargs):
+    if created:
+        try:
+            group = Group.objects.get(name='Users')
+            user.groups.add(group)
+        except ObjectDoesNotExist:
+            print("Group 'Users' does not exist.")
+        
 @user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def location_list(request):
@@ -131,6 +149,7 @@ class GetLocationsView(View):
 
 
 # PROJECT VIEWS
+@login_required
 def select_project_view(request):
     form = ProjectSelectionForm()
     if request.method == "POST":
@@ -183,7 +202,6 @@ def edit_profile(request):
         
     return render(request, 'register_app/edit_profile.html', {'form': form})
 
-
 # Project & Location views
 @login_required
 def create_project(request):
@@ -199,8 +217,6 @@ def create_project(request):
         form = CreateProjectForm()
         formset = LocationFormSet(prefix='locations')
     return render(request, 'register_app/create_project.html', {'form': form, 'formset': formset})
-
-
 
 # @login_required
 # def create_location(request):
@@ -221,16 +237,7 @@ def create_project(request):
 #         location_form = LocationForm()
 #     return render(request, 'your_template.html', {'project_form': project_form, 'location_form': location_form})
 
-def register(request):
-    if request.method == 'POST':
-        form = UserCreationForm(request.POST)
-        if form.is_valid():
-            user = form.save()
-            login(request, user)
-            return redirect('location_list')
-    else:
-        form = UserCreationForm()
-    return render(request, 'register_app/register.html', {'form': form})
+
 
 # QR code generation
 @receiver(post_save, sender=Location)

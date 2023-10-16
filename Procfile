@@ -1,1 +1,1 @@
-web: gunicorn p4-QRCodeRegister.wsgi:application
+web: gunicorn QRCodeRegister.wsgi:application

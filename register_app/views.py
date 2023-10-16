@@ -24,6 +24,8 @@ from .forms import UserRegistrationForm, UserProfileForm
 from django.core.exceptions import ObjectDoesNotExist
 from django.contrib.auth import authenticate, login
 
+def home(request):
+    return render(request, 'register_app/landing_page.html')
 
 def register(request):
     if request.method == 'POST':

@@ -34,7 +34,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['qrsigninoutapp-c6f4e2915b2d.herokuapp.com', 'localhost', '127.0.0.1']
 
-STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATIC_ROOT = BASE_DIR / 'static'
 STATIC_URL = '/static/'
 
 

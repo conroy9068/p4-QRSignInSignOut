@@ -233,7 +233,7 @@ def create_project(request):
 def generate_qr_code(sender, instance, created, **kwargs):
     if created:
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
-        url = f"http://127.0.0.0/sign_in/{instance.id}/"
+        url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in_out/{instance.id}/"
         qr.add_data(url)
         qr.make(fit=True)
         img = qr.make_image(fill='black', back_color='white')
@@ -255,7 +255,7 @@ def generate_qr_code(sender, instance, created, **kwargs):
 def view_qr_code(request, location_id):
     location = Location.objects.get(id=location_id)
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
-    url = f"http://127.0.0.0/sign_in/{location.id}/"
+    url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in/{location.id}/"
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image(fill='black', back_color='white')

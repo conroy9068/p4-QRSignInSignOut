@@ -64,50 +64,6 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register_app/register.html', {'form': form})
 
-
-
-
-# def register(request):
-#     print("Inside register view")
-#     print(request.POST)
-#     print(user_form.is_valid())
-#     print(profile_form.is_valid())
-#     print(user_form.errors)
-#     print(profile_form.errors)
-
-#     if request.method == 'POST':
-
-#         if user_form.is_valid() and profile_form.is_valid():
-#             user = user_form.save(commit=False)
-#             user.set_password(user_form.cleaned_data['password'])
-#             user.save()
-
-#             profile = profile_form.save(commit=False)
-#             profile.user = user
-#             profile.save()
-            
-#             # Add user to a group
-#             add_to_group(None, user, True)
-
-#             # Authenticate and login (optional)
-#             authenticated_user = authenticate(username=user.username, password=user_form.cleaned_data['password'])
-#             if authenticated_user:
-#                 login(request, authenticated_user)
-
-#             messages.success(request, "Registration successful!")
-#             return redirect('login')
-#         else:
-#             print("User Form Errors:", user_form.errors)
-#             print("Profile Form Errors:", profile_form.errors)
-#             return render(request, 'register_app/register.html', {'user_form': user_form, 'profile_form': profile_form})
-        
-#     else:
-#         user_form = UserRegistrationForm()
-#         profile_form = UserProfileForm()
-
-#     return render(request, 'register_app/register.html', {'user_form': user_form, 'profile_form': profile_form})
-
-
 def is_admin(user):
     return user.is_superuser or user.is_staff
 

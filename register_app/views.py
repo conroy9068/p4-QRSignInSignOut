@@ -28,6 +28,8 @@ from .forms import (
     UserProfileForm
 )
 import qrcode
+from io import BytesIO
+from django.core.files import File
 from django.dispatch import receiver
 
 def home(request):
@@ -235,12 +237,20 @@ def generate_qr_code(sender, instance, created, **kwargs):
         qr.add_data(url)
         qr.make(fit=True)
         img = qr.make_image(fill='black', back_color='white')
-        img_path = os.path.join(settings.BASE_DIR, f"media/qr_codes/{instance.id}.png")
-        directory = os.path.dirname(img_path)
-        img.save(img_path)
-        instance.qr_code = img_path
-        instance.save()
+        
+        # Save the image to a BytesIO object
+        img_byte_arr = BytesIO()
+        img.save(img_byte_arr)
 
+        
+        # Create a name for the file
+        filename = f'{instance.id}.png'
+        
+        # Create the File object and save it to the model
+        img_file = File(img_byte_arr, name=filename)
+        instance.qr_code.save(filename, img_file)
+        instance.save()
+        
 # QR code view
 def view_qr_code(request, location_id):
     location = Location.objects.get(id=location_id)

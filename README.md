@@ -1,3 +1,6 @@
+# Live App
+- https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/
+
 ## Resources
 - Extending user model
 https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model

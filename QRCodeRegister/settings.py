@@ -16,7 +16,6 @@ if os.path.isfile('env.py'):
     import env
 from pathlib import Path
 import django
-print("Django version:", django.get_version())
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

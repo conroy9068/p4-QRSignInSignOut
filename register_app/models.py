@@ -8,7 +8,7 @@ class Role(models.Model):
     name = models.CharField(max_length=50)
     description = models.TextField()
 
-    def __str__(self):
+    def __str__(self):  # Updated here
         return self.name
 
 class UserProfile(models.Model):
@@ -20,19 +20,17 @@ class UserProfile(models.Model):
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
-    def __str__(self):
-        return self.user.username
-    
+    def __str__(self):  # Updated here
+        return self.user.username  
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
-    print("create_user_profile called")  # Debugging line
     if created:
         UserProfile.objects.create(user=instance)
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    print("save_user_profile called")  # Debugging line
-    instance.profile.save()
+    instance.profile.save() 
 
 
 
@@ -45,7 +43,7 @@ class Project(models.Model):
         (INACTIVE, 'Inactive'),
     ]
 
-    project_name = models.CharField(max_length=200)
+    project_name = models.CharField(max_length=50)
     project_code = models.CharField(max_length=50)
     project_status = models.CharField(
         max_length=50,
@@ -86,5 +84,5 @@ class SignInOutRegister(models.Model):
     updated_at = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return f"{self.user.username} - {self.location.name}"
+        return f"{self.user} - {self.location.name}"
 

@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block content %}
+<!-- jQuery import -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Button to Open Modal -->
+<div class="d-grid gap-2 m-4">
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLocationModal">
+        Create New Location
+    </button>
+</div>
+
+<h2 class="center">Current Active Locations</h2>
+
+<div class="row">
+    <!-- loop through locations -->
+</div>
+
+<!-- Modal -->
+<div class="modal" id="createLocationModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Location</h4>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <!-- Modal body -->
+            <div class="modal-body">
+                <form id="CreateLocationForm" method="post" action="{% url 'create_location' %}">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <!-- Project Dropdown -->
+                        {{ form.project }}  
+                        <!-- Location Formset -->
+                        {{ formset.management_form }}
+                        {% for form in formset %}
+                            {{ form.as_p }}
+                        {% endfor %}
+                    </div>
+                </form>
+            </div>
+            <!-- Modal footer -->
+            <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Create</button>
+                <button type="button" class="btn btn-danger" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+    function closeModal() {
+        $("#createLocationModal").modal('hide');
+    }
+</script>
+
+{% endblock %}

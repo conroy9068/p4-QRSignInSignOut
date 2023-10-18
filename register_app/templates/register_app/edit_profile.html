@@ -1,6 +1,19 @@
 {% extends "base.html" %}
 
 {% block content %}
+
+<!-- Toast notification for form validation -->
+<div class="toast" id="formErrorToast" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="toast-header">
+    <strong class="mr-auto">Form Validation Error</strong>
+    <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="toast-body" id="toastMessage">
+  </div>
+</div>
+
 <div class="container my-5">
     <div class="row">
         <div class="col-lg-6 offset-lg-3">
@@ -11,17 +24,17 @@
                 <div class="card-body">
                     <form method="post">
                         {% csrf_token %}
+                        {% for field in form %}
                         <div class="mb-3">
-                            {% for field in form %}
                             <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                            <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default_if_none:"" }}">
+                            <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}" value="{{ field.value|default_if_none:'' }}">
                             {% if field.errors %}
                                 <div class="text-danger">
-                                    {{ field.errors.0 }}
+                                    <strong>{{ field.label }}:</strong> {{ field.errors.0 }}
                                 </div>
                             {% endif %}
-                            {% endfor %}
                         </div>
+                        {% endfor %}
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>
@@ -29,4 +42,25 @@
         </div>
     </div>
 </div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+// Show the toast notification for form validation errors
+document.addEventListener("DOMContentLoaded", function() {
+  const formErrors = document.querySelectorAll('.text-danger');
+  const toast = new bootstrap.Toast(document.getElementById('formErrorToast'));
+  let toastMessage = '';
+  
+  formErrors.forEach(errorDiv => {
+    toastMessage += errorDiv.textContent + '<br>';
+  });
+
+  if (toastMessage) {
+    document.getElementById('toastMessage').innerHTML = toastMessage;
+    toast.show();
+  }
+});
+</script>
 {% endblock %}

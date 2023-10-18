@@ -9,7 +9,18 @@
                     <h2>Login</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post">
+                    {% if form.errors %}
+                    <div class="alert alert-danger">
+                        <ul>
+                            {% for field in form %}
+                                {% for error in field.errors %}
+                                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                                {% endfor %}
+                            {% endfor %}
+                        </ul>
+                    </div>
+                    {% endif %}
+                    <form id="loginForm" method="post">
                         {% csrf_token %}
                         <div class="mb-3">
                             <label for="id_username" class="form-label">Username</label>
@@ -30,4 +41,37 @@
         </div>
     </div>
 </div>
+
+<!-- Bootstrap Toast -->
+<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="errorToast">
+  <div class="toast-header">
+    <strong class="me-auto">Error</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+  <div class="toast-body" id="toastBody">
+    Error message here.
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const loginForm = document.getElementById("loginForm");
+
+    loginForm.addEventListener("submit", function(event) {
+        const username = document.getElementById("id_username").value;
+        const password = document.getElementById("id_password").value;
+        const toast = new bootstrap.Toast(document.getElementById("errorToast"));
+        const toastBody = document.getElementById("toastBody");
+
+        if (!username || !password) {
+            event.preventDefault();
+            toastBody.textContent = "Both username and password are required!";
+            toast.show();
+        }
+    });
+});
+</script>
 {% endblock %}

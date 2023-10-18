@@ -1,7 +1,7 @@
 from django import forms
 from .models import Location, Project, UserProfile
 from django.contrib.auth.models import User
-from django import forms
+
 
 # USER PROFILE FORMS
 class UserRegistrationForm(forms.ModelForm):
@@ -35,6 +35,7 @@ class UserProfileForm(forms.ModelForm):
         if password != confirm_password:
             self.add_error('confirm_password', 'Passwords must match.')
             
+
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
@@ -61,11 +62,23 @@ LocationFormSet = forms.inlineformset_factory(
     extra=1,
     can_delete=True,
     widgets={'name': forms.TextInput(attrs={'class': 'form-control'}),
-             'address': forms.TextInput(attrs={'class': 'form-control'}),
-             'description': forms.TextInput(attrs={'class': 'form-control'}),
-             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-             }
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            }
 )
+
+class CreateLocationForm(forms.ModelForm):
+    class Meta:
+        model = Location
+        fields = ['name', 'address', 'description', 'is_active']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+
     
 class ProjectSelectionForm(forms.Form):
     project = forms.ModelChoiceField(
@@ -80,12 +93,12 @@ class ProjectSelectionForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
-
 # LOCATION FORMS
 class SelectLocationSignInOut(forms.Form):
     location = forms.ModelChoiceField(
         queryset=Location.objects.filter(is_active=True), 
-        label="Select Project",
+        label="Select Location",
         widget=forms.Select(attrs={'class': 'form-select'})
     )
+
     

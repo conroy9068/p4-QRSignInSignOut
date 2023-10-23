@@ -167,7 +167,8 @@ def admin_panel(request):
     Returns:
         The rendered 'admin_panel.html' template.
     """
-    return render(request, 'admin_panel.html')
+    projects = Project.objects.all()
+    return render(request, 'register_app/admin_panel.html', {'projects': projects})
 
 # Sign in and sign out views
 @login_required
@@ -213,9 +214,8 @@ def sign_in_out_view(request, location_id):
     else:
         return render(request, 'register_app/sign_in_out.html', context)
 
+
 # LOCATION VIEWS
-
-
 @login_required
 def select_location_view(request):
     """
@@ -253,6 +253,21 @@ def select_project_view(request):
             return HttpResponseRedirect(redirect_url)
 
     return render(request, 'register_app/select_project.html', {'form': form})
+
+
+def edit_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    if request.method == 'POST':
+        form = CreateProjectForm(request.POST, instance=project)
+        formset = LocationFormSet(request.POST, instance=project)
+        if form.is_valid() and formset.is_valid():
+            form.save()
+            formset.save()
+            return redirect('admin_panel')  # or wherever you want to redirect
+    else:
+        form = CreateProjectForm(instance=project)
+        formset = LocationFormSet(instance=project)
+    return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset})
 
 
 # ADMIN VIEWS
@@ -310,8 +325,7 @@ def create_project(request):
             project = form.save()
             formset.instance = project
             formset.save()
-            # Make sure 'user_dashboard.html' is the correct redirect URL
-            return redirect('user_dashboard.html')
+            return redirect('register_app/user_dashboard.html')
     else:
         form = CreateProjectForm()
         formset = LocationFormSet(prefix='locations')

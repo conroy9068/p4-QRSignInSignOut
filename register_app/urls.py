@@ -18,5 +18,7 @@ urlpatterns = [
     path('get_locations/', views.GetLocationsView.as_view(), name='get_locations'),
     path('register/', views.register, name='register'),
     path('admin_panel/', views.admin_panel, name='admin_panel'),
+    path('edit_project/<int:project_id>/', views.edit_project, name='edit_project'),
+
 
 ]

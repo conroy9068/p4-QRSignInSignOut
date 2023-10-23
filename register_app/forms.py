@@ -51,10 +51,10 @@ class CreateProjectForm(forms.ModelForm):
             'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email'
         ]
         widgets = {
-            field: forms.TextInput(attrs={'class': 'form-control mb-2'})
+            field: forms.TextInput(attrs={'class': 'form-control mb-2', 'id': field})
             for field in ['project_name', 'project_code', 'project_url', 'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email']
         }
-        widgets['project_status'] = forms.Select(attrs={'class': 'form-control mb-2'})
+        widgets['project_status'] = forms.Select(attrs={'class': 'form-control mb-2', 'id': 'project_status'})
         
 LocationFormSet = forms.inlineformset_factory(
     Project, Location,

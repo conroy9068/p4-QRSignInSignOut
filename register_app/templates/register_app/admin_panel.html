@@ -1,49 +1,73 @@
-{% load static %}
+{% extends "base.html" %}
 
-<!DOCTYPE html>
-<html>
-  <html lang="en" data-bs-theme="auto">
-  <!-- ... (existing head content) ... -->
-
-<body>
-  <!-- ... (existing SVGs and buttons) ... -->
-
-  <div class="container-fluid">
+{% block content %}
+<div class="container mt-5">
     <div class="row">
-      <!-- Sidebar -->
-      <nav id="sidebar" class="col-md-3 col-lg-2 d-md-block bg-light sidebar">
-        <div class="position-sticky">
-          <ul class="nav flex-column">
-            <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="{% url 'admin_dashboard' %}">
-                Dashboard
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'admin_panel' %}">
-                Admin Panel
-              </a>
-            </li>
-            <li class="nav-item">
-              <a class="nav-link" href="{% url 'location_list' %}">
-                Create Location
-              </a>
-            </li>
-            <!-- Add more links here -->
-          </ul>
+        <!-- Sidebar -->
+        <div class="col-lg-3">
+            <div class="list-group">
+                <a href="#" class="list-group-item list-group-item-action active">
+                    Dashboard
+                </a>
+                <a href="#" class="list-group-item list-group-item-action" id="projectModel">Projects</a>
+                <a href="#" class="list-group-item list-group-item-action" id="signInOutModel">Clock In/Out Register</a>
+            </div>
         </div>
-      </nav>
-
-      <!-- Main Content -->
-      <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-        {% block content %}
-        {% endblock %}
-      </main>
+        <!-- Main Content -->
+        <div class="col-lg-9">
+            <h1>Admin Panel</h1>
+            <div class="card mt-4">
+                <div class="card-body">
+                    <!-- Here we will load tables or forms dynamically -->
+                    <div id="adminContent">
+                        Welcome to the admin panel. Select an option from the sidebar.
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
+</div>
 
-  <!-- ... (existing footer content) ... -->
 
-  <!-- ... (existing scripts) ... -->
-</body>
-</html>
+<!-- Modals -->
+
+<div id="projectTable" style="display:none;">
+  <h2>Project List</h2>
+  <table class="table">
+      <thead>
+          <tr>
+              <th>Project Name</th>
+              <th>Project Code</th>
+              <th>Status</th>
+              <th>Action</th>  <!-- New header for the action buttons -->
+          </tr>
+      </thead>
+      <tbody>
+          {% for project in projects %}
+              <tr>
+                  <td>{{ project.project_name }}</td>
+                  <td>{{ project.project_code }}</td>
+                  <td>{{ project.project_status }}</td>
+                  <td>
+                      <a href="{% url 'edit_project' project.id %}" class="btn btn-primary">Edit</a>
+                  </td>
+              </tr>
+          {% endfor %}
+      </tbody>
+  </table>
+</div>
+
+
+<!-- Optional JavaScript to handle clicks -->
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    // Handle clicks on sidebar items
+    document.getElementById("projectModel").addEventListener("click", function() {
+        // Hide all other tables
+        // Show Project table
+        document.getElementById("adminContent").innerHTML = document.getElementById("projectTable").innerHTML;
+    });
+});
+
+</script>
+{% endblock %}

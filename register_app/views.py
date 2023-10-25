@@ -254,21 +254,65 @@ def select_project_view(request):
 
     return render(request, 'register_app/select_project.html', {'form': form})
 
+# @login_required
+# def edit_project(request, project_id):
+#     project = get_object_or_404(Project, id=project_id)
+#     if request.method == 'POST':
+#         form = CreateProjectForm(request.POST, instance=project)
+#         formset = LocationFormSet(request.POST, instance=project)
+#         if form.is_valid() and formset.is_valid():
+#             form.save()
+#             formset.save()
+#             return redirect('admin_panel')  # or wherever you want to redirect
+#     else:
+#         form = CreateProjectForm(instance=project)
+#         formset = LocationFormSet(instance=project)
+#         return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
 @login_required
 def edit_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
+    
+    # Create a form for project details
     if request.method == 'POST':
         form = CreateProjectForm(request.POST, instance=project)
         formset = LocationFormSet(request.POST, instance=project)
         if form.is_valid() and formset.is_valid():
+            # Save project details
             form.save()
+            messages.success(request, "Project details updated successfully.")
+            
+            # Check if a new location is being added
+            new_location_name = request.POST.get('new_location_name')
+            new_location_address = request.POST.get('new_location_address')
+            new_location_description = request.POST.get('new_location_description')
+            
+            if new_location_name and new_location_address and new_location_description:
+                # Create a new location and associate it with the project
+                new_location = Location(
+                    name=new_location_name,
+                    address=new_location_address,
+                    description=new_location_description,
+                    project=project,
+                    is_active=True  # You can set this as needed
+                )
+                new_location.save()
+                messages.success(request, "New location added successfully.")
+
             formset.save()
-            return redirect('admin_panel')  # or wherever you want to redirect
+            return redirect('edit_project', project_id=project.id)
+        else:
+            messages.error(request, "There was a problem updating the project.")
     else:
         form = CreateProjectForm(instance=project)
         formset = LocationFormSet(instance=project)
-        return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
+        
+    return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
 
+@login_required
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    project.delete()
+    return redirect('admin_panel') 
 
 # ADMIN VIEWS
 @login_required
@@ -332,31 +376,7 @@ def create_project(request):
     return render(request, 'register_app/create_project.html', {'form': form, 'formset': formset})
 
 
-@login_required
-def create_location(request):
-    form = CreateLocationForm()  # Replace with your actual form
-    formset = LocationFormSet(queryset=Location.objects.none())
-    return render(request, 'your_template.html', {'form': form, 'formset': formset})
 
-
-# @login_required
-# def create_location(request):
-#     if request.method == 'POST':
-#         project_form = SelectProjectForm(request.POST)
-#         if project_form.is_valid():
-#             project_id = project_form.cleaned_data.get('project')
-#             location_form = LocationForm(request.POST, project_id=project_id)
-#             if location_form.is_valid():
-#                 location_form.save()
-#                 return JsonResponse({'status': 'success'})
-#             else:
-#                 return JsonResponse({'status': 'error', 'errors': location_form.errors})
-#         else:
-#             return JsonResponse({'status': 'error', 'errors': project_form.errors})
-#     else:
-#         project_form = SelectProjectForm()
-#         location_form = LocationForm()
-#     return render(request, 'your_template.html', {'project_form': project_form, 'location_form': location_form})
 
 
 # QR code generation

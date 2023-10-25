@@ -7,7 +7,7 @@ urlpatterns = [
     # path('sign_out/<int:register_id>/', views.sign_out, name='sign_out'),
     # path('sign_in/<int:location_id>/', views.sign_in_out_view, name='sign_in_out'),
     path('create_project/', views.create_project, name='create_project'),
-    path('create_location/', views.location_form, name='create_location'),
+    # path('create_location/', views.create_location, name='create_location'),
     path('no_access/', views.no_access, name='no_access'),
     path('edit_profile/', views.edit_profile, name='edit_profile'),
     path('view_qr_code/<int:location_id>/', views.view_qr_code, name='view_qr_code'),
@@ -19,6 +19,6 @@ urlpatterns = [
     path('register/', views.register, name='register'),
     path('admin_panel/', views.admin_panel, name='admin_panel'),
     path('edit_project/<int:project_id>/', views.edit_project, name='edit_project'),
-
+    path('delete_project/<int:project_id>/', views.delete_project, name='delete_project'),
 
 ]

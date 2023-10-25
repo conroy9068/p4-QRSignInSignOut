@@ -40,8 +40,8 @@
               <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Admin</a>
               <ul class="dropdown-menu">
                 <li><a class="dropdown-item" href="{% url 'admin_panel' %}">Admin Panel</a></li>
-                <li><a class="dropdown-item" href="{% url 'create_project' %}">Create Project</a></li>
-                <li><a class="dropdown-item" href="{% url 'create_location' %}">Create Location</a></li>
+                {% comment %} <li><a class="dropdown-item" href="{% url 'create_project' %}">Create Project</a></li> {% endcomment %}
+                {% comment %} <li><a class="dropdown-item" href="{% url 'create_location' %}">Create Location</a></li> {% endcomment %}
               </ul>
             </li>
             {% endif %}

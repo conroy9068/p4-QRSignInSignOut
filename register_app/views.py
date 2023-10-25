@@ -254,7 +254,7 @@ def select_project_view(request):
 
     return render(request, 'register_app/select_project.html', {'form': form})
 
-
+@login_required
 def edit_project(request, project_id):
     project = get_object_or_404(Project, id=project_id)
     if request.method == 'POST':
@@ -267,7 +267,7 @@ def edit_project(request, project_id):
     else:
         form = CreateProjectForm(instance=project)
         formset = LocationFormSet(instance=project)
-    return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset})
+        return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
 
 
 # ADMIN VIEWS

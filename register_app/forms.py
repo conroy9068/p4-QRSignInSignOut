@@ -46,6 +46,7 @@ class UserUpdateForm(forms.ModelForm):
 class CreateProjectForm(forms.ModelForm):
     class Meta:
         model = Project
+        can_delete=True,
         fields = [
             'project_name', 'project_code', 'project_status', 'project_url',
             'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email'
@@ -59,7 +60,7 @@ class CreateProjectForm(forms.ModelForm):
 LocationFormSet = forms.inlineformset_factory(
     Project, Location,
     fields=('name', 'address', 'description', 'is_active'),
-    extra=1,
+    extra=0,
     can_delete=True,
     widgets={'name': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
@@ -69,6 +70,18 @@ LocationFormSet = forms.inlineformset_factory(
 )
 
 class CreateLocationForm(forms.ModelForm):
+    class Meta:
+        model = Location
+        can_delete=True,
+        fields = ['name', 'address', 'description', 'is_active']
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'address': forms.TextInput(attrs={'class': 'form-control'}),
+            'description': forms.TextInput(attrs={'class': 'form-control'}),
+            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+        
+class EditLocationForm(forms.ModelForm):
     class Meta:
         model = Location
         fields = ['name', 'address', 'description', 'is_active']

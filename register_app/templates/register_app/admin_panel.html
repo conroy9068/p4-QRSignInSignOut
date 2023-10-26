@@ -57,16 +57,47 @@
   </table>
 </div>
 
+<div id="clockedInUserTable" style="display:none;">
+    <h2>Clocked-in Users</h2>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Project</th>
+                <th>Location</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for entry in clocked_in_users %}
+                <tr>
+                    <td>{{ entry.user.username }}</td>
+                    <td>{{ entry.location.project.project_name }}</td>
+                    <td>{{ entry.location.name }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+
+
 
 <!-- Optional JavaScript to handle clicks -->
+
 <script>
-  document.addEventListener("DOMContentLoaded", function() {
+// Show project table
+document.addEventListener("DOMContentLoaded", function() {
     // Handle clicks on sidebar items
     document.getElementById("projectModel").addEventListener("click", function() {
         // Hide all other tables
         // Show Project table
         document.getElementById("adminContent").innerHTML = document.getElementById("projectTable").innerHTML;
     });
+});
+
+// Show clockedInUserTable 
+document.getElementById("signInOutModel").addEventListener("click", function() {
+    document.getElementById("adminContent").innerHTML = document.getElementById("clockedInUserTable").innerHTML;
 });
 
 </script>

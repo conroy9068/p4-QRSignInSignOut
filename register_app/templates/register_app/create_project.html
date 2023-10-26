@@ -13,7 +13,7 @@
 </button>
 </div>
 
-<h2 class="center">Current Active Projects</h2>
+{% comment %} <h2 class="center">Current Active Projects</h2>
 
 <div class="row">
     {% for project in projects %}
@@ -29,22 +29,22 @@
         </div>
     </div>
     {% endfor %}
-</div>
+</div> {% endcomment %}
 
-        <!-- The Modal -->
-        <div class="modal" id="createProjectModal">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <!-- Modal Header -->
-                    <div class="modal-header">
-                        <h4 class="modal-title">Create New Project</h4>
-                        <button type="button" class="close" data-dismiss="modal" onClick="closeModal()">&times;</button>
-                    </div>
-                    <!-- Modal body -->
-        <div class="modal-body">
-            <form id="createProjectForm" method="post" action="{% url 'create_project' %}">
-                {% csrf_token %}
-                <div class="form-group">
+<!-- The Modal -->
+<div class="modal" id="createProjectModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <!-- Modal Header -->
+            <div class="modal-header">
+                <h4 class="modal-title">Create New Project</h4>
+                <button type="button" class="close" data-dismiss="modal" onClick="closeModal()">&times;</button>
+            </div>
+            <!-- Modal Body -->
+            <div class="modal-body">
+                <form id="createProjectForm" method="post" action="{% url 'create_project' %}">
+                    {% csrf_token %}
+
                     <!-- Add labels for each form field -->
                     <label for="{{ form.project_name.id_for_label }}">Project Name</label>
                     {{ form.project_name }}
@@ -82,40 +82,16 @@
                             {{ location_form.address }}
                             <label for="{{ location_form.description.id_for_label }}">Location Description</label>
                             {{ location_form.description }}
-                            {% comment %} <label for="{{ location_form.is_active.id_for_label }}">Location Active</label>
-                            {{ location_form.is_active }} {% endcomment %}
                         </div>
                         {% endfor %}
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-secondary" id="addLocationButton" onclick="addLocation()">Add Another Location</button>
-                        </div>
+                        <button type="button" class="btn btn-secondary" id="addLocationButton" onclick="addLocation()">Add Another Location</button>
+                        <button type="submit" class="btn btn-primary">Create</button>
                 </div>
-                
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Create</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="closeModal()">Close</button>
+                </div>
             </form>
-            </div>
-
-            {% with empty_location_form=formset.empty_form %}
-            <div id="empty-form" style="display:none;">
-                <!-- Manually render empty location form fields to match existing forms -->
-                <div class="location-form">
-                    <label for="{{ empty_location_form.name.id_for_label }}">Location Name</label>
-                    {{ empty_location_form.name }}
-                    <label for="{{ empty_location_form.address.id_for_label }}">Location Address</label>
-                    {{ empty_location_form.address }}
-                    <label for="{{ empty_location_form.description.id_for_label }}">Location Description</label>
-                    {{ empty_location_form.description }}
-                    <label for="{{ empty_location_form.is_active.id_for_label }}">Location Active</label>
-                    {{ empty_location_form.is_active }}
-                    <button type="button" class="btn btn-danger remove-location-button" onclick="removeForm(this)">Remove Location</button>
-                </div>
-            </div>
-            {% endwith %}
-
-
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="submit" class="btn btn-primary">Create</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="closeModal()">Close</button>
             </div>
         </div>
     </div>
@@ -124,109 +100,24 @@
 
 <script>
     // Function to close the modal
-function closeModal() {
-    $("#createProjectModal").modal('hide');
-}
+    function closeModal() {
+        $("#createProjectModal").modal('hide');
+    }
 
-// Function to remove a location form
-function removeForm(button) {
-    button.parentElement.remove();
-}
+    // Function to add a new location form
+    function addLocation() {
+        const formSetDiv = document.getElementById('locationFormSet');
+        const newFormHtml = document.getElementById('empty-form').innerHTML;
 
-// Function to add a location form
-function addLocation() {
-    const formSetDiv = document.getElementById('locationFormSet');
-    const newFormHtml = document.getElementById('empty-form').innerHTML;
+        const newDiv = document.createElement('div');
+        newDiv.className = 'location-form';
+        newDiv.innerHTML = newFormHtml;
 
-    const newDiv = document.createElement('div');
-    newDiv.className = 'location-form';
-    newDiv.innerHTML = newFormHtml;
+        formSetDiv.appendChild(newDiv);
+    }
 
-    formSetDiv.appendChild(newDiv);
-}
-
-// Function to create a project
-function createProject() {
-    const name = $("input[name='project_name']").val();
-    const status = $("select[name='project_status']").val();
-    const manager = $("input[name='site_manager_name']").val();
-
-    $.post("/create_project/", {
-        name: name,
-        status: status,
-        manager: manager,
-        csrfmiddlewaretoken: '{{ csrf_token }}'
-    }, function(data){
-        if (data.status === 'success') {
-            location.reload();
-            closeModal();
-        } else {
-            alert("Error: " + data.errors || "Undefined error");
-        }
-    });
-}
-
-$(document).ready(function() {
-    // Attach event listeners
-    $('#addLocationButton').click(addLocation);
-    $(document).on('click', '.remove-location-button', function() {
-        removeForm(this);
-    });
-    $('#createProjectForm').submit(function(e) {
-        e.preventDefault();
-        createProject();
-    });
-});
-
-    
-
-    {% comment %} // Function to remove location form
-    $(document).ready(function() {
-        function closeModal() {
-            $("#createProjectModal").modal('hide');
-        }
-    
-        function createProject() {
-            var name = $("#projectName").val();
-            var status = $("#projectStatus").val();
-            var manager = $("#siteManagerName").val();
-            $.post("/create_project/", {name: name, status: status, manager: manager, csrfmiddlewaretoken: '{{ csrf_token }}'}, function(data) {
-                if (data.status === 'success') {
-                    location.reload();
-                    $("#createProjectModal").modal('hide');
-                } else {
-                    alert("Error: " + data.errors);
-                }
-            });
-        }
-    
-        function removeForm(e) {
-            e.preventDefault();
-            $(this).parents('.location-form').remove();
-            let formIdx = $('#id_locations-TOTAL_FORMS').val();
-            $('#id_locations-TOTAL_FORMS').val(parseInt(formIdx) - 1);
-        }
-    
-        $('#locationFormSet').on('click', '.remove-location-button', removeForm);
-    
-        // Adding new location
-        $('#addLocationButton').click(function() {
-            let formIdx = $('#id_locations-TOTAL_FORMS').val();
-            $('#locationFormSet').append($('#empty-form').html().replace(/__prefix__/g, formIdx));
-            $('#id_locations-TOTAL_FORMS').val(parseInt(formIdx) + 1);
-        });
-    });
-    
-    
-    
-
-    $(document).ready(function() {
-        $('#addLocationButton').click(function() {
-            let formIdx = $('#id_locations-TOTAL_FORMS').val();
-            $('#locationFormSet').append($('#empty-form').html().replace(/__prefix__/g, formIdx));
-            $('#id_locations-TOTAL_FORMS').val(parseInt(formIdx) + 1);
-        });
-    }); {% endcomment %}
+    // Attach event listener for 'Add Another Location' button
+    document.getElementById('addLocationButton').addEventListener('click', addLocation);
 </script>
 
 {% endblock %}

@@ -155,20 +155,15 @@ def no_access(request):
     return render(request, 'register_app/no_access.html')
 
 # Admin Panel
-@user_passes_test(is_admin, login_url='/no_access/')
 @login_required
+@user_passes_test(is_admin, login_url='/no_access/')
 def admin_panel(request):
-    """
-    Renders the 'admin_panel.html' template.
-
-    Args:
-        request: The HTTP request object.
-
-    Returns:
-        The rendered 'admin_panel.html' template.
-    """
     projects = Project.objects.all()
-    return render(request, 'register_app/admin_panel.html', {'projects': projects})
+    
+    # Fetch currently signed-in users
+    clocked_in_users = SignInOutRegister.objects.filter(sign_out_time__isnull=True)
+
+    return render(request, 'register_app/admin_panel.html', {'projects': projects, 'clocked_in_users': clocked_in_users})
 
 # Sign in and sign out views
 @login_required
@@ -299,7 +294,9 @@ def edit_project(request, project_id):
                 messages.success(request, "New location added successfully.")
 
             formset.save()
-            return redirect('edit_project', project_id=project.id)
+            # Reinitialize form and formset with updated project data
+            form = CreateProjectForm(instance=project)
+            formset = LocationFormSet(instance=project)
         else:
             messages.error(request, "There was a problem updating the project.")
     else:

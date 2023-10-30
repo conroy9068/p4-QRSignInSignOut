@@ -79,3 +79,12 @@ body {
   .bd-mode-toggle .dropdown-menu .active .bi {
     display: block !important;
   }
+
+
+/* Media query for mobile viewport */
+
+@media (max-width: 990px) {
+  .navbar-nav {
+    justify-content: center;  /* Center the nav links horizontally */
+  }
+}

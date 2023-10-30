@@ -32,9 +32,6 @@ This application is designed for employees and subcontractors to clock in and ou
 ### User Stories
 
 
-
-
-
 ### Database Schema
 
 ![Database Schema dbdiagram.io](static/images/readme/database-schema.png)
@@ -104,10 +101,10 @@ This application is designed for employees and subcontractors to clock in and ou
 ### Design
 
 
-
 ### Wireframes
 
-
+## Agile Development
+Github projects was used for the agile development of this project. The purpose for this was to layout the tasks that needed to be completed and to track the progress of the project. 
 
 ## Credits
 - Extending user model

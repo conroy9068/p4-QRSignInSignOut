@@ -3,121 +3,170 @@
 {% load static %}
 
 {% block content %}
-<!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style>
+    /* Styles for the form and its components */
+    form {
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    label {
+        display: block;
+        margin-top: 15px;
+    }
+    input, select, textarea {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .location-form {
+        margin-top: 20px;
+    }
+    .location-form:not(:first-of-type) {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #eee;
+    }
+    .errorlist {
+        color: red;
+        list-style-type: none;
+        padding: 0;
+    }
+    .errorlist li {
+        text-transform: capitalize;
+        text-decoration: none;
+    }
+</style>
 
-<!-- Button to Open the Modal -->
-<div class="d-grid gap-2 m-4">
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
-    Create New Project
-</button>
-</div>
+<h2 class="m-4">Create New Project</h2>
 
-{% comment %} <h2 class="center">Current Active Projects</h2>
-
-<div class="row">
-    {% for project in projects %}
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ project.project_name }}</h5>
-                <p class="card-text">{{ project.project_status }}</p>
-                <p class="card-text">{{ project.site_manager_name }}</p>
-                <!-- Add more project details here -->
-                <a href="{% url 'view_project_details' project.id %}" class="btn btn-primary">View Details</a>
-            </div>
-        </div>
-    </div>
+<!-- Display errors -->
+{% if form.errors %}
+    <ul class="list-unstyled">
+    {% for field, errors in form.errors.items %}
+        {% for error in errors %}
+            <li class="text-danger">{{ error }}</li>
+        {% endfor %}
     {% endfor %}
-</div> {% endcomment %}
+    </ul>
+{% endif %}
 
-<!-- The Modal -->
-<div class="modal" id="createProjectModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Create New Project</h4>
-                <button type="button" class="close" data-dismiss="modal" onClick="closeModal()">&times;</button>
-            </div>
-            <!-- Modal Body -->
-            <div class="modal-body">
-                <form id="createProjectForm" method="post" action="{% url 'create_project' %}">
-                    {% csrf_token %}
+{% if formset.errors %}
+    <ul class="list-unstyled">
+    {% for error in formset.errors %}
+        <li class="text-danger">{{ error }}</li>
+    {% endfor %}
+    </ul>
+{% endif %}
 
-                    <!-- Add labels for each form field -->
-                    <label for="{{ form.project_name.id_for_label }}">Project Name</label>
-                    {{ form.project_name }}
-                    
-                    <label for="{{ form.project_code.id_for_label }}">Project Code</label>
-                    {{ form.project_code }}
-                    
-                    <label for="{{ form.project_status.id_for_label }}">Project Status</label>
-                    {{ form.project_status }}
-                    
-                    <label for="{{ form.project_url.id_for_label }}">Project URL</label>
-                    {{ form.project_url }}
-                    
-                    <label for="{{ form.site_manager_name.id_for_label }}">Site Manager Name</label>
-                    {{ form.site_manager_name }}
-                    
-                    <label for="{{ form.site_manager_email.id_for_label }}">Site Manager Email</label>
-                    {{ form.site_manager_email }}
-                    
-                    <label for="{{ form.project_manager_name.id_for_label }}">Project Manager Name</label>
-                    {{ form.project_manager_name }}
-                    
-                    <label for="{{ form.project_manager_email.id_for_label }}">Project Manager Email</label>
-                    {{ form.project_manager_email }}
-                </div>
-                {{ formset.management_form }}
-                <div id="locationFormSet">
-                    <!-- Add location form set here -->
-                    {% for location_form in formset %}
-                        <div class="location-form">
-                            <!-- Manually render location form fields with custom labels -->
-                            <label for="{{ location_form.name.id_for_label }}">Location Name</label>
-                            {{ location_form.name }}
-                            <label for="{{ location_form.address.id_for_label }}">Location Address</label>
-                            {{ location_form.address }}
-                            <label for="{{ location_form.description.id_for_label }}">Location Description</label>
-                            {{ location_form.description }}
-                        </div>
-                        {% endfor %}
-                        <button type="button" class="btn btn-secondary" id="addLocationButton" onclick="addLocation()">Add Another Location</button>
-                        <button type="submit" class="btn btn-primary">Create</button>
-                </div>
-                <div class="modal-footer">
-                    <button type="submit" class="btn btn-primary">Create</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="closeModal()">Close</button>
-                </div>
-            </form>
-            </div>
-        </div>
+<form id="create_project" method="post" action="{% url 'create_project' %}">
+    {% csrf_token %}
+    <!-- Add labels and form controls with Bootstrap classes -->
+    <label for="{{ form.project_name.id_for_label }}" class="form-label">Project Name</label>
+    {{ form.project_name }}
+    
+    <label for="{{ form.project_code.id_for_label }}" class="form-label">Project Code</label>
+    {{ form.project_code }}
+
+    <label for="{{ form.project_status.id_for_label }}">Project Status</label>
+    {{ form.project_status }}
+
+    <label for="{{ form.project_url.id_for_label }}">Project URL</label>
+    {{ form.project_url }}
+
+    <label for="{{ form.site_manager_name.id_for_label }}">Site Manager Name</label>
+    {{ form.site_manager_name }}
+
+    <label for="{{ form.site_manager_email.id_for_label }}">Site Manager Email</label>
+    {{ form.site_manager_email }}
+
+    <label for="{{ form.project_manager_name.id_for_label }}">Project Manager Name</label>
+    {{ form.project_manager_name }}
+
+    <label for="{{ form.project_manager_email.id_for_label }}">Project Manager Email</label>
+    {{ form.project_manager_email }}
+    
+    {{ formset.management_form }}
+    
+    <div id="empty-form" style="display: none;">
+        <label for="id_form-__prefix__-name">Location Name</label>
+        <input type="text" id="id_form-__prefix__-name" name="form-__prefix__-name">
+        <label for="id_form-__prefix__-address">Location Address</label>
+        <input type="text" id="id_form-__prefix__-address" name="form-__prefix__-address">
+        <label for="id_form-__prefix__-description">Location Description</label>
+        <textarea id="id_form-__prefix__-description" name="form-__prefix__-description"></textarea>
     </div>
-</div>
+    <div id="locationFormSet">
+        <!-- Loop through each form in the formset -->
 
+        {% for location_form in formset %}
+            <div class="location-form">
+                <!-- Manually render location form fields with custom labels -->
+                <label for="{{ location_form.name.id_for_label }}">Location Name</label>
+                {{ location_form.name }}
+                <label for="{{ location_form.address.id_for_label }}">Location Address</label>
+                {{ location_form.address }}
+                <label for="{{ location_form.description.id_for_label }}">Location Description</label>
+                {{ location_form.description }}
+            </div>
+        {% endfor %}
+
+
+    </div>
+        <!-- Your empty form template here -->
+    </div>
+    <div class="mt-3">
+        <button type="submit" class="btn btn-primary">Create</button>
+        <button type="button" id="addLocationButton" class="btn btn-secondary">+ Location</button>
+    </div>
+</form>
 
 <script>
-    // Function to close the modal
-    function closeModal() {
-        $("#createProjectModal").modal('hide');
-    }
-
-    // Function to add a new location form
+    // Function to add a new location to the form
     function addLocation() {
+
         const formSetDiv = document.getElementById('locationFormSet');
-        const newFormHtml = document.getElementById('empty-form').innerHTML;
-
-        const newDiv = document.createElement('div');
-        newDiv.className = 'location-form';
-        newDiv.innerHTML = newFormHtml;
-
-        formSetDiv.appendChild(newDiv);
+        
+        // Create the container div for the new location
+        const locationDiv = document.createElement('div');
+        locationDiv.className = 'location-form';
+        
+        // Create the label and input for the location name
+        let label = document.createElement('label');
+        label.innerText = 'Location Name';
+        locationDiv.appendChild(label);
+        
+        let input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'form-' + formSetDiv.children.length + '-name';
+        locationDiv.appendChild(input);
+        
+        // Create the label and input for the location address
+        label = document.createElement('label');
+        label.innerText = 'Location Address';
+        locationDiv.appendChild(label);
+        
+        input = document.createElement('input');
+        input.type = 'text';
+        input.name = 'form-' + formSetDiv.children.length + '-address';
+        locationDiv.appendChild(input);
+        
+        // Create the label and textarea for the location description
+        label = document.createElement('label');
+        label.innerText = 'Location Description';
+        locationDiv.appendChild(label);
+        
+        let textarea = document.createElement('textarea');
+        textarea.name = 'form-' + formSetDiv.children.length + '-description';
+        locationDiv.appendChild(textarea);
+        
+        // Append the created location div to the form
+        formSetDiv.appendChild(locationDiv);
     }
-
-    // Attach event listener for 'Add Another Location' button
+    
     document.getElementById('addLocationButton').addEventListener('click', addLocation);
 </script>
+
 
 {% endblock %}

@@ -39,8 +39,8 @@
               <th>Project Name</th>
               <th>Project Code</th>
               <th>Status</th>
-              <th>Action</th>  <!-- New header for the action buttons -->
-          </tr>
+              <th>Actions</th>
+            </tr>
       </thead>
       <tbody>
           {% for project in projects %}
@@ -50,7 +50,10 @@
                   <td>{{ project.project_status }}</td>
                   <td>
                       <a href="{% url 'edit_project' project.id %}" class="btn btn-primary">Edit</a>
+                      <a href="{% url 'create_project' %}" class="btn btn-success ">Create</a>
                   </td>
+                  <td>
+                </td>
               </tr>
           {% endfor %}
       </tbody>

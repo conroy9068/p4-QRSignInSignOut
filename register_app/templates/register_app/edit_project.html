@@ -23,7 +23,6 @@
                     <div class="col-lg-6">
                         <h3 class="mb-4">Project Details</h3>
                         <div class="project-details">
-                            <!-- Display form fields here instead of using {{ form.as_p }} for better control -->
                             {% for field in form %}
                                 <div class="mb-3">
                                     <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
@@ -37,7 +36,7 @@
                             {% endfor %}
                         </div>
                     </div>
-
+                    <!-- Column for Location Details -->
                     <div class="col-lg-6">
                         <h3 class="mb-4">Locations</h3>
                         <div class="locations">
@@ -46,6 +45,9 @@
                                 {% for location_form in formset %}
                                     <li class="list-group-item">
                                         {{ location_form.as_p }}
+                                        {% if location_form.instance.id %}
+                                            <a href="{% url 'view_qr_code' location_form.instance.id %}" class="btn btn-secondary" download>Download QR</a>
+                                        {% endif %}
                                     </li>
                                 {% endfor %}
                             </ul>

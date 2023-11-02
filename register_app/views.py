@@ -117,29 +117,17 @@ def add_to_group(sender, user, created, **kwargs):
         except ObjectDoesNotExist:
             print("Group 'Users' does not exist.")
 
-# @login_required
 # @user_passes_test(is_admin, login_url='/no_access/')
-# def location_form(request, project_id):
-#     project = Project.objects.get(pk=project_id)
-#     if request.method == 'POST':
-#         formset = LocationFormSet(request.POST, instance=project)
-#         if formset.is_valid():
-#             formset.save()
-#             return redirect('register_app/location_list.html')  # Redirect to a success page
-#     else:
-#         formset = LocationFormSet(instance=project)
-#     return render(request, 'register_app/create_location.html', {'formset': formset, 'project': project})
-@user_passes_test(is_admin, login_url='/no_access/')
-@login_required
-def location_form(request):
-    """
-    View function that displays a list of active locations to the user.
+# @login_required
+# def location_form(request):
+#     """
+#     View function that displays a list of active locations to the user.
 
-    :param request: The HTTP request object.
-    :return: The rendered HTTP response object.
-    """
-    locations = Location.objects.filter(is_active=True)
-    return render(request, 'register_app/create_location.html', {'locations': locations})
+#     :param request: The HTTP request object.
+#     :return: The rendered HTTP response object.
+#     """
+#     locations = Location.objects.filter(is_active=True)
+#     return render(request, 'register_app/create_location.html', {'locations': locations})
 
 
 def no_access(request):
@@ -366,12 +354,25 @@ def create_project(request):
             project = form.save()
             formset.instance = project
             formset.save()
-            return redirect('register_app/user_dashboard.html')
+            return redirect('user_dashboard')
     else:
         form = CreateProjectForm()
         formset = LocationFormSet(prefix='locations')
     return render(request, 'register_app/create_project.html', {'form': form, 'formset': formset})
 
+
+@user_passes_test(is_admin, login_url='/no_access/')
+@login_required
+def location_form(request, project_id):
+    project = Project.objects.get(pk=project_id)
+    if request.method == 'POST':
+        formset = LocationFormSet(request.POST, instance=project, prefix='locations')  # Added prefix
+        if formset.is_valid():
+            formset.save()
+            return redirect('register_app/location_list.html')  # Redirect to a success page
+    else:
+        formset = LocationFormSet(instance=project, prefix='locations')  # Added prefix
+    return render(request, 'register_app/create_location.html', {'formset': formset, 'project': project})
 
 
 
@@ -391,7 +392,7 @@ def generate_qr_code(sender, instance, created, **kwargs):
         img.save(img_byte_arr)
 
         # Create a name for the file
-        filename = f'{instance.id}.png'
+        filename = f"{instance.name}.png".replace(" ", "_")
 
         # Create the File object and save it to the model
         img_file = File(img_byte_arr, name=filename)
@@ -399,12 +400,10 @@ def generate_qr_code(sender, instance, created, **kwargs):
         instance.save()
 
 # QR code view
-
-
 def view_qr_code(request, location_id):
     location = Location.objects.get(id=location_id)
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
-    url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in/{location.id}/"
+    url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in_out/{location.id}/"
     qr.add_data(url)
     qr.make(fit=True)
     img = qr.make_image(fill='black', back_color='white')
@@ -412,3 +411,17 @@ def view_qr_code(request, location_id):
     response = HttpResponse(content_type="image/png")
     img.save(response, "PNG")
     return response
+
+def download_qr(request, location_id):
+    location = Location.objects.get(id=location_id)
+
+    # Assuming your Location model has a field named qr_code that stores the generated QR image
+    with location.qr_code.open("rb") as qr_file:
+        response = HttpResponse(qr_file.read(), content_type="image/png")
+
+        # Set filename based on the saved QR code's name
+        filename = location.qr_code.name.split('/')[-1]  # Extracts filename from the full path
+        response['Content-Disposition'] = f'attachment; filename="{filename}"'
+
+        return response
+

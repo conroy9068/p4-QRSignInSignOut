@@ -29,20 +29,24 @@
         {% endif %}
     </div>
 
-    <h2 class="mt-4 mb-3">Past Sign-ins</h2>
-    <div>
+    <h2 class="mb-4">Past Sign-ins</h2>
     {% for signin in past_signins %}
-        <div class="mb-2">
-            <h6>{{ signin.sign_in_time|date:"d M Y" }}</h6>
-            <div class="card mb-4">
+        <div class="mb-4">
+            <h6 class="mb-2">{{ signin.sign_in_time|date:"d M Y" }}</h6>
+            <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title">{{ signin.location.name }}</h5>
+                    <div class="d-flex justify-content-between">
+                        <h5 class="card-title">{{ signin.location.name }}</h5>
+                        <div>
+                        </div>
+                    </div>
                     <p class="card-text">Sign-in Time: {{ signin.sign_in_time }}</p>
                     <p class="card-text">Sign-out Time: {{ signin.sign_out_time }}</p>
                 </div>
             </div>
         </div>
     {% endfor %}
+
     </div>
 </div>
 {% endblock %}

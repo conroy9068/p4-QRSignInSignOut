@@ -29,6 +29,7 @@ from register_app import views
 urlpatterns = [
     path('__debug__/', include(debug_toolbar.urls)),
     path('', views.home, name='home'),
+    path('', include('register_app.urls')), 
 
     path('admin/', admin.site.urls),
     path('login/', auth_views.LoginView.as_view(template_name='register_app/login.html'), name='login'),
@@ -36,7 +37,6 @@ urlpatterns = [
     path('password_change/', auth_views.PasswordChangeView.as_view(), name='passwordChangeForm'),
     path('password_change/done/', auth_views.PasswordChangeDoneView.as_view(), name='passwordChangeDone'),
     path('register/', register_views.register, name='register'),
-    path('', include('register_app.urls')), 
     path('user_dashboard/', register_views.user_dashboard, name='user_dashboard'),
     path('sign_in_out/<int:location_id>/', register_views.sign_in_out_view, name='sign_in_out'),
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),

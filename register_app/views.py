@@ -129,7 +129,7 @@ def add_to_group(sender, user, created, **kwargs):
 #     locations = Location.objects.filter(is_active=True)
 #     return render(request, 'register_app/create_location.html', {'locations': locations})
 
-
+# No access view
 def no_access(request):
     """
     Renders the 'no_access.html' template when a user tries to access a page they do not have permission to view.
@@ -142,6 +142,7 @@ def no_access(request):
     """
     return render(request, 'register_app/no_access.html')
 
+
 # Admin Panel
 @login_required
 @user_passes_test(is_admin, login_url='/no_access/')
@@ -152,6 +153,7 @@ def admin_panel(request):
     clocked_in_users = SignInOutRegister.objects.filter(sign_out_time__isnull=True)
 
     return render(request, 'register_app/admin_panel.html', {'projects': projects, 'clocked_in_users': clocked_in_users})
+
 
 # Sign in and sign out views
 @login_required
@@ -224,80 +226,8 @@ class GetLocationsView(View):
         return JsonResponse(list(locations), safe=False)
 
 
-# PROJECT VIEWS
-@login_required
-def select_project_view(request):
-    form = ProjectSelectionForm()
-    if request.method == "POST":
-        form = SelectLocationSignInOut(request.POST)
-        if form.is_valid():
-            location_id = form.cleaned_data['location'].id
-            redirect_url = reverse('sign_in_out', args=[location_id])
-            return HttpResponseRedirect(redirect_url)
 
-    return render(request, 'register_app/select_project.html', {'form': form})
 
-# @login_required
-# def edit_project(request, project_id):
-#     project = get_object_or_404(Project, id=project_id)
-#     if request.method == 'POST':
-#         form = CreateProjectForm(request.POST, instance=project)
-#         formset = LocationFormSet(request.POST, instance=project)
-#         if form.is_valid() and formset.is_valid():
-#             form.save()
-#             formset.save()
-#             return redirect('admin_panel')  # or wherever you want to redirect
-#     else:
-#         form = CreateProjectForm(instance=project)
-#         formset = LocationFormSet(instance=project)
-#         return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
-@login_required
-def edit_project(request, project_id):
-    project = get_object_or_404(Project, id=project_id)
-    
-    # Create a form for project details
-    if request.method == 'POST':
-        form = CreateProjectForm(request.POST, instance=project)
-        formset = LocationFormSet(request.POST, instance=project)
-        if form.is_valid() and formset.is_valid():
-            # Save project details
-            form.save()
-            messages.success(request, "Project details updated successfully.")
-            
-            # Check if a new location is being added
-            new_location_name = request.POST.get('new_location_name')
-            new_location_address = request.POST.get('new_location_address')
-            new_location_description = request.POST.get('new_location_description')
-            
-            if new_location_name and new_location_address and new_location_description:
-                # Create a new location and associate it with the project
-                new_location = Location(
-                    name=new_location_name,
-                    address=new_location_address,
-                    description=new_location_description,
-                    project=project,
-                    is_active=True  # You can set this as needed
-                )
-                new_location.save()
-                messages.success(request, "New location added successfully.")
-
-            formset.save()
-            # Reinitialize form and formset with updated project data
-            form = CreateProjectForm(instance=project)
-            formset = LocationFormSet(instance=project)
-        else:
-            messages.error(request, "There was a problem updating the project.")
-    else:
-        form = CreateProjectForm(instance=project)
-        formset = LocationFormSet(instance=project)
-        
-    return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
-
-@login_required
-def delete_project(request, project_id):
-    project = get_object_or_404(Project, id=project_id)
-    project.delete()
-    return redirect('admin_panel') 
 
 # ADMIN VIEWS
 @login_required
@@ -349,18 +279,79 @@ def edit_profile(request):
 def create_project(request):
     if request.method == 'POST':
         form = CreateProjectForm(request.POST)
-        formset = LocationFormSet(request.POST, prefix='locations')
-        if form.is_valid() and formset.is_valid():
+        if form.is_valid():
             project = form.save()
-            formset.instance = project
-            formset.save()
-            return redirect('user_dashboard')
+            # Redirect to the 'edit_project' view with the project's ID
+            return redirect(reverse('edit_project', kwargs={'project_id': project.id}))
     else:
         form = CreateProjectForm()
-        formset = LocationFormSet(prefix='locations')
-    return render(request, 'register_app/create_project.html', {'form': form, 'formset': formset})
+
+    return render(request, 'register_app/create_project.html', {'form': form})
+
+@login_required
+def select_project_view(request):
+    form = ProjectSelectionForm()
+    if request.method == "POST":
+        form = SelectLocationSignInOut(request.POST)
+        if form.is_valid():
+            location_id = form.cleaned_data['location'].id
+            redirect_url = reverse('sign_in_out', args=[location_id])
+            return HttpResponseRedirect(redirect_url)
+
+    return render(request, 'register_app/select_project.html', {'form': form})
 
 
+@login_required
+def edit_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    
+    # Create a form for project details
+    if request.method == 'POST':
+        form = CreateProjectForm(request.POST, instance=project)
+        formset = LocationFormSet(request.POST, instance=project)
+        if form.is_valid() and formset.is_valid():
+            # Save project details
+            form.save()
+            messages.success(request, "Project details updated successfully.")
+            
+            # Check if a new location is being added
+            new_location_name = request.POST.get('new_location_name')
+            new_location_address = request.POST.get('new_location_address')
+            new_location_description = request.POST.get('new_location_description')
+            
+            if new_location_name and new_location_address and new_location_description:
+                # Create a new location and associate it with the project
+                new_location = Location(
+                    name=new_location_name,
+                    address=new_location_address,
+                    description=new_location_description,
+                    project=project,
+                    is_active=True  # You can set this as needed
+                )
+                new_location.save()
+                messages.success(request, "New location added successfully.")
+
+            formset.save()
+            # Reinitialize form and formset with updated project data
+            form = CreateProjectForm(instance=project)
+            formset = LocationFormSet(instance=project)
+        else:
+            messages.error(request, "There was a problem updating the project.")
+    else:
+        form = CreateProjectForm(instance=project)
+        formset = LocationFormSet(instance=project)
+        
+    return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
+
+
+@login_required
+def delete_project(request, project_id):
+    project = get_object_or_404(Project, id=project_id)
+    project.delete()
+    return redirect('admin_panel') 
+
+
+# Location views
 @user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def location_form(request, project_id):
@@ -373,8 +364,6 @@ def location_form(request, project_id):
     else:
         formset = LocationFormSet(instance=project, prefix='locations')  # Added prefix
     return render(request, 'register_app/create_location.html', {'formset': formset, 'project': project})
-
-
 
 
 # QR code generation
@@ -399,6 +388,7 @@ def generate_qr_code(sender, instance, created, **kwargs):
         instance.qr_code.save(filename, img_file)
         instance.save()
 
+
 # QR code view
 def view_qr_code(request, location_id):
     location = Location.objects.get(id=location_id)
@@ -412,6 +402,8 @@ def view_qr_code(request, location_id):
     img.save(response, "PNG")
     return response
 
+
+# QR code download
 def download_qr(request, location_id):
     location = Location.objects.get(id=location_id)
 

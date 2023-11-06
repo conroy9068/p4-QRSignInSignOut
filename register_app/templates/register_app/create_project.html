@@ -86,87 +86,13 @@
 
     <label for="{{ form.project_manager_email.id_for_label }}">Project Manager Email</label>
     {{ form.project_manager_email }}
-    
-    {{ formset.management_form }}
-    
-    <div id="empty-form" style="display: none;">
-        <label for="id_form-__prefix__-name">Location Name</label>
-        <input type="text" id="id_form-__prefix__-name" name="form-__prefix__-name">
-        <label for="id_form-__prefix__-address">Location Address</label>
-        <input type="text" id="id_form-__prefix__-address" name="form-__prefix__-address">
-        <label for="id_form-__prefix__-description">Location Description</label>
-        <textarea id="id_form-__prefix__-description" name="form-__prefix__-description"></textarea>
-    </div>
-    <div id="locationFormSet">
-        <!-- Loop through each form in the formset -->
-
-        {% for location_form in formset %}
-            <div class="location-form">
-                <!-- Manually render location form fields with custom labels -->
-                <label for="{{ location_form.name.id_for_label }}">Location Name</label>
-                {{ location_form.name }}
-                <label for="{{ location_form.address.id_for_label }}">Location Address</label>
-                {{ location_form.address }}
-                <label for="{{ location_form.description.id_for_label }}">Location Description</label>
-                {{ location_form.description }}
-            </div>
-        {% endfor %}
-
-
-    </div>
-        <!-- Your empty form template here -->
-    </div>
+        
     <div class="mt-3">
         <button type="submit" class="btn btn-primary">Create</button>
-        <button type="button" id="addLocationButton" class="btn btn-secondary">+ Location</button>
     </div>
 </form>
 
-<script>
-    // Function to add a new location to the form
-    function addLocation() {
 
-        const formSetDiv = document.getElementById('locationFormSet');
-        
-        // Create the container div for the new location
-        const locationDiv = document.createElement('div');
-        locationDiv.className = 'location-form';
-        
-        // Create the label and input for the location name
-        let label = document.createElement('label');
-        label.innerText = 'Location Name';
-        locationDiv.appendChild(label);
-        
-        let input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'form-' + formSetDiv.children.length + '-name';
-        locationDiv.appendChild(input);
-        
-        // Create the label and input for the location address
-        label = document.createElement('label');
-        label.innerText = 'Location Address';
-        locationDiv.appendChild(label);
-        
-        input = document.createElement('input');
-        input.type = 'text';
-        input.name = 'form-' + formSetDiv.children.length + '-address';
-        locationDiv.appendChild(input);
-        
-        // Create the label and textarea for the location description
-        label = document.createElement('label');
-        label.innerText = 'Location Description';
-        locationDiv.appendChild(label);
-        
-        let textarea = document.createElement('textarea');
-        textarea.name = 'form-' + formSetDiv.children.length + '-description';
-        locationDiv.appendChild(textarea);
-        
-        // Append the created location div to the form
-        formSetDiv.appendChild(locationDiv);
-    }
-    
-    document.getElementById('addLocationButton').addEventListener('click', addLocation);
-</script>
 
 
 {% endblock %}

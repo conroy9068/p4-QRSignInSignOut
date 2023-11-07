@@ -114,24 +114,6 @@
         </div>
     </div>
 </div>
-<!-- Location Form Template -->
-<script type="text/html" id="location-form-template">
-    {% with empty_location_form=formset.empty_form %}
-        <li class="list-group-item">
-            {{ empty_location_form.as_p }}
-        </li>
-    {% endwith %}
-</script>
-
-<script>
-    // Add Location Script
-    let formIndex = {{ formset.total_form_count }};
-    document.getElementById('add-location').addEventListener('click', () => {
-        const newForm = document.getElementById('location-form-template').innerHTML.replace(/__prefix__/g, formIndex);
-        document.getElementById('location-form-list').insertAdjacentHTML('beforeend', newForm);
-        document.getElementById('id_form-TOTAL_FORMS').value = ++formIndex;
-    });
-</script>
 
 
 

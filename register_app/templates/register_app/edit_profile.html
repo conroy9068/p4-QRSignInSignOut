@@ -35,6 +35,21 @@
                             {% endif %}
                         </div>
                         {% endfor %}
+
+                        <!-- UserProfile form fields -->
+                        {% for field in UserProfile %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field }}  <!-- This uses the default widget for the field -->
+                            <input type="date" class="form-control" id="{{ form.date_of_birth.id_for_label }}" name="{{ form.date_of_birth.name }}" value="{{ form.date_of_birth.value|date:'Y-m-d'|default_if_none:'' }}">
+
+                            {% if field.errors %}
+                                <div class="text-danger">
+                                    <strong>{{ field.label }}:</strong> {{ field.errors.0 }}
+                                </div>
+                            {% endif %}
+                        </div>
+                        {% endfor %}
                         <button type="submit" class="btn btn-primary">Update</button>
                     </form>
                 </div>

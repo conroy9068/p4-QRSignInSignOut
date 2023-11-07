@@ -1,30 +1,30 @@
 <div class="container mt-5">
-    <div class="d-flex justify-content-center align-items-center">
+    <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card">
+            <div class="card container">
                 <div class="card-body">
                     <h2 class="card-title text-center">{{ location.name }}</h2>
-                    <p class="card-text">{{ location.description }}</p>
+                    <p class="card-text text-muted">{{ location.description }}</p>
                     
                     <form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-swap="outerHTML" hx-target="#clockingDiv">
                         {% csrf_token %}
-                        <div class="my-3">
-                            <strong>Current Session:</strong>
+                        <div class="my-4">
+                            <h6 class="mb-2 text-primary">Current Session:</h6>
                             <div class="d-flex justify-content-between">
-                                <p class="mb-0">Started: {{ current_signin.sign_in_time }}</p>
+                                <span>Started: {{ current_signin.sign_in_time }}</span>
                                 {% if current_signin %}
                                     {% if current_signin.sign_out_time %}
-                                        <p class="mb-0">End: {{ current_signin.sign_out_time|date:"Y-m-d H:i" }}</p>
+                                        <span>End: {{ current_signin.sign_out_time|date:"Y-m-d H:i" }}</span>
                                     {% else %}
-                                        <p class="mb-0">End: Still clocked in</p>
+                                        <span>End: Still clocked in</span>
                                     {% endif %}
                                 {% else %}
-                                    <p class="mb-0">End: -</p>
+                                    <span>End: -</span>
                                 {% endif %}
                             </div>
                         </div>
                         
-                        <div class="text-center">
+                        <div class="d-grid gap-2">
                             {% if not current_signin %}
                                 <button type="submit" class="btn btn-primary btn-lg">Clock In</button>
                             {% else %}
@@ -35,21 +35,17 @@
                 </div>
             </div>
             
-            <div class="card mt-4">
+            <div class="card mt-4 container">
                 <div class="card-body">
                     <h3 class="card-title">Today's Clock-ins</h3>
-                    <ul class="list-group">
+                    <ul class="list-group list-group-flush">
                     {% for signin in todays_signins %}
-                        {% comment %} <li class="list-group-item">
-                            <strong class="text-primary">Project:</strong> <span class="font-weight-bold">{{ signin.location.name }}</span> - 
-                            <strong class="text-secondary">Started:</strong> {{ signin.sign_in_time }} - 
-                            <strong class="text-secondary">Ended:</strong> {{ signin.sign_out_time|default:"Ongoing" }}
-                        </li> {% endcomment %}
-                        <div class="list-group-item">
-                            <h5 class="card-title">{{ signin.location.name }}</h5>
-                            <p class="card-text">Sign-in Time: {{ signin.sign_in_time }}</p>
-                            <p class="card-text">Sign-out Time: {{ signin.sign_out_time }}</p>
-                        </div>
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">{{ signin.location.name }}</h5>
+                                <small class="text-muted">{{ signin.sign_in_time }} - {{ signin.sign_out_time|default:"Ongoing" }}</small>
+                            </div>
+                        </li>
                     {% endfor %}
                     </ul>
                 </div>

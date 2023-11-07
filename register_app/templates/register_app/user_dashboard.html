@@ -1,52 +1,68 @@
 {% extends 'base.html' %}
 
 {% block content %}
-{% if messages %}
-    <div class="container mt-2">
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
-<div class="container mt-5">
-    <h1>Your Dashboard</h1>
-    <div class="mt-4">
-        {% if current_signin %}
-            <h2 class="mb-3">Current Sign-in</h2>
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5 class="card-title">{{ current_signin.location.name }}</h5>
-                    <p class="card-text">Sign-in Time: {{ current_signin.sign_in_time }}</p>
-                </div>
-            </div>
-            <hr>
-        {% else %}
-            <div class="alert alert-info" role="alert">
-                You are currently not signed in to a Project Location.
-            </div>
-        {% endif %}
-    </div>
-
-    <h2 class="mb-4">Past Sign-ins</h2>
-    {% for signin in past_signins %}
-        <div class="mb-4">
-            <h6 class="mb-2">{{ signin.sign_in_time|date:"d M Y" }}</h6>
-            <div class="card">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <h5 class="card-title">{{ signin.location.name }}</h5>
-                        <div>
-                        </div>
-                    </div>
-                    <p class="card-text">Sign-in Time: {{ signin.sign_in_time }}</p>
-                    <p class="card-text">Sign-out Time: {{ signin.sign_out_time }}</p>
-                </div>
-            </div>
-        </div>
+<div class="container mt-3">
+  {% if messages %}
+    {% for message in messages %}
+      <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
     {% endfor %}
+  {% endif %}
 
-    </div>
+  <div class="my-5">
+    <h1 class=" text-center">Your Dashboard</h1>
+    {% comment %} <h2 class="text-center mb-4">Your Dashboard</h2> {% endcomment %}
+
+    {% if current_signin %}
+        <section class="my-4">
+            <div class="card">
+                <div class="card-body bg-success">
+                    <h2 class="card-title text-center text-white">Currently Clocked-in at {{ current_signin.location.name }}</h2>
+                    <p class="card-text text-white text-center">Time Clocked-in at: {{ current_signin.sign_in_time|date:"d/m/Y h:i a" }}</p>
+                </div>
+            </div>
+        </section>
+    {% else %}
+        <div class="alert alert-info" role="alert">
+            You are currently not signed in to a Project Location.
+        </div>
+    {% endif %}
+
+    <section class="mt-4">
+        <div class="card container">
+          <div class="card-body">
+            <h3 class="card-title text-center">Past Sign-ins</h3>
+            <div class="table-responsive">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">Location Name</th>
+                    <th scope="col" class="text-center">Date</th>
+                    <th scope="col" class="text-center">Sign-in Time</th>
+                    <th scope="col" class="text-center">Sign-out Time</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for signin in past_signins %}
+                    <tr>
+                      <td>{{ signin.location.name }}</td>
+                      <td class="text-center">{{ signin.sign_in_time|date:"d/m/Y" }}</td>
+                      <td class="text-center">{{ signin.sign_in_time|date:"H:i" }}</td>
+                      <td class="text-center">{{ signin.sign_out_time|date:"H:i"|default:"Ongoing" }}</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      
+  </div>
 </div>
 {% endblock %}

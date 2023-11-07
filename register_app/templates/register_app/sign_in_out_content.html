@@ -37,19 +37,30 @@
             
             <div class="card mt-4 container">
                 <div class="card-body">
-                    <h3 class="card-title">Today's Clock-ins</h3>
-                    <ul class="list-group list-group-flush">
-                    {% for signin in todays_signins %}
-                        <li class="list-group-item">
-                            <div class="d-flex justify-content-between align-items-center">
-                                <h5 class="mb-0">{{ signin.location.name }}</h5>
-                                <small class="text-muted">{{ signin.sign_in_time }} - {{ signin.sign_out_time|default:"Ongoing" }}</small>
-                            </div>
-                        </li>
-                    {% endfor %}
-                    </ul>
+                    <h3 class="card-title text-center">Today's Clock-ins</h3>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Location Name</th>
+                                    <th scope="col" class="text-center">Sign-in Time</th>
+                                    <th scope="col" class="text-center">Sign-out Time</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for signin in todays_signins %}
+                                <tr>
+                                    <td>{{ signin.location.name }}</td>
+                                    <td class="text-center">{{ signin.sign_in_time|date:"H:i a" }}</td>
+                                    <td class="text-center">{{ signin.sign_out_time|date:"H:i a"|default:"Ongoing" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
+            
             
         </div>
     </div>

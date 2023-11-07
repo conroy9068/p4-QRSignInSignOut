@@ -267,11 +267,12 @@ def edit_profile(request):
 
         if form.is_valid():
             form.save()
-            return redirect('user_dashboard')
+            return redirect('view_profile')
     else:
         form = UserUpdateForm(instance=request.user)
 
     return render(request, 'register_app/edit_profile.html', {'form': form})
+
 
 
 # Project & Location views

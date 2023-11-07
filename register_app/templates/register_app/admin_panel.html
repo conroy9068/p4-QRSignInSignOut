@@ -1,107 +1,85 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
+<div class="container my-5">
     <div class="row">
         <!-- Sidebar -->
         <div class="col-lg-3">
-            <div class="list-group">
-                <a href="#" class="list-group-item list-group-item-action active">
-                    Dashboard
-                </a>
-                <a href="#" class="list-group-item list-group-item-action" id="projectModel">Projects</a>
-                <a href="#" class="list-group-item list-group-item-action" id="signInOutModel">Clock In/Out Register</a>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <a class="nav-link active" id="v-pills-projects-tab" data-bs-toggle="pill" href="#v-pills-projects" role="tab" aria-controls="v-pills-projects" aria-selected="true">Projects</a>
+                <a class="nav-link" id="v-pills-clock-tab" data-bs-toggle="pill" href="#v-pills-clock" role="tab" aria-controls="v-pills-clock" aria-selected="false">Clock In/Out Register</a>
             </div>
         </div>
+
         <!-- Main Content -->
         <div class="col-lg-9">
-            <h1>Admin Panel</h1>
-            <div class="card mt-4">
-                <div class="card-body">
-                    <!-- Here we will load tables or forms dynamically -->
-                    <div id="adminContent">
-                        Welcome to the admin panel. Select an option from the sidebar.
+            <h1 class="mb-4">Admin Panel</h1>
+            <div class="tab-content" id="v-pills-tabContent">
+                <!-- Projects Tab -->
+                <div class="tab-pane fade show active" id="v-pills-projects" role="tabpanel" aria-labelledby="v-pills-projects-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2>Project List</h2>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Project Name</th>
+                                        <th>Project Code</th>
+                                        <th>Status</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for project in projects %}
+                                        <tr>
+                                            <td>{{ project.project_name }}</td>
+                                            <td>{{ project.project_code }}</td>
+                                            <td>{{ project.project_status }}</td>
+                                            <td>
+                                                <a href="{% url 'edit_project' project.id %}" class="btn btn-primary btn-sm">
+                                                Edit
+                                                </a>
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>                            
+                            <a class="btn btn-primary" href="{% url 'create_project' %}">Create Project</a></li>
+                            
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Clock In/Out Register Tab -->
+                <div class="tab-pane fade" id="v-pills-clock" role="tabpanel" aria-labelledby="v-pills-clock-tab">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2>Clocked-in Users</h2>
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Company</th>
+                                        <th>Project</th>
+                                        <th>Location</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for entry in clocked_in_users %}
+                                        <tr>
+                                            <td>{{ entry.user.username }}</td>
+                                            <td>{{ entry.user.profile.company_name }}</td>
+                                            <td>{{ entry.location.project.project_name }}</td>
+                                            <td>{{ entry.location.name }}</td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
-
-
-<!-- Modals -->
-
-<div id="projectTable" style="display:none;">
-  <h2>Project List</h2>
-  <table class="table">
-      <thead>
-          <tr>
-              <th>Project Name</th>
-              <th>Project Code</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-      </thead>
-      <tbody>
-          {% for project in projects %}
-              <tr>
-                  <td>{{ project.project_name }}</td>
-                  <td>{{ project.project_code }}</td>
-                  <td>{{ project.project_status }}</td>
-                  <td>
-                      <a href="{% url 'edit_project' project.id %}" class="btn btn-primary">Edit</a>
-                      <a href="{% url 'create_project' %}" class="btn btn-success ">Create</a>
-                  </td>
-                  <td>
-                </td>
-              </tr>
-          {% endfor %}
-      </tbody>
-  </table>
-</div>
-
-<div id="clockedInUserTable" style="display:none;">
-    <h2>Clocked-in Users</h2>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Username</th>
-                <th>Project</th>
-                <th>Location</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for entry in clocked_in_users %}
-                <tr>
-                    <td>{{ entry.user.username }}</td>
-                    <td>{{ entry.location.project.project_name }}</td>
-                    <td>{{ entry.location.name }}</td>
-                </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
-
-
-
-<!-- Optional JavaScript to handle clicks -->
-
-<script>
-// Show project table
-document.addEventListener("DOMContentLoaded", function() {
-    // Handle clicks on sidebar items
-    document.getElementById("projectModel").addEventListener("click", function() {
-        // Hide all other tables
-        // Show Project table
-        document.getElementById("adminContent").innerHTML = document.getElementById("projectTable").innerHTML;
-    });
-});
-
-// Show clockedInUserTable 
-document.getElementById("signInOutModel").addEventListener("click", function() {
-    document.getElementById("adminContent").innerHTML = document.getElementById("clockedInUserTable").innerHTML;
-});
-
-</script>
 {% endblock %}

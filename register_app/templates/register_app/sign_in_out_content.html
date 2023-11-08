@@ -42,15 +42,15 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">Location Name</th>
-                                    <th scope="col" class="text-center">Sign-in Time</th>
-                                    <th scope="col" class="text-center">Sign-out Time</th>
+                                    <th scope="col" class="d-none d-md-table-cell">Location Name</th>
+                                    <th scope="col" class="text-center">Clock-In</th>
+                                    <th scope="col" class="text-center">Clock-Out</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for signin in todays_signins %}
                                 <tr>
-                                    <td>{{ signin.location.name }}</td>
+                                    <td class="d-none d-md-table-cell">{{ signin.location.name }}</td>
                                     <td class="text-center">{{ signin.sign_in_time|date:"H:i a" }}</td>
                                     <td class="text-center">{{ signin.sign_out_time|date:"H:i a"|default:"Ongoing" }}</td>
                                 </tr>

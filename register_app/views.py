@@ -33,19 +33,28 @@ from io import BytesIO
 from django.core.files import File
 from django.dispatch import receiver
 
-
+# Render the landing page for the app.
 def home(request):
+    """
+    Render the landing page for the app.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered landing page HTML.
+    """
     return render(request, 'landing_page.html')
 
-
+# View function for user registration.
 def register(request):
     """
-    View function for user registration.
+    Handle user registration.
 
-    If the request method is POST, the function validates the user creation form and saves the user's information.
-    If the form is valid, the user is logged in and redirected to their dashboard.
-    If the form is invalid, the errors are printed to the console.
-    If the request method is not POST, the function renders the user creation form.
+    If the request method is POST, validate the user creation form and save the user's information.
+    If the form is valid, log the user in and redirect to their dashboard.
+    If the form is invalid, print the errors to the console.
+    If the request method is not POST, render the user creation form.
 
     Args:
         request (HttpRequest): The HTTP request object.
@@ -83,32 +92,33 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'register_app/register.html', {'form': form})
 
-
+# Check if a user is an administrator or a staff member.
 def is_admin(user):
     """
-    Checks if a user is an administrator or a staff member.
+    Check if the user is an administrator or a staff member.
 
-    Parameters:
-    - user (User object): The user to check.
+    Args:
+        user (User): The user to check.
 
     Returns:
-    - bool: True if the user is a superuser or staff, False otherwise.
+        bool: True if the user is a superuser or staff, False otherwise.
     """
     return user.is_superuser or user.is_staff
 
+# Add a newly created user to the 'Users' group.
 def add_to_group(sender, user, created, **kwargs):
     """
-    Adds a newly created user to the 'Users' group.
+    Add a newly created user to the 'Users' group.
 
-    Parameters:
-    - sender (Model Class): The model class sending the signal.
-    - user (User object): The user instance to add to the group.
-    - created (bool): Flag indicating if the user was created.
-    - kwargs (dict): Additional keyword arguments.
+    Args:
+        sender (Model Class): The model class sending the signal.
+        user (User): The user instance to add to the group.
+        created (bool): Flag indicating if the user was created.
+        kwargs (dict): Additional keyword arguments.
 
     Side-effects:
-    - Adds the user to the 'Users' group if it exists and the user is newly created.
-    - Prints a message to the console if the 'Users' group does not exist.
+        Adds the user to the 'Users' group if it exists and the user is newly created.
+        Prints a message to the console if the 'Users' group does not exist.
     """
     if created:
         try:
@@ -117,36 +127,34 @@ def add_to_group(sender, user, created, **kwargs):
         except ObjectDoesNotExist:
             print("Group 'Users' does not exist.")
 
-# @user_passes_test(is_admin, login_url='/no_access/')
-# @login_required
-# def location_form(request):
-#     """
-#     View function that displays a list of active locations to the user.
 
-#     :param request: The HTTP request object.
-#     :return: The rendered HTTP response object.
-#     """
-#     locations = Location.objects.filter(is_active=True)
-#     return render(request, 'register_app/create_location.html', {'locations': locations})
-
-# No access view
+# Render the 'no_access.html' template.
 def no_access(request):
     """
-    Renders the 'no_access.html' template when a user tries to access a page they do not have permission to view.
+    Render the 'no_access.html' template when access is denied.
 
     Args:
-        request: The HTTP request object.
+        request (HttpRequest): The HTTP request object.
 
     Returns:
-        The rendered 'no_access.html' template.
+        HttpResponse: The rendered 'no_access.html' template.
     """
     return render(request, 'register_app/no_access.html')
 
 
-# Admin Panel
+# Render the admin panel page.
 @login_required
 @user_passes_test(is_admin, login_url='/no_access/')
 def admin_panel(request):
+    """
+    Render the admin panel page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered admin panel page.
+    """
     projects = Project.objects.all()
     
     # Fetch currently signed-in users
@@ -155,15 +163,15 @@ def admin_panel(request):
     return render(request, 'register_app/admin_panel.html', {'projects': projects, 'clocked_in_users': clocked_in_users})
 
 
-# Sign in and sign out views
+# Handle signing in and out of a location.
 @login_required
 def sign_in_out_view(request, location_id):
     """
-    View function that handles signing in and out of a location for a user.
+    Handle signing in and out of a location for a user.
 
     Args:
         request (HttpRequest): The HTTP request object.
-        location_id (int): The ID of the location to sign in/out of.
+        location_id (int): The ID of the location.
 
     Returns:
         HttpResponse: The HTTP response object.
@@ -200,12 +208,17 @@ def sign_in_out_view(request, location_id):
         return render(request, 'register_app/sign_in_out.html', context)
 
 
-# LOCATION VIEWS
+# Display a form to select a location.
 @login_required
 def select_location_view(request):
     """
-    This view displays a form to select a location for sign in/out and handles the form submission.
-    If the form is submitted with valid data, the user is redirected to the sign in/out page for the selected location.
+    Display a form to select a location for sign in/out.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered HTML template or a redirect to the sign in/out page.
     """
     form = SelectLocationSignInOut()
     if request.method == "POST":
@@ -217,28 +230,51 @@ def select_location_view(request):
 
     return render(request, 'register_app/select_location.html', {'form': form})
 
-
+# Return a JSON response containing a list of locations.
 class GetLocationsView(View):
+    """
+    Return a JSON list of locations for a given project ID.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        JsonResponse: A list of locations.
+    """
     def get(self, request, *args, **kwargs):
         project_id = request.GET.get('project_id')
         locations = Location.objects.filter(
             project_id=project_id).values('id', 'name')
         return JsonResponse(list(locations), safe=False)
 
-
-
-
-
-# ADMIN VIEWS
+# Render the admin dashboard page.
 @login_required
 @user_passes_test(is_admin, login_url='/no_access/')
 def admin_dashboard(request):
+    """
+    Render the admin dashboard page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered admin dashboard page.
+    """
     return render(request, 'register_app/admin_dashboard.html')
 
 
-# USER VIEWS
+# Render the user dashboard page.
 @login_required
 def user_dashboard(request):
+    """
+    Render the user dashboard page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered user dashboard page.
+    """
     current_signin = SignInOutRegister.objects.filter(
         user=request.user, sign_out_time__isnull=True).first()
     past_signins = SignInOutRegister.objects.filter(
@@ -250,18 +286,36 @@ def user_dashboard(request):
     }
     return render(request, 'register_app/user_dashboard.html', context)
 
-
+# Render the profile view page.
 @login_required
 def view_profile(request):
+    """
+    Render the profile view page.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered profile view page.
+    """
     user = request.user
     context = {
         'user': user,
     }
     return render(request, 'register_app/view_profile.html', context)
 
-
+# Handle profile editing.
 @login_required
 def edit_profile(request):
+    """
+    Handle profile editing.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered profile edit page or a redirect to the profile view.
+    """
     if request.method == 'POST':
         form = UserUpdateForm(request.POST, instance=request.user)
 
@@ -275,9 +329,19 @@ def edit_profile(request):
 
 
 
-# Project & Location views
+# Create a new project.
+@user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def create_project(request):
+    """
+    Handle the creation of a new project.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered project creation page or a redirect to the edit project page.
+    """
     if request.method == 'POST':
         form = CreateProjectForm(request.POST)
         if form.is_valid():
@@ -289,8 +353,18 @@ def create_project(request):
 
     return render(request, 'register_app/create_project.html', {'form': form})
 
+# Display the project selection form.
 @login_required
 def select_project_view(request):
+    """
+    Display the project selection form.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+
+    Returns:
+        HttpResponse: The rendered project selection form.
+    """
     form = ProjectSelectionForm()
     if request.method == "POST":
         form = SelectLocationSignInOut(request.POST)
@@ -301,9 +375,20 @@ def select_project_view(request):
 
     return render(request, 'register_app/select_project.html', {'form': form})
 
-
+# Handle project editing.
+@user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def edit_project(request, project_id):
+    """
+    Handle editing project details.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        project_id (int): The ID of the project to edit.
+
+    Returns:
+        HttpResponse: The rendered project editing page.
+    """
     project = get_object_or_404(Project, id=project_id)
     
     # Create a form for project details
@@ -344,18 +429,39 @@ def edit_project(request, project_id):
         
     return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
 
-
+# Handle project deletion.
+@user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def delete_project(request, project_id):
+    """
+    Handle the deletion of a project.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        project_id (int): The ID of the project to delete.
+
+    Returns:
+        HttpResponse: A redirect to the admin panel page.
+    """
     project = get_object_or_404(Project, id=project_id)
     project.delete()
     return redirect('admin_panel') 
 
 
-# Location views
+# Handle the creation of location forms.
 @user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def location_form(request, project_id):
+    """
+    Handle the creation of location forms.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        project_id (int): The ID of the project.
+
+    Returns:
+        HttpResponse: The rendered location form or a redirect.
+    """
     project = Project.objects.get(pk=project_id)
     if request.method == 'POST':
         formset = LocationFormSet(request.POST, instance=project, prefix='locations')  # Added prefix
@@ -370,6 +476,18 @@ def location_form(request, project_id):
 # QR code generation
 @receiver(post_save, sender=Location)
 def generate_qr_code(sender, instance, created, **kwargs):
+    """
+    Generate a QR code when a new location is created.
+
+    Args:
+        sender (Model Class): The model class sending the signal.
+        instance (Location): The instance of the Location.
+        created (bool): Flag indicating if the location was created.
+        kwargs (dict): Additional keyword arguments.
+
+    Side-effects:
+        Generates and saves a QR code image for the location.
+    """
     if created:
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
         url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in_out/{instance.id}/"
@@ -392,6 +510,16 @@ def generate_qr_code(sender, instance, created, **kwargs):
 
 # QR code view
 def view_qr_code(request, location_id):
+    """
+    Render the QR code view.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        location_id (int): The ID of the location.
+
+    Returns:
+        HttpResponse: A PNG image response of the QR code.
+    """
     location = Location.objects.get(id=location_id)
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
     url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in_out/{location.id}/"
@@ -406,6 +534,16 @@ def view_qr_code(request, location_id):
 
 # QR code download
 def download_qr(request, location_id):
+    """
+    Handle the download of a QR code.
+
+    Args:
+        request (HttpRequest): The HTTP request object.
+        location_id (int): The ID of the location.
+
+    Returns:
+        HttpResponse: A response with the QR code image as an attachment.
+    """
     location = Location.objects.get(id=location_id)
 
     # Assuming your Location model has a field named qr_code that stores the generated QR image

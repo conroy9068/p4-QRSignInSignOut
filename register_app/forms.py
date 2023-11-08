@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 
 # USER PROFILE FORMS
 class UserRegistrationForm(forms.ModelForm):
+    """
+    A form for registering a new user. Requires the user to enter a username, email, password, and confirm password.
+    """
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
     class Meta:
@@ -23,6 +26,10 @@ class UserRegistrationForm(forms.ModelForm):
 
 
 class UserProfileForm(forms.ModelForm):
+    """
+    A form for creating or updating a user's profile information.
+    Includes fields for company name, date of birth, and phone number.
+    """
     class Meta:
         model = UserProfile
         fields = ['company_name', 'date_of_birth', 'phone_number']
@@ -37,13 +44,28 @@ class UserProfileForm(forms.ModelForm):
             
 
 class UserUpdateForm(forms.ModelForm):
+    """
+    A form for updating user information.
+
+    Allows users to update their username, email, first name, last name, company name, date of birth, and phone number.
+    """
+    company_name = forms.CharField(max_length=255, required=False)
+    date_of_birth = forms.DateField(required=False)
+    phone_number = forms.CharField(max_length=20, required=False)
+
     class Meta:
         model = User
-        fields = ['username', 'email', 'first_name', 'last_name']            
+        fields = ['username', 'email', 'first_name', 'last_name', 'company_name', 'date_of_birth', 'phone_number']
 
 
 # PROJECT FORMS
 class CreateProjectForm(forms.ModelForm):
+    """
+    A form for creating a new project.
+
+    This form includes fields for the project name, code, status, URL, site manager name and email,
+    and project manager name and email. It also includes widgets for styling the form fields.
+    """
     class Meta:
         model = Project
         can_delete=True,
@@ -70,6 +92,11 @@ LocationFormSet = forms.inlineformset_factory(
 )
 
 class CreateLocationForm(forms.ModelForm):
+    """
+    A form used to create a new location instance.
+
+    This form includes fields for the location name, address, description, and whether or not the location is active.
+    """
     class Meta:
         model = Location
         can_delete=True,
@@ -80,8 +107,15 @@ class CreateLocationForm(forms.ModelForm):
             'description': forms.TextInput(attrs={'class': 'form-control'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
+
         
 class EditLocationForm(forms.ModelForm):
+    """
+    A form used to edit a location instance.
+
+    This form includes fields for the location name, address, description, and whether or not the location is active.
+        
+    """
     class Meta:
         model = Location
         fields = ['name', 'address', 'description', 'is_active']
@@ -94,6 +128,10 @@ class EditLocationForm(forms.ModelForm):
 
     
 class ProjectSelectionForm(forms.Form):
+    """
+    A form used to select a project and location.
+
+    """
     project = forms.ModelChoiceField(
         queryset=Project.objects.filter(project_status='Active'), 
         label="Select Project",
@@ -108,6 +146,9 @@ class ProjectSelectionForm(forms.Form):
 
 # LOCATION FORMS
 class SelectLocationSignInOut(forms.Form):
+    """
+    A form for selecting a location for sign in/out.
+    """
     location = forms.ModelChoiceField(
         queryset=Location.objects.filter(is_active=True), 
         label="Select Location",

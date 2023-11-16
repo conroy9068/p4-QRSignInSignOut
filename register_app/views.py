@@ -18,14 +18,12 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Location, Project, SignInOutRegister, UserProfile
 from .forms import (
-    CreateLocationForm,
     CreateProjectForm,
     LocationFormSet,
     ProjectSelectionForm,
     SelectLocationSignInOut,
     UserProfileForm,
     UserRegistrationForm,
-    UserUpdateForm,
     UserProfileForm
 )
 import qrcode
@@ -72,17 +70,6 @@ def register(request):
             user.save()  # Save now
 
             login(request, user)
-
-            # Update UserProfile
-            company_name = request.POST.get('company_name')
-            # date_of_birth = request.POST.get('date_of_birth')
-            # phone_number = request.POST.get('phone_number')
-
-            user_profile = UserProfile.objects.get(user=user)
-            user_profile.company_name = company_name
-            # user_profile.date_of_birth = date_of_birth
-            # user_profile.phone_number = phone_number
-            user_profile.save()
 
             messages.success(request, 'You are now registered and logged in.')
             return redirect('user_dashboard')
@@ -316,14 +303,20 @@ def edit_profile(request):
     Returns:
         HttpResponse: The rendered profile edit page or a redirect to the profile view.
     """
+    try:
+        profile = request.user.profile  # Assuming 'profile' is the related name for the UserProfile
+    except UserProfile.DoesNotExist:
+        profile = UserProfile.objects.create(user=request.user)
+
     if request.method == 'POST':
-        form = UserUpdateForm(request.POST, instance=request.user)
+        form = UserProfileForm(request.POST, instance=profile)
 
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your profile has been updated!')
             return redirect('view_profile')
     else:
-        form = UserUpdateForm(instance=request.user)
+        form = UserProfileForm(instance=profile)
 
     return render(request, 'register_app/edit_profile.html', {'form': form})
 
@@ -346,7 +339,7 @@ def create_project(request):
         form = CreateProjectForm(request.POST)
         if form.is_valid():
             project = form.save()
-            # Redirect to the 'edit_project' view with the project's ID
+            
             return redirect(reverse('edit_project', kwargs={'project_id': project.id}))
     else:
         form = CreateProjectForm()
@@ -412,7 +405,7 @@ def edit_project(request, project_id):
                     address=new_location_address,
                     description=new_location_description,
                     project=project,
-                    is_active=True  # You can set this as needed
+                    is_active=True
                 )
                 new_location.save()
                 messages.success(request, "New location added successfully.")
@@ -464,12 +457,12 @@ def location_form(request, project_id):
     """
     project = Project.objects.get(pk=project_id)
     if request.method == 'POST':
-        formset = LocationFormSet(request.POST, instance=project, prefix='locations')  # Added prefix
+        formset = LocationFormSet(request.POST, instance=project, prefix='locations')
         if formset.is_valid():
             formset.save()
-            return redirect('register_app/location_list.html')  # Redirect to a success page
+            return redirect('register_app/location_list.html')
     else:
-        formset = LocationFormSet(instance=project, prefix='locations')  # Added prefix
+        formset = LocationFormSet(instance=project, prefix='locations')
     return render(request, 'register_app/create_location.html', {'formset': formset, 'project': project})
 
 
@@ -546,12 +539,11 @@ def download_qr(request, location_id):
     """
     location = Location.objects.get(id=location_id)
 
-    # Assuming your Location model has a field named qr_code that stores the generated QR image
     with location.qr_code.open("rb") as qr_file:
         response = HttpResponse(qr_file.read(), content_type="image/png")
 
         # Set filename based on the saved QR code's name
-        filename = location.qr_code.name.split('/')[-1]  # Extracts filename from the full path
+        filename = location.qr_code.name.split('/')[-1]
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
         return response

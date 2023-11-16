@@ -1,16 +1,6 @@
 {% extends "base.html" %}
 
 {% block content %}
-<!-- Messages -->
-{% if messages %}
-    <div class="container mt-2">
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-    </div>
-{% endif %}
 
 <!-- Main Container -->
 <div class="container mt-5">
@@ -61,18 +51,21 @@
                                     {% endfor %}
                                 </div>
                                 <!-- Create New Location Form -->
-                            <div class="create-location-form mt-4">
-                                <div class="collapse" id="new-location-form-collapse">
-                                    <div class="mb-3">
-                                        <label for="new_location_name" class="form-label">Location Name</label>
-                                        <input type="text" class="form-control" id="new_location_name" name="new_location_name">
-                                        <label for="new_location_address" class="form-label">Location Address</label>
-                                        <input type="text" class="form-control" id="new_location_address" name="new_location_address">
-                                        <label for="new_location_description" class="form-label">Location Description</label>
-                                        <textarea class="form-control" id="new_location_description" name="new_location_description" rows="3"></textarea>
+                                <div class="create-location-form">
+                                    <div class="collapse" id="new-location-form-collapse">
+                                        <div class="mb-3">
+                                            <label for="new_location_name" class="form-label">Location Name</label>
+                                            <input type="text" class="form-control" id="new_location_name" name="new_location_name">
+                                            <label for="new_location_address" class="form-label">Location Address</label>
+                                            <input type="text" class="form-control" id="new_location_address" name="new_location_address">
+                                            <label for="new_location_description" class="form-label">Location Description</label>
+                                            <textarea class="form-control" id="new_location_description" name="new_location_description" rows="3"></textarea>
+                                            <div class="invalid-feedback">
+                                                Please fill out all fields.
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
                             <!-- Add New Location Button -->
                             <button type="button" class="btn btn-link text-decoration-none" data-bs-toggle="collapse" data-bs-target="#new-location-form-collapse" aria-expanded="false" aria-controls="new-location-form-collapse">
@@ -114,6 +107,30 @@
         </div>
     </div>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        var newLocationFormCollapse = document.getElementById('new-location-form-collapse');
+        var locationNameField = document.getElementById('new_location_name');
+        var locationAddressField = document.getElementById('new_location_address');
+        var locationDescriptionField = document.getElementById('new_location_description');
+
+        function updateRequiredAttributes() {
+            var isFormExpanded = newLocationFormCollapse.classList.contains('show');
+            locationNameField.required = isFormExpanded;
+            locationAddressField.required = isFormExpanded;
+            locationDescriptionField.required = isFormExpanded;
+        }
+
+        // Initialize required attributes based on initial form state
+        updateRequiredAttributes();
+
+        // Event listener for toggling the form
+        $('#new-location-form-collapse').on('shown.bs.collapse hidden.bs.collapse', function() {
+            updateRequiredAttributes();
+        });
+    });
+</script>
 
 
 

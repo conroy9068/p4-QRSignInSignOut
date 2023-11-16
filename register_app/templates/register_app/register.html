@@ -9,13 +9,16 @@
                     <h2>Register</h2>
                 </div>
                 <div class="card-body">
-                    <form method="post" action="{% url 'register' %}">
+                    <form method="post" action="{% url 'register' %}" class="needs-validation" novalidate>
                         {% csrf_token %}
 
                         <!-- User fields -->
                         <div class="mb-3">
                             <label for="id_username" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="id_username">
+                            <input type="text" name="username" class="form-control" id="id_username" required>
+                            <div class="invalid-feedback">
+                                Please choose a username.
+                            </div>
                             {% if user_form.username.errors %}
                                 <div class="alert alert-danger">
                                     {{ user_form.username.errors }}
@@ -25,7 +28,10 @@
 
                         <div class="mb-3">
                             <label for="id_first_name" class="form-label">First Name</label>
-                            <input type="text" name="first_name" class="form-control" id="id_first_name">
+                            <input type="text" name="first_name" class="form-control" id="id_first_name" required>
+                            <div class="invalid-feedback">
+                                Please enter your first name.
+                            </div>
                             {% if user_form.first_name.errors %}
                                 <div class="alert alert-danger">
                                     {{ user_form.first_name.errors }}
@@ -35,7 +41,10 @@
 
                         <div class="mb-3">
                             <label for="id_last_name" class="form-label">Last Name</label>
-                            <input type="text" name="last_name" class="form-control" id="id_last_name">
+                            <input type="text" name="last_name" class="form-control" id="id_last_name" required>
+                            <div class="invalid-feedback">
+                                Please enter your last name.
+                            </div>
                             {% if user_form.last_name.errors %}
                                 <div class="alert alert-danger">
                                     {{ user_form.last_name.errors }}
@@ -45,7 +54,10 @@
 
                         <div class="mb-3">
                             <label for="id_email" class="form-label">Email</label>
-                            <input type="email" name="email" class="form-control" id="id_email">
+                            <input type="email" name="email" class="form-control" id="id_email" required>
+                            <div class="invalid-feedback">
+                                Please enter a valid email address.
+                            </div>
                             {% if user_form.email.errors %}
                                 <div class="alert alert-danger">
                                     {{ user_form.email.errors }}
@@ -56,7 +68,10 @@
                         <!-- Password fields -->
                         <div class="mb-3">
                             <label for="id_password1" class="form-label">Password</label>
-                            <input type="password" name="password1" class="form-control" id="id_password1">
+                            <input type="password" name="password1" class="form-control" id="id_password1" required>
+                            <div class="invalid-feedback">
+                                Please enter a password.
+                            </div>
                             {% if user_form.password1.errors %}
                                 <div class="alert alert-danger">
                                     {{ user_form.password1.errors }}
@@ -66,21 +81,13 @@
 
                         <div class="mb-3">
                             <label for="id_password2" class="form-label">Confirm Password</label>
-                            <input type="password" name="password2" class="form-control" id="id_password2">
+                            <input type="password" name="password2" class="form-control" id="id_password2" required>
+                            <div class="invalid-feedback">
+                                Please confirm your password.
+                            </div>
                             {% if user_form.password2.errors %}
                                 <div class="alert alert-danger">
                                     {{ user_form.password2.errors }}
-                                </div>
-                            {% endif %}
-                        </div>
-
-                        <!-- User profile fields -->
-                        <div class="mb-3">
-                            <label for="id_company_name" class="form-label">Company Name</label>
-                            <input type="text" name="company_name" class="form-control" id="id_company_name">
-                            {% if profile_form.company_name.errors %}
-                                <div class="alert alert-danger">
-                                    {{ profile_form.company_name.errors }}
                                 </div>
                             {% endif %}
                         </div>
@@ -93,4 +100,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Example starter JavaScript for disabling form submissions if there are invalid fields
+    (function () {
+        'use strict'
+
+        // Fetch all the forms we want to apply custom Bootstrap validation styles to
+        var forms = document.querySelectorAll('.needs-validation')
+
+        // Loop over them and prevent submission
+        Array.prototype.slice.call(forms)
+            .forEach(function (form) {
+                form.addEventListener('submit', function (event) {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+
+                    form.classList.add('was-validated')
+                }, false)
+            })
+    })()
+</script>
 {% endblock %}

@@ -1,8 +1,13 @@
-body {
-    background: url("static/images/readme/database-schema.png") no-repeat center center fixed;
-    background-size: cover;
-}
 
+/* body { font-family: Arial, sans-serif; }
+        .hero { background: url("static/images/readme/database-schema.png"); background-size: cover; padding: 50px 0; text-align: center; }
+        .feature { padding: 20px; }
+        .feature-icon { font-size: 24px; color: #007bff; }
+        .footer { background: #333; color: white; padding: 20px 0; text-align: center;
+        } */
+body { background-color: red; }
+        
+        /* 
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
@@ -131,4 +136,4 @@ input, select, textarea {
       margin-bottom: 5px; 
       border-radius: 5px; 
   }
-}
+} 

@@ -1,12 +1,28 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <body>
-            <h1>Welcome to My Django App!</h1>
-            <p>This is the landing page.</p>
-        </body>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Time Tracker</title>
+
+</head>
+<body>
+
+    <div class="hero">
+        <h1>Welcome to QR Code Time Tracker</h1>
+        <p>Your efficient solution for managing work hours.</p>
+        {% if user.is_authenticated %}
+        <a href="{% url 'select_project' %}" class="btn btn-primary">Select Project</a>
+        {% else %}
+        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+        {% endif %}
     </div>
-</div>
+
+</body>
+</html>
+
 {% endblock %}

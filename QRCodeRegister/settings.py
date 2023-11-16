@@ -33,12 +33,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-i8)6%3=87x@olqlh@j^tlnj#c*3oaul6m_*5&(fdd&e$^&1o_*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['qrsigninoutapp-c6f4e2915b2d.herokuapp.com', 'localhost', '127.0.0.1']
 
-STATIC_ROOT = BASE_DIR / 'static'
+# Static files (CSS, JavaScript, Images)
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_URL = '/static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Application definition
@@ -70,6 +72,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
     'register_app.middleware.NoAccessMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
 
 
 ]

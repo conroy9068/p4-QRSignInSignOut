@@ -17,6 +17,9 @@ if os.path.isfile('env.py'):
     import env
 from pathlib import Path
 import django
+from django.conf import settings
+from django.utils import timezone
+
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -171,7 +174,9 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Europe/Dublin'
+
+USE_TZ = True
 
 USE_I18N = True
 

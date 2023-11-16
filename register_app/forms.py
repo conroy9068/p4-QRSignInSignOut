@@ -30,9 +30,15 @@ class UserProfileForm(forms.ModelForm):
     A form for creating or updating a user's profile information.
     Includes fields for company name, date of birth, and phone number.
     """
+    company_name = forms.CharField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
     class Meta:
         model = UserProfile
-        fields = ['company_name', 'date_of_birth', 'phone_number']
+        fields = ['company_name', 'date_of_birth', 'phone_number' ]
+        widgets = {
+            'company_name': forms.TextInput(attrs={'class': 'form-control'}),
+            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
+        }
 
     def clean(self):
         cleaned_data = super().clean()
@@ -41,21 +47,6 @@ class UserProfileForm(forms.ModelForm):
 
         if password != confirm_password:
             self.add_error('confirm_password', 'Passwords must match.')
-            
-
-class UserUpdateForm(forms.ModelForm):
-    """
-    A form for updating user information.
-
-    Allows users to update their username, email, first name, last name, company name, date of birth, and phone number.
-    """
-    company_name = forms.CharField(max_length=255, required=False)
-    date_of_birth = forms.DateField(required=False)
-    phone_number = forms.CharField(max_length=20, required=False)
-
-    class Meta:
-        model = User
-        fields = ['username', 'email', 'first_name', 'last_name', 'company_name', 'date_of_birth', 'phone_number']
 
 
 # PROJECT FORMS
@@ -106,6 +97,9 @@ class CreateLocationForm(forms.ModelForm):
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.TextInput(attrs={'class': 'form-control'}),
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+        }
+        required = {
+            'description': False,
         }
 
         

@@ -1,13 +1,103 @@
+/* Importing Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Open+Sans:wght@400;700&display=swap');
 
-/* body { font-family: Arial, sans-serif; }
-        .hero { background: url("static/images/readme/database-schema.png"); background-size: cover; padding: 50px 0; text-align: center; }
-        .feature { padding: 20px; }
-        .feature-icon { font-size: 24px; color: #007bff; }
-        .footer { background: #333; color: white; padding: 20px 0; text-align: center;
-        } */
-body { background-color: red; }
-        
-        /* 
+/* Base styles */
+body {
+  font-family: 'Open Sans', sans-serif;
+  background-color: #F8F8F8;
+  color: #333333; 
+  height: 100%; 
+
+}
+
+.landing-page {
+  position: relative; /* Needed to position the pseudo-element */
+  background-image: url('/static/img/hero-image.webp');
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center center;
+}
+
+.landing-page::before {
+  content: ''; /* Pseudo-elements require the content property */
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.507); /* White color with opacity */
+  z-index: 1; /* Sit on top of the background image */
+}
+
+/* Make sure the content of .landing-page sits on top of the overlay */
+.landing-page * {
+  position: relative;
+  z-index: 2;
+}
+
+
+html {
+  height: 100%; 
+  margin: 0; 
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', sans-serif;
+}
+
+.primary-color {
+  background-color: #333333; 
+  color: #FFD700;
+}
+
+.secondary-color {
+  background-color: #FFD700; 
+  color: #333333; 
+}
+
+.accent-color {
+  color: #C0C0C0; 
+}
+
+.page-container {
+  display: flex;
+  flex-direction: column; 
+  min-height: 100%; 
+}
+
+/* Push the footer to the bottom */
+.content-wrap {
+  flex: 1; 
+  padding-bottom: 60px; 
+}
+
+footer {
+  height: 150px;
+  width: 100%;
+  position: relative;
+}
+
+/* Navbar specific styles */
+.navbar {
+  background-color: #333333; 
+}
+
+.navbar .navbar-brand,
+.navbar .navbar-nav .nav-link {
+  color: #333333;
+}
+
+.hero { 
+  background-size: cover; 
+  padding: 50px 0; 
+  text-align: center; }
+.feature { padding: 20px; }
+.feature-icon { font-size: 24px; color: #007bff; }
+.footer { background: #333; color: white; padding: 20px 0; text-align: center;
+}
+
+ 
 .bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
@@ -79,6 +169,12 @@ user-select: none;
     display: block !important;
   }
 
+.nav-pills .nav-link {
+    border: 1px solid #ddd; 
+      margin-bottom: 5px; 
+      border-radius: 5px; 
+  }
+
 /* Styles for the create project form and its components */
 form {
   max-width: 600px;
@@ -115,25 +211,24 @@ input, select, textarea {
 
 
 /* Media query for mobile viewport */
-
-@media (max-width: 990px) {
-  .navbar-nav {
-    justify-content: center;
-  }
-}
-
-
 @media (min-width: 768px) {
   .bd-placeholder-img-lg {
     font-size: 3.5rem;
   }
 }
 
-/* Nav-pills */
-@media (max-width: 767px) {
+@media (max-width: 990px) {
   .nav-pills .nav-link {
       border: 1px solid #ddd; 
       margin-bottom: 5px; 
       border-radius: 5px; 
   }
-} 
+  .navbar-nav {
+    justify-content: center;
+  }
+
+  .navbar-brand {
+    display: none;
+  }
+}
+

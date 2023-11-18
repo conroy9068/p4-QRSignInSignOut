@@ -5,22 +5,9 @@
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: #F8F8F8;
-  color: #2a2a2a; 
+  color: #333333; 
   height: 100%; 
-}
 
-.logo {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 700;
-  font-size: 1.5rem; /* Adjust the font size as desired */
-  color: #2a2a2a;
-}
-
-.navbar-brand .logo {
-  height: auto; /* maintain aspect ratio */
-  width: 100px; /* adjust as necessary */
-  max-width: 100%; /* ensure it is responsive */
-  max-height: 100%; /* ensure it does not exceed the navbar's height */
 }
 
 .landing-page {
@@ -39,7 +26,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.81); /* White color with opacity */
+  background-color: rgba(255, 255, 255, 0.507); /* White color with opacity */
   z-index: 1; /* Sit on top of the background image */
 }
 
@@ -48,6 +35,7 @@ body {
   position: relative;
   z-index: 2;
 }
+
 
 html {
   height: 100%; 
@@ -59,13 +47,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .primary-color {
-  background-color: #2a2a2a; 
+  background-color: #333333; 
   color: #FFD700;
 }
 
 .secondary-color {
   background-color: #FFD700; 
-  color: #2a2a2a; 
+  color: #333333; 
 }
 
 .accent-color {
@@ -85,7 +73,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 footer {
-  height: 20%;
+  height: 150px;
   width: 100%;
   position: relative;
 }
@@ -102,20 +90,15 @@ footer {
 
 .hero { 
   background-size: cover; 
-  padding: 150px 20px; 
+  padding: 50px 0; 
   text-align: center; }
 .feature { padding: 20px; }
-.feature-icon { font-size: 24px; }
+.feature-icon { font-size: 24px; color: #007bff; }
 .footer { background: #333; color: white; padding: 20px 0; text-align: center;
 }
 
-.card {
-  border: none; /* Remove default borders */
-  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1); /* Add subtle shadow for depth */
-  margin-bottom: 2rem; /* Add space between cards */
-}
  
-/* .bd-placeholder-img {
+.bd-placeholder-img {
   font-size: 1.125rem;
   text-anchor: middle;
   -webkit-user-select: none;
@@ -184,7 +167,7 @@ user-select: none;
 
   .bd-mode-toggle .dropdown-menu .active .bi {
     display: block !important;
-  } */
+  }
 
 .nav-pills .nav-link {
     border: 1px solid #ddd; 
@@ -238,8 +221,7 @@ input, select, textarea {
   .nav-pills .nav-link {
       border: 1px solid #ddd; 
       margin-bottom: 5px; 
-      border-radius: 5px;
-      text-align: center;
+      border-radius: 5px; 
   }
   .navbar-nav {
     justify-content: center;

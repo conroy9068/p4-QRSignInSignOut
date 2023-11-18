@@ -25,7 +25,7 @@
               </button>
               <div class="collapse navbar-collapse" id="navbarContent">
           <a class="navbar-brand col-lg-3 me-0" href="{% url 'home' %}">
-            <img src="{% static 'img/qr-clock-in-out-logo.png' %}" alt="test">
+            <img class="logo" src="/static/img/nav-logo.webp" alt="test">
           </a>
           <ul class="navbar-nav col-lg-6 justify-content-lg-center">
             {% if user.is_authenticated %}
@@ -62,7 +62,7 @@
             {% if user.is_authenticated %}
               <a href="{% url 'logout' %}" class="btn btn-primary btn-danger text-white">Logout</a>
             {% else %}
-              <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
+              <a href="{% url 'login' %}" class="btn btn-primary mt-2">Login</a>
             {% endif %}
           </div>
           

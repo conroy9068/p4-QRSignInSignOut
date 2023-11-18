@@ -30,12 +30,11 @@ class UserProfileForm(forms.ModelForm):
     A form for creating or updating a user's profile information.
     Includes fields for company name, date of birth, and phone number.
     """
-    company_name = forms.CharField(required=True, widget=forms.DateInput(attrs={'class': 'form-control'}))
+    company_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
     class Meta:
         model = UserProfile
-        fields = ['company_name', 'date_of_birth', 'phone_number' ]
+        fields = ['company_name', 'date_of_birth', 'phone_number']
         widgets = {
-            'company_name': forms.TextInput(attrs={'class': 'form-control'}),
             'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
         }

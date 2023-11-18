@@ -5,10 +5,8 @@
     <head>  
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width, initial-scale=1">
-      <title>Navbar Template · Bootstrap v5.3</title>
-      <style>
-        body { background-color: red; }
-      </style>
+      <title>QR Code Time Tracker</title>
+
       
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css">
@@ -18,13 +16,17 @@
       <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
     </head>
     <body>
-      <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+      <div class="page-container">
+        <div class="content-wrap">
+              <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
           <div class="container">
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                   <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarContent">
-          <a class="navbar-brand col-lg-3 me-0" href="{% url 'home' %}">Logo</a>
+          <a class="navbar-brand col-lg-3 me-0" href="{% url 'home' %}">
+            <img src="{% static 'img/qr-clock-in-out-logo.png' %}" alt="test">
+          </a>
           <ul class="navbar-nav col-lg-6 justify-content-lg-center">
             {% if user.is_authenticated %}
             <li class="nav-item">
@@ -83,8 +85,9 @@
     {% block content %}
     {% endblock %}
     </main>
-    <footer class="bg-dark text-white mt-4">
-      <div class="container py-4">
+  </div>
+  <footer class="bg-dark text-white mt-4">
+          <div class="container pt-4">
           <div class="row">
               <div class="col-lg-6 col-md-6 mb-4 mb-md-0">
                   <p>

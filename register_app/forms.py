@@ -7,7 +7,8 @@ from .models import Location, Project, UserProfile
 # USER PROFILE FORMS
 class UserRegistrationForm(forms.ModelForm):
     """
-    A form for registering a new user. Requires the user to enter a username, email, password, and confirm password.
+    A form for registering a new user. Requires the user to enter a username,
+    email, password, and confirm password.
     """
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
@@ -39,7 +40,9 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['company_name', 'date_of_birth', 'phone_number']
         widgets = {
-            'date_of_birth': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'date_of_birth': forms.DateInput(attrs={
+                'class': 'form-control', 'type': 'date'
+            }),
             'phone_number': forms.TextInput(attrs={'class': 'form-control'}),
         }
 
@@ -57,20 +60,26 @@ class CreateProjectForm(forms.ModelForm):
     """
     A form for creating a new project.
 
-    This form includes fields for the project name, code, status, URL, site manager name and email,
-    and project manager name and email. It also includes widgets for styling the form fields.
+    This form includes fields for the project name, code, status, URL,
+    site manager name and email,
+    and project manager name and email. It also includes widgets for
+    styling the form fields.
     """
     class Meta:
         model = Project
         can_delete = True,
         fields = [
             'project_name', 'project_code', 'project_status', 'project_url',
-            'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email'
+            'site_manager_name', 'site_manager_email', 'project_manager_name',
+            'project_manager_email'
         ]
         widgets = {
             field: forms.TextInput(
                 attrs={'class': 'form-control mb-2', 'id': field})
-            for field in ['project_name', 'project_code', 'project_url', 'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email']
+            for field in ['project_name', 'project_code', 'project_url',
+                          'site_manager_name', 'site_manager_email',
+                          'project_manager_name', 'project_manager_email'
+                          ]
         }
         widgets['project_status'] = forms.Select(
             attrs={'class': 'form-control mb-2', 'id': 'project_status'})
@@ -84,7 +93,9 @@ LocationFormSet = forms.inlineformset_factory(
     widgets={'name': forms.TextInput(attrs={'class': 'form-control'}),
              'address': forms.TextInput(attrs={'class': 'form-control'}),
              'description': forms.TextInput(attrs={'class': 'form-control'}),
-             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+             'is_active': forms.CheckboxInput(attrs={
+                 'class': 'form-check-input'
+             }),
              }
 )
 
@@ -93,7 +104,8 @@ class CreateLocationForm(forms.ModelForm):
     """
     A form used to create a new location instance.
 
-    This form includes fields for the location name, address, description, and whether or not the location is active.
+    This form includes fields for the location name, address, description,
+    and whether or not the location is active.
     """
     class Meta:
         model = Location
@@ -103,7 +115,9 @@ class CreateLocationForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.TextInput(attrs={'class': 'form-control'}),
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
         }
         required = {
             'description': False,
@@ -114,7 +128,8 @@ class EditLocationForm(forms.ModelForm):
     """
     A form used to edit a location instance.
 
-    This form includes fields for the location name, address, description, and whether or not the location is active.
+    This form includes fields for the location name, address, description,
+    and whether or not the location is active.
 
     """
     class Meta:
@@ -124,7 +139,9 @@ class EditLocationForm(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control'}),
             'description': forms.TextInput(attrs={'class': 'form-control'}),
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+            'is_active': forms.CheckboxInput(attrs={
+                'class': 'form-check-input'
+            }),
         }
 
 
@@ -139,15 +156,14 @@ class ProjectSelectionForm(forms.Form):
         widget=forms.Select(attrs={'class': 'form-select'})
     )
     location = forms.ModelChoiceField(
-        queryset=Location.objects.none(),
+        queryset=Location.objects.filter(is_active=True),
         label="Select Location",
         required=False,
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
+
 # LOCATION FORMS
-
-
 class SelectLocationSignInOut(forms.Form):
     """
     A form for selecting a location for sign in/out.

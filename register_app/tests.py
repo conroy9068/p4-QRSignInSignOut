@@ -78,8 +78,14 @@ def test_create_project(self):
 
     # Send a POST request to create a new project
     response = self.client.post(reverse('create_project'), {
-        'name': 'Test Project',
-        'description': 'This is a test project',
+        'project_name': 'Test Project',
+        'project_code': 'TP001',
+        'project_status': 'Active',  # Assuming 'Active' is a valid choice
+        'project_url': 'https://www.testproject.com',
+        'site_manager_name': 'Site Manager',
+        'site_manager_email': 'site_manager@testproject.com',
+        'project_manager_name': 'Project Manager',
+        'project_manager_email': 'project_manager@testproject.com',
     })
 
     # Check if the project was created successfully

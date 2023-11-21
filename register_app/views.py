@@ -45,7 +45,8 @@ def register(request):
     """
     Handle user registration.
 
-    If the request method is POST, validate the user creation form and save the user's information.
+    If the request method is POST, validate the user creation form and save
+    the user's information.
     If the form is valid, log the user in and redirect to their dashboard.
     If the form is invalid, print the errors to the console.
     If the request method is not POST, render the user creation form.
@@ -104,7 +105,8 @@ def add_to_group(sender, user, created, **kwargs):
         kwargs (dict): Additional keyword arguments.
 
     Side-effects:
-        Adds the user to the 'Users' group if it exists and the user is newly created.
+        Adds the user to the 'Users' group if it exists and the user is newly
+        created.
         Prints a message to the console if the 'Users' group does not exist.
     """
     if created:
@@ -148,7 +150,9 @@ def admin_panel(request):
     clocked_in_users = SignInOutRegister.objects.filter(
         sign_out_time__isnull=True)
 
-    return render(request, 'register_app/admin_panel.html', {'projects': projects, 'clocked_in_users': clocked_in_users})
+    return render(request, 'register_app/admin_panel.html', {
+        'projects': projects, 'clocked_in_users': clocked_in_users
+    })
 
 
 # Handle signing in and out of a location.
@@ -166,14 +170,21 @@ def sign_in_out_view(request, location_id):
     """
     location = get_object_or_404(Location, id=location_id)
     current_signin = SignInOutRegister.objects.filter(
-        user=request.user, location_id=location_id, sign_out_time__isnull=True).first()
+        user=request.user,
+        location_id=location_id,
+        sign_out_time__isnull=True
+    ).first()
 
     if request.method == "POST":
         if not current_signin:
             SignInOutRegister.objects.create(
-                user=request.user, location=location, sign_in_time=timezone.now())
+                user=request.user,
+                location=location,
+                sign_in_time=timezone.now())
             current_signin = SignInOutRegister.objects.filter(
-                user=request.user, location_id=location_id, sign_out_time__isnull=True).first()
+                user=request.user,
+                location_id=location_id,
+                sign_out_time__isnull=True).first()
         else:
             current_signin.sign_out_time = timezone.now()
             current_signin.save()
@@ -191,7 +202,9 @@ def sign_in_out_view(request, location_id):
     }
 
     if 'HTTP_HX_REQUEST' in request.META:
-        return render(request, 'register_app/sign_in_out_content.html', context)
+        return render(
+            request, 'register_app/sign_in_out_content.html', context
+        )
     else:
         return render(request, 'register_app/sign_in_out.html', context)
 
@@ -206,7 +219,8 @@ def select_location_view(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: The rendered HTML template or a redirect to the sign in/out page.
+        HttpResponse: The rendered HTML template or a redirect to the
+        sign in/out page.
     """
     form = SelectLocationSignInOut()
     if request.method == "POST":
@@ -271,8 +285,8 @@ def user_dashboard(request):
     current_signin = SignInOutRegister.objects.filter(
         user=request.user, sign_out_time__isnull=True).first()
     past_signins = SignInOutRegister.objects.filter(
-        user=request.user, sign_out_time__isnull=False).order_by('-sign_in_time')
-
+        user=request.user,
+        sign_out_time__isnull=False).order_by('-sign_in_time')
     context = {
         'current_signin': current_signin,
         'past_signins': past_signins,
@@ -311,7 +325,8 @@ def edit_profile(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: The rendered profile edit page or a redirect to the profile view.
+        HttpResponse: The rendered profile edit page or a redirect
+        to the profile view.
     """
     try:
         # Assuming 'profile' is the related name for the UserProfile
@@ -343,14 +358,17 @@ def create_project(request):
         request (HttpRequest): The HTTP request object.
 
     Returns:
-        HttpResponse: The rendered project creation page or a redirect to the edit project page.
+        HttpResponse: The rendered project creation page or a
+        redirect to the edit project page.
     """
     if request.method == 'POST':
         form = CreateProjectForm(request.POST)
         if form.is_valid():
             project = form.save()
 
-            return redirect(reverse('edit_project', kwargs={'project_id': project.id}))
+            return redirect(reverse('edit_project', kwargs={
+                'project_id': project.id
+            }))
     else:
         form = CreateProjectForm()
 
@@ -413,7 +431,9 @@ def edit_project(request, project_id):
             new_location_description = request.POST.get(
                 'new_location_description')
 
-            if new_location_name and new_location_address and new_location_description:
+            if new_location_name and new_location_address \
+                    and new_location_description:
+
                 # Create a new location and associate it with the project
                 new_location = Location(
                     name=new_location_name,
@@ -436,7 +456,9 @@ def edit_project(request, project_id):
         form = CreateProjectForm(instance=project)
         formset = LocationFormSet(instance=project)
 
-    return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
+    return render(request, 'register_app/edit_project.html', {
+        'form': form, 'formset': formset, 'project': project
+    })
 
 # Handle project deletion.
 
@@ -482,7 +504,9 @@ def location_form(request, project_id):
             return redirect('register_app/location_list.html')
     else:
         formset = LocationFormSet(instance=project, prefix='locations')
-    return render(request, 'register_app/create_location.html', {'formset': formset, 'project': project})
+    return render(request, 'register_app/create_location.html', {
+        'formset': formset, 'project': project
+    })
 
 
 # QR code generation

@@ -60,7 +60,8 @@ class LocationAdmin(admin.ModelAdmin):
 
     Attributes:
         list_display (tuple): Fields to display in the admin list view.
-        list_editable (tuple): Fields that can be edited directly in the admin list view.
+        list_editable (tuple): Fields that can be edited directly in the
+        admin list view.
     """
     list_display = ('name', 'address', 'is_active')
     list_editable = ('is_active',)

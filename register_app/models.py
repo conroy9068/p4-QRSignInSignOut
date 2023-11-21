@@ -21,17 +21,25 @@ class Role(models.Model):
 
 class UserProfile(models.Model):
     """
-    The UserProfile model is an extension of Django's built-in User model. 
-    It uses a one-to-one relationship with the User model to associate additional information with each user.
+    The UserProfile model is an extension of Django's built-in User model.
+    It uses a one-to-one relationship with the User model to associate
+    additional information with each user.
 
     Attributes:
-        user (User): A one-to-one field representing the user associated with the profile.
-        role (Role): A foreign key representing the a users role associated with the profile.
-        company_name (str): A string representing the name of the company associated with the profile.
-        date_of_birth (date): A date representing the date of birth associated with the profile.
-        phone_number (str): A string representing the phone number associated with the profile.
-        created_at (datetime): A datetime representing the date and time the profile was created.
-        updated_at (datetime): A datetime representing the date and time the profile was last updated.
+        user (User): A one-to-one field representing the user associated
+        with the profile.
+        role (Role): A foreign key representing the a users role
+        associated with the profile.
+        company_name (str): A string representing the name of the
+        company associated with the profile.
+        date_of_birth (date): A date representing the date of birth
+        associated with the profile.
+        phone_number (str): A string representing the phone number
+        associated with the profile.
+        created_at (datetime): A datetime representing the date and
+        time the profile was created.
+        updated_at (datetime): A datetime representing the date and
+        time the profile was last updated.
     """
 
     user = models.OneToOneField(
@@ -65,14 +73,16 @@ class Project(models.Model):
     Attributes:
         project_name (str): The name of the project.
         project_code (str): The code of the project.
-        project_status (str): The status of the project. Can be either 'Active' or 'Inactive'.
+        project_status (str): The status of the project. Can be either
+        'Active' or 'Inactive'.
         project_url (str): The URL of the project.
         site_manager_name (str): The name of the site manager.
         site_manager_email (str): The email of the site manager.
         project_manager_name (str): The name of the project manager.
         project_manager_email (str): The email of the project manager.
         created_at (datetime): The date and time when the project was created.
-        updated_at (datetime): The date and time when the project was last updated.
+        updated_at (datetime): The date and time when the project was
+        last updated.
     """
     ACTIVE = 'Active'
     INACTIVE = 'Inactive'
@@ -114,7 +124,8 @@ class Location(models.Model):
         is_active (bool): Whether the location is currently active.
         qr_code (FileField): The QR code associated with the location.
         created_at (DateTimeField): The date and time the location was created.
-        updated_at (DateTimeField): The date and time the location was last updated.
+        updated_at (DateTimeField): The date and time the location was
+        last updated.
     """
     name = models.CharField(max_length=200)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
@@ -131,15 +142,19 @@ class Location(models.Model):
 
 class SignInOutRegister(models.Model):
     """
-    A model to represent the sign-in and sign-out times of users at various locations.
+    A model to represent the sign-in and sign-out times of users at
+    various locations.
 
     Attributes:
         user (ForeignKey): The user associated with the sign-in/sign-out.
-        location (ForeignKey): The location associated with the sign-in/sign-out.
+        location (ForeignKey): The location associated with
+        the sign-in/sign-out.
         sign_in_time (DateTimeField): The date and time the user signed in.
         sign_out_time (DateTimeField): The date and time the user signed out.
-        created_at (DateTimeField): The date and time the sign-in/sign-out was created.
-        updated_at (DateTimeField): The date and time the sign-in/sign-out was last updated.
+        created_at (DateTimeField): The date and time the sign-in/sign-out
+        was created.
+        updated_at (DateTimeField): The date and time the sign-in/sign-out
+        was last updated.
     """
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     location = models.ForeignKey(Location, on_delete=models.CASCADE)

@@ -93,10 +93,11 @@
 </div>
 
 <script>
+  //Function to close the modal
   function closeModal() {
     $("#createLocationModal").modal("hide");
   }
-
+  // Function to create a new location
   function createLocation() {
     var name = $("#locationName").val();
     var address = $("#locationAddress").val();
@@ -109,6 +110,7 @@
         description: description,
         csrfmiddlewaretoken: "{{ csrf_token }}",
       },
+      // Callback function to handle the response
       function (data) {
         if (data.status === "success") {
           location.reload(); // Reload the page if successful

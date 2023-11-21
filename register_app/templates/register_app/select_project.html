@@ -46,6 +46,7 @@
 </div>
 
 <script>
+  // Populate location select based on project selection
   document
     .getElementById("{{ form.project.id_for_label }}")
     .addEventListener("change", function () {
@@ -67,7 +68,7 @@
 </script>
 
 <script>
-  // Example starter JavaScript for disabling form submissions if there are invalid fields
+  //Function to validate form
   (function () {
     "use strict";
 

@@ -1,79 +1,123 @@
-{% extends "base.html" %}
-
-{% load static %}
-
-{% block content %}
-<!-- Include jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
+{% extends "base.html" %} {% load static %} {% block content %}
 <!-- Button to Open the Modal -->
 <div class="d-grid gap-2 m-4">
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLocationModal">
+  <button
+    type="button"
+    class="btn btn-primary"
+    data-bs-toggle="modal"
+    data-bs-target="#createLocationModal"
+  >
     Create New Location
-</button>
+  </button>
 </div>
 
 <h2 class="center">Current Active Locations</h2>
 
 <div class="row">
-    {% for location in locations %}
-    <div class="col-md-4 mb-4">
-        <div class="card">
-            <div class="card-body">
-                <h5 class="card-title">{{ location.name }}</h5>
-                <p class="card-text">{{ location.description }}</p>
-                <p class="card-text">{{ location.address }}</p>
-                <a href="{% url 'view_qr_code' location.id %}" class="btn btn-primary">View QR Code</a>
-            </div>
-        </div>
+  {% for location in locations %}
+  <div class="col-md-4 mb-4">
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{ location.name }}</h5>
+        <p class="card-text">{{ location.description }}</p>
+        <p class="card-text">{{ location.address }}</p>
+        <a href="{% url 'view_qr_code' location.id %}" class="btn btn-primary"
+          >View QR Code</a
+        >
+      </div>
     </div>
-    {% endfor %}
+  </div>
+  {% endfor %}
 </div>
 
 <!-- The Modal -->
 <div class="modal" id="createLocationModal">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <!-- Modal Header -->
-            <div class="modal-header">
-                <h4 class="modal-title">Create New Location</h4>
-                <button type="button" class="close" data-dismiss="modal" onClick="closeModal()">&times;</button>
-            </div>
-            <!-- Modal body -->
-            <div class="modal-body">
-                <form id="createLocationForm">
-                    {% csrf_token %}
-                    <input type="text" id="locationName" placeholder="Location Name" class="form-control mb-2">
-                    <input type="text" id="locationAddress" placeholder="Address" class="form-control mb-2">
-                    <input type="text" id="locationDescription" placeholder="Description" class="form-control mb-2">
-                </form>
-            </div>
-            <!-- Modal footer -->
-            <div class="modal-footer">
-                <button type="button" class="btn btn-primary" onclick="createLocation()">Create</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal" onClick="closeModal()">Close</button>
-            </div>
-        </div>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4 class="modal-title">Create New Location</h4>
+        <button
+          type="button"
+          class="close"
+          data-dismiss="modal"
+          onClick="closeModal()"
+        >
+          &times;
+        </button>
+      </div>
+      <!-- Modal body -->
+      <div class="modal-body">
+        <form id="createLocationForm">
+          {% csrf_token %}
+          <input
+            type="text"
+            id="locationName"
+            placeholder="Location Name"
+            class="form-control mb-2"
+          />
+          <input
+            type="text"
+            id="locationAddress"
+            placeholder="Address"
+            class="form-control mb-2"
+          />
+          <input
+            type="text"
+            id="locationDescription"
+            placeholder="Description"
+            class="form-control mb-2"
+          />
+        </form>
+      </div>
+      <!-- Modal footer -->
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          onclick="createLocation()"
+        >
+          Create
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-dismiss="modal"
+          onClick="closeModal()"
+        >
+          Close
+        </button>
+      </div>
     </div>
+  </div>
 </div>
 
 <script>
-    function closeModal() {
-        $("#createLocationModal").modal('hide');
-    }
+  function closeModal() {
+    $("#createLocationModal").modal("hide");
+  }
 
-    function createLocation() {
-        var name = $("#locationName").val();
-        var address = $("#locationAddress").val();
-        var description = $("#locationDescription").val();
-        $.post("/create_location/", {name: name, address: address, description: description, csrfmiddlewaretoken: '{{ csrf_token }}'}, function(data){
-            if (data.status === 'success') {
-                location.reload();  // Reload the page if successful
-                $("#createLocationModal").modal('hide');  // Hide the modal if successful
-            } else {
-                alert("Error: " + data.errors);
-            }
-        });
-    }
+  function createLocation() {
+    var name = $("#locationName").val();
+    var address = $("#locationAddress").val();
+    var description = $("#locationDescription").val();
+    $.post(
+      "/create_location/",
+      {
+        name: name,
+        address: address,
+        description: description,
+        csrfmiddlewaretoken: "{{ csrf_token }}",
+      },
+      function (data) {
+        if (data.status === "success") {
+          location.reload(); // Reload the page if successful
+          $("#createLocationModal").modal("hide"); // Hide the modal if successful
+        } else {
+          alert("Error: " + data.errors);
+        }
+      }
+    );
+  }
 </script>
 {% endblock %}

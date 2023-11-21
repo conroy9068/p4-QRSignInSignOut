@@ -1,51 +1,61 @@
-{% extends 'base.html' %}
-{% block content %}
+{% extends 'base.html' %} {% block content %}
 <div class="container mt-3">
   <div class="my-5">
-    <h1 class=" text-center">Your Dashboard</h1>
+    <h1 class="text-center">Your Dashboard</h1>
     {% if current_signin %}
-        <section class="my-4">
-            <div class="card">
-                <div class="card-body bg-success">
-                    <h2 class="card-title text-center text-white">Currently Clocked-in at {{ current_signin.location.name }}</h2>
-                    <p class="card-text text-white text-center">Time Clocked-in at: {{ current_signin.sign_in_time|date:"d/m/Y h:i a" }}</p>
-                </div>
-            </div>
-        </section>
-    {% else %}
-        <div class="alert alert-info" role="alert">
-            You are currently not signed in to a Project Location.
+    <section class="my-4">
+      <div class="card">
+        <div class="card-body bg-success">
+          <h2 class="card-title text-center text-white">
+            Currently Clocked-in at {{ current_signin.location.name }}
+          </h2>
+          <p class="card-text text-white text-center">
+            Time Clocked-in at: {{ current_signin.sign_in_time|date:"d/m/Y h:i
+            a" }}
+          </p>
         </div>
+      </div>
+    </section>
+    {% else %}
+    <div class="alert alert-info" role="alert">
+      You are currently not signed in to a Project Location.
+    </div>
     {% endif %}
     <section class="mt-4">
-        <div class="card container">
-          <div class="card-body">
-            <h3 class="card-title text-center">Past Sign-ins</h3>
-            <div class="table-responsive">
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">Location Name</th>
-                    <th scope="col" class="text-center">Date</th>
-                    <th scope="col" class="text-center">Sign-in Time</th>
-                    <th scope="col" class="text-center">Sign-out Time</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for signin in past_signins %}
-                    <tr>
-                      <td>{{ signin.location.name }}</td>
-                      <td class="text-center">{{ signin.sign_in_time|date:"d/m/Y" }}</td>
-                      <td class="text-center">{{ signin.sign_in_time|date:"H:i" }}</td>
-                      <td class="text-center">{{ signin.sign_out_time|date:"H:i"|default:"Ongoing" }}</td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
+      <div class="card container">
+        <div class="card-body">
+          <h3 class="card-title text-center">Past Sign-ins</h3>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col">Location Name</th>
+                  <th scope="col" class="text-center">Date</th>
+                  <th scope="col" class="text-center">Sign-in Time</th>
+                  <th scope="col" class="text-center">Sign-out Time</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for signin in past_signins %}
+                <tr>
+                  <td>{{ signin.location.name }}</td>
+                  <td class="text-center">
+                    {{ signin.sign_in_time|date:"d/m/Y" }}
+                  </td>
+                  <td class="text-center">
+                    {{ signin.sign_in_time|date:"H:i" }}
+                  </td>
+                  <td class="text-center">
+                    {{ signin.sign_out_time|date:"H:i"|default:"Ongoing" }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
           </div>
         </div>
-      </section>
+      </div>
+    </section>
   </div>
 </div>
 {% endblock %}

@@ -1,81 +1,92 @@
-{% extends "base.html" %}
-
-{% block content %}
-<body class='landing-page'>
-
-<div class="container mt-5">
+{% extends "base.html" %} {% block content %}
+<body class="landing-page">
+  <div class="container mt-5">
     <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card">
-                <div class="card-header">
-                    <h2>Login</h2>
-                </div>
-                <div class="card-body">
-                    {% if form.errors %}
-                    <div class="alert alert-danger">
-                        <ul>
-                            {% for field in form %}
-                                {% for error in field.errors %}
-                                    <li><strong>{{ field.label }}:</strong> {{ error }}</li>
-                                {% endfor %}
-                            {% endfor %}
-                        </ul>
-                    </div>
-                    {% endif %}
-                    <form id="loginForm" method="post">
-                        {% csrf_token %}
-                        <div class="mb-3">
-                            <label for="id_username" class="form-label">Username</label>
-                            <input type="text" name="username" class="form-control" id="id_username">
-                        </div>
-                        <div class="mb-3">
-                            <label for="id_password" class="form-label">Password</label>
-                            <input type="password" name="password" class="form-control" id="id_password">
-                        </div>
-                        <button type="submit" class="btn btn-primary">Login</button>
-                    </form>
-                </div>
-                <div class="card-footer text-right">
-                    <a href="{% url 'password_reset' %}">Forgot Password?</a><br>
-                    <a href="{% url 'register' %}">Register</a>
-                </div>
+      <div class="col-md-6">
+        <div class="card">
+          <div class="card-header">
+            <h2>Login</h2>
+          </div>
+          <div class="card-body">
+            {% if form.errors %}
+            <div class="alert alert-danger">
+              <ul>
+                {% for field in form %} {% for error in field.errors %}
+                <li><strong>{{ field.label }}:</strong> {{ error }}</li>
+                {% endfor %} {% endfor %}
+              </ul>
             </div>
+            {% endif %}
+            <form id="loginForm" method="post">
+              {% csrf_token %}
+              <div class="mb-3">
+                <label for="id_username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  name="username"
+                  class="form-control"
+                  id="id_username"
+                />
+              </div>
+              <div class="mb-3">
+                <label for="id_password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  name="password"
+                  class="form-control"
+                  id="id_password"
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+          </div>
+          <div class="card-footer text-right">
+            <a href="{% url 'password_reset' %}">Forgot Password?</a><br />
+            <a href="{% url 'register' %}">Register</a>
+          </div>
         </div>
+      </div>
     </div>
-</div>
-
-<!-- Bootstrap Toast -->
-<div class="toast" role="alert" aria-live="assertive" aria-atomic="true" id="errorToast">
-  <div class="toast-header">
-    <strong class="me-auto">Error</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
   </div>
-  <div class="toast-body" id="toastBody">
-    Error message here.
-  </div>
-</div>
 
+  <!-- Bootstrap Toast -->
+  <div
+    class="toast"
+    role="alert"
+    aria-live="assertive"
+    aria-atomic="true"
+    id="errorToast"
+  >
+    <div class="toast-header">
+      <strong class="me-auto">Error</strong>
+      <button
+        type="button"
+        class="btn-close"
+        data-bs-dismiss="toast"
+        aria-label="Close"
+      ></button>
+    </div>
+    <div class="toast-body" id="toastBody">Error message here.</div>
+  </div>
 </body>
 
-{% endblock %}
-
-{% block extra_js %}
+{% endblock %} {% block extra_js %}
 <script>
-document.addEventListener("DOMContentLoaded", function() {
+  document.addEventListener("DOMContentLoaded", function () {
     const loginForm = document.getElementById("loginForm");
 
-    loginForm.addEventListener("submit", function(event) {
-        const username = document.getElementById("id_username").value;
-        const password = document.getElementById("id_password").value;
-        const toast = new bootstrap.Toast(document.getElementById("errorToast"));
-        const toastBody = document.getElementById("toastBody");
+    loginForm.addEventListener("submit", function (event) {
+      const username = document.getElementById("id_username").value;
+      const password = document.getElementById("id_password").value;
+      const toast = new bootstrap.Toast(document.getElementById("errorToast"));
+      const toastBody = document.getElementById("toastBody");
 
-        if (!username || !password) {
-            event.preventDefault();
-            toastBody.textContent = "Both username and password are required!";
-            toast.show();
-        }
+      if (!username || !password) {
+        event.preventDefault();
+        toastBody.textContent = "Both username and password are required!";
+        toast.show();
+      }
     });
-});
+  });
 </script>
 {% endblock %}

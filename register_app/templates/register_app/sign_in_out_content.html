@@ -1,67 +1,83 @@
 <div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <div class="card container">
-                <div class="card-body">
-                    <h2 class="card-title text-center">{{ location.name }}</h2>
-                    <p class="card-text text-muted">{{ location.description }}</p>
-                    
-                    <form method="post" hx-post="{% url 'sign_in_out' location.id %}" hx-swap="outerHTML" hx-target="#clockingDiv">
-                        {% csrf_token %}
-                        <div class="my-4">
-                            <h6 class="mb-2 text-primary">Current Session:</h6>
-                            <div class="d-flex justify-content-between">
-                                <span>Started: {{ current_signin.sign_in_time }}</span>
-                                {% if current_signin %}
-                                    {% if current_signin.sign_out_time %}
-                                        <span>End: {{ current_signin.sign_out_time|date:"Y-m-d H:i" }}</span>
-                                    {% else %}
-                                        <span>End: Still clocked in</span>
-                                    {% endif %}
-                                {% else %}
-                                    <span>End: -</span>
-                                {% endif %}
-                            </div>
-                        </div>
-                        
-                        <div class="d-grid gap-2">
-                            {% if not current_signin %}
-                                <button type="submit" class="btn btn-primary btn-lg">Clock In</button>
-                            {% else %}
-                                <button type="submit" class="btn btn-danger btn-lg">Clock Out</button>
-                            {% endif %}
-                        </div>
-                    </form>
-                </div>
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <div class="card container">
+        <div class="card-body">
+          <h2 class="card-title text-center">{{ location.name }}</h2>
+          <p class="card-text text-muted">{{ location.description }}</p>
+
+          <form
+            method="post"
+            hx-post="{% url 'sign_in_out' location.id %}"
+            hx-swap="outerHTML"
+            hx-target="#clockingDiv"
+          >
+            {% csrf_token %}
+            <div class="my-4">
+              <h6 class="mb-2 text-primary">Current Session:</h6>
+              <div class="d-flex justify-content-between">
+                <span>Started: {{ current_signin.sign_in_time }}</span>
+                {% if current_signin %} {% if current_signin.sign_out_time %}
+                <span
+                  >End: {{ current_signin.sign_out_time|date:"Y-m-d H:i"
+                  }}</span
+                >
+                {% else %}
+                <span>End: Still clocked in</span>
+                {% endif %} {% else %}
+                <span>End: -</span>
+                {% endif %}
+              </div>
             </div>
-            
-            <div class="card mt-4 container">
-                <div class="card-body">
-                    <h3 class="card-title text-center">Today's Clock-ins</h3>
-                    <div class="table-responsive">
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th scope="col" class="d-none d-md-table-cell">Location Name</th>
-                                    <th scope="col" class="text-center">Clock-In</th>
-                                    <th scope="col" class="text-center">Clock-Out</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for signin in todays_signins %}
-                                <tr>
-                                    <td class="d-none d-md-table-cell">{{ signin.location.name }}</td>
-                                    <td class="text-center">{{ signin.sign_in_time|date:"H:i a" }}</td>
-                                    <td class="text-center">{{ signin.sign_out_time|date:"H:i a"|default:"Ongoing" }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
+
+            <div class="d-grid gap-2">
+              {% if not current_signin %}
+              <button type="submit" class="btn btn-primary btn-lg">
+                Clock In
+              </button>
+              {% else %}
+              <button type="submit" class="btn btn-danger btn-lg">
+                Clock Out
+              </button>
+              {% endif %}
             </div>
-            
-            
+          </form>
         </div>
+      </div>
+
+      <div class="card mt-4 container">
+        <div class="card-body">
+          <h3 class="card-title text-center">Today's Clock-ins</h3>
+          <div class="table-responsive">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th scope="col" class="d-none d-md-table-cell">
+                    Location Name
+                  </th>
+                  <th scope="col" class="text-center">Clock-In</th>
+                  <th scope="col" class="text-center">Clock-Out</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for signin in todays_signins %}
+                <tr>
+                  <td class="d-none d-md-table-cell">
+                    {{ signin.location.name }}
+                  </td>
+                  <td class="text-center">
+                    {{ signin.sign_in_time|date:"H:i a" }}
+                  </td>
+                  <td class="text-center">
+                    {{ signin.sign_out_time|date:"H:i a"|default:"Ongoing" }}
+                  </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </div>

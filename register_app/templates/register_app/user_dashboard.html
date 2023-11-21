@@ -4,17 +4,13 @@
     <h1 class="text-center">Your Dashboard</h1>
     {% if current_signin %}
     <section class="my-4">
-      <div class="card">
-        <div class="card-body bg-success">
-          <h2 class="card-title text-center text-white">
-            Currently Clocked-in at {{ current_signin.location.name }}
-          </h2>
-          <p class="card-text text-white text-center">
-            Time Clocked-in at: {{ current_signin.sign_in_time|date:"d/m/Y h:i
-            a" }}
-          </p>
+      <section class="my-4">
+        <div class="card">
+            <div class="card-body bg-success">
+                <h2 class="card-title text-center text-white">Currently Clocked-in at {{ current_signin.location.name }}</h2>
+                <p class="card-text text-white text-center">Time Clocked-in at: {{ current_signin.sign_in_time|date:"d/m/Y h:i a" }}</p>
+            </div>
         </div>
-      </div>
     </section>
     {% else %}
     <div class="alert alert-info" role="alert">
@@ -37,18 +33,12 @@
               </thead>
               <tbody>
                 {% for signin in past_signins %}
-                <tr>
-                  <td>{{ signin.location.name }}</td>
-                  <td class="text-center">
-                    {{ signin.sign_in_time|date:"d/m/Y" }}
-                  </td>
-                  <td class="text-center">
-                    {{ signin.sign_in_time|date:"H:i" }}
-                  </td>
-                  <td class="text-center">
-                    {{ signin.sign_out_time|date:"H:i"|default:"Ongoing" }}
-                  </td>
-                </tr>
+                  <tr>
+                    <td>{{ signin.location.name }}</td>
+                    <td class="text-center">{{ signin.sign_in_time|date:"d/m/Y" }}</td>
+                    <td class="text-center">{{ signin.sign_in_time|date:"H:i" }}</td>
+                    <td class="text-center">{{ signin.sign_out_time|date:"H:i"|default:"Ongoing" }}</td>
+                  </tr>
                 {% endfor %}
               </tbody>
             </table>

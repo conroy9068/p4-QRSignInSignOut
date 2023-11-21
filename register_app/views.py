@@ -1,35 +1,29 @@
-from datetime import datetime, time
 import os
+from datetime import datetime, time
+from io import BytesIO
 
-from django.shortcuts import render, redirect, get_object_or_404
-from django.http import HttpResponseRedirect, JsonResponse, HttpResponse
-from django.contrib.auth.decorators import login_required, user_passes_test
-from django.urls import reverse
-from django.views import View
-from django.utils import timezone
-from django.db.models.signals import post_save
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.models import User, Group
-from django.contrib.auth.forms import UserCreationForm
-from django.core.files import File
+import qrcode
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.models import Group, User
 from django.core.exceptions import ObjectDoesNotExist
-
-from .models import Location, Project, SignInOutRegister, UserProfile
-from .forms import (
-    CreateProjectForm,
-    LocationFormSet,
-    ProjectSelectionForm,
-    SelectLocationSignInOut,
-    UserProfileForm,
-    UserRegistrationForm,
-    UserProfileForm
-)
-import qrcode
-from io import BytesIO
 from django.core.files import File
+from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from django.utils import timezone
+from django.views import View
+
+from .forms import (CreateProjectForm, LocationFormSet, ProjectSelectionForm,
+                    SelectLocationSignInOut, UserProfileForm,
+                    UserRegistrationForm)
+from .models import Location, Project, SignInOutRegister, UserProfile
+
 
 # Render the landing page for the app.
 def home(request):
@@ -45,6 +39,8 @@ def home(request):
     return render(request, 'landing_page.html')
 
 # View function for user registration.
+
+
 def register(request):
     """
     Handle user registration.
@@ -80,6 +76,8 @@ def register(request):
     return render(request, 'register_app/register.html', {'form': form})
 
 # Check if a user is an administrator or a staff member.
+
+
 def is_admin(user):
     """
     Check if the user is an administrator or a staff member.
@@ -93,6 +91,8 @@ def is_admin(user):
     return user.is_superuser or user.is_staff
 
 # Add a newly created user to the 'Users' group.
+
+
 def add_to_group(sender, user, created, **kwargs):
     """
     Add a newly created user to the 'Users' group.
@@ -143,9 +143,10 @@ def admin_panel(request):
         HttpResponse: The rendered admin panel page.
     """
     projects = Project.objects.all()
-    
+
     # Fetch currently signed-in users
-    clocked_in_users = SignInOutRegister.objects.filter(sign_out_time__isnull=True)
+    clocked_in_users = SignInOutRegister.objects.filter(
+        sign_out_time__isnull=True)
 
     return render(request, 'register_app/admin_panel.html', {'projects': projects, 'clocked_in_users': clocked_in_users})
 
@@ -218,6 +219,8 @@ def select_location_view(request):
     return render(request, 'register_app/select_location.html', {'form': form})
 
 # Return a JSON response containing a list of locations.
+
+
 class GetLocationsView(View):
     """
     Return a JSON list of locations for a given project ID.
@@ -228,6 +231,7 @@ class GetLocationsView(View):
     Returns:
         JsonResponse: A list of locations.
     """
+
     def get(self, request, *args, **kwargs):
         project_id = request.GET.get('project_id')
         locations = Location.objects.filter(
@@ -235,6 +239,8 @@ class GetLocationsView(View):
         return JsonResponse(list(locations), safe=False)
 
 # Render the admin dashboard page.
+
+
 @login_required
 @user_passes_test(is_admin, login_url='/no_access/')
 def admin_dashboard(request):
@@ -274,6 +280,8 @@ def user_dashboard(request):
     return render(request, 'register_app/user_dashboard.html', context)
 
 # Render the profile view page.
+
+
 @login_required
 def view_profile(request):
     """
@@ -292,6 +300,8 @@ def view_profile(request):
     return render(request, 'register_app/view_profile.html', context)
 
 # Handle profile editing.
+
+
 @login_required
 def edit_profile(request):
     """
@@ -304,7 +314,8 @@ def edit_profile(request):
         HttpResponse: The rendered profile edit page or a redirect to the profile view.
     """
     try:
-        profile = request.user.profile  # Assuming 'profile' is the related name for the UserProfile
+        # Assuming 'profile' is the related name for the UserProfile
+        profile = request.user.profile
     except UserProfile.DoesNotExist:
         profile = UserProfile.objects.create(user=request.user)
 
@@ -319,7 +330,6 @@ def edit_profile(request):
         form = UserProfileForm(instance=profile)
 
     return render(request, 'register_app/edit_profile.html', {'form': form})
-
 
 
 # Create a new project.
@@ -339,7 +349,7 @@ def create_project(request):
         form = CreateProjectForm(request.POST)
         if form.is_valid():
             project = form.save()
-            
+
             return redirect(reverse('edit_project', kwargs={'project_id': project.id}))
     else:
         form = CreateProjectForm()
@@ -347,6 +357,8 @@ def create_project(request):
     return render(request, 'register_app/create_project.html', {'form': form})
 
 # Display the project selection form.
+
+
 @login_required
 def select_project_view(request):
     """
@@ -369,6 +381,8 @@ def select_project_view(request):
     return render(request, 'register_app/select_project.html', {'form': form})
 
 # Handle project editing.
+
+
 @user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def edit_project(request, project_id):
@@ -383,7 +397,7 @@ def edit_project(request, project_id):
         HttpResponse: The rendered project editing page.
     """
     project = get_object_or_404(Project, id=project_id)
-    
+
     # Create a form for project details
     if request.method == 'POST':
         form = CreateProjectForm(request.POST, instance=project)
@@ -392,12 +406,13 @@ def edit_project(request, project_id):
             # Save project details
             form.save()
             messages.success(request, "Project details updated successfully.")
-            
+
             # Check if a new location is being added
             new_location_name = request.POST.get('new_location_name')
             new_location_address = request.POST.get('new_location_address')
-            new_location_description = request.POST.get('new_location_description')
-            
+            new_location_description = request.POST.get(
+                'new_location_description')
+
             if new_location_name and new_location_address and new_location_description:
                 # Create a new location and associate it with the project
                 new_location = Location(
@@ -415,14 +430,17 @@ def edit_project(request, project_id):
             form = CreateProjectForm(instance=project)
             formset = LocationFormSet(instance=project)
         else:
-            messages.error(request, "There was a problem updating the project.")
+            messages.error(
+                request, "There was a problem updating the project.")
     else:
         form = CreateProjectForm(instance=project)
         formset = LocationFormSet(instance=project)
-        
+
     return render(request, 'register_app/edit_project.html', {'form': form, 'formset': formset, 'project': project})
 
 # Handle project deletion.
+
+
 @user_passes_test(is_admin, login_url='/no_access/')
 @login_required
 def delete_project(request, project_id):
@@ -438,7 +456,7 @@ def delete_project(request, project_id):
     """
     project = get_object_or_404(Project, id=project_id)
     project.delete()
-    return redirect('admin_panel') 
+    return redirect('admin_panel')
 
 
 # Handle the creation of location forms.
@@ -457,7 +475,8 @@ def location_form(request, project_id):
     """
     project = Project.objects.get(pk=project_id)
     if request.method == 'POST':
-        formset = LocationFormSet(request.POST, instance=project, prefix='locations')
+        formset = LocationFormSet(
+            request.POST, instance=project, prefix='locations')
         if formset.is_valid():
             formset.save()
             return redirect('register_app/location_list.html')
@@ -547,4 +566,3 @@ def download_qr(request, location_id):
         response['Content-Disposition'] = f'attachment; filename="{filename}"'
 
         return response
-

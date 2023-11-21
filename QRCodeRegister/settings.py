@@ -9,18 +9,20 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-from pathlib import Path
-import dj_database_url
 import os
 import sys
+from pathlib import Path
+
+import dj_database_url
+
 if os.path.isfile('env.py'):
     import env
+
 from pathlib import Path
+
 import django
 from django.conf import settings
 from django.utils import timezone
-
-
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -35,7 +37,8 @@ SECRET_KEY = 'django-insecure-i8)6%3=87x@olqlh@j^tlnj#c*3oaul6m_*5&(fdd&e$^&1o_*
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['qrsigninoutapp-c6f4e2915b2d.herokuapp.com', 'localhost', '127.0.0.1']
+ALLOWED_HOSTS = ['qrsigninoutapp-c6f4e2915b2d.herokuapp.com',
+                 'localhost', '127.0.0.1']
 
 # Static files (CSS, JavaScript, Images)
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -60,7 +63,6 @@ INSTALLED_APPS = [
     'debug_toolbar',
 
 ]
-
 
 
 SITE_ID = 1

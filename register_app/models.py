@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-# Create your models here.
+
 
 class Role(models.Model):
     """
@@ -17,13 +17,13 @@ class Role(models.Model):
 
     def __str__(self):
         return self.name
-    
+
 
 class UserProfile(models.Model):
     """
     The UserProfile model is an extension of Django's built-in User model. 
     It uses a one-to-one relationship with the User model to associate additional information with each user.
-    
+
     Attributes:
         user (User): A one-to-one field representing the user associated with the profile.
         role (Role): A foreign key representing the a users role associated with the profile.
@@ -34,7 +34,8 @@ class UserProfile(models.Model):
         updated_at (datetime): A datetime representing the date and time the profile was last updated.
     """
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name='profile')
     role = models.ForeignKey(Role, on_delete=models.SET_NULL, null=True)
     company_name = models.CharField(max_length=50, null=True, blank=True)
     date_of_birth = models.DateField(null=True, blank=True)
@@ -45,15 +46,16 @@ class UserProfile(models.Model):
     def __str__(self):
         return self.user.username
 
+
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
         UserProfile.objects.create(user=instance)
 
+
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
-    instance.profile.save() 
-
+    instance.profile.save()
 
 
 class Project(models.Model):
@@ -95,9 +97,10 @@ class Project(models.Model):
     project_manager_email = models.EmailField(null=True)
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
-    
+
     def __str__(self):
         return self.project_name
+
 
 class Location(models.Model):
     """
@@ -125,10 +128,11 @@ class Location(models.Model):
     def __str__(self):
         return self.name
 
+
 class SignInOutRegister(models.Model):
     """
     A model to represent the sign-in and sign-out times of users at various locations.
-    
+
     Attributes:
         user (ForeignKey): The user associated with the sign-in/sign-out.
         location (ForeignKey): The location associated with the sign-in/sign-out.
@@ -146,4 +150,3 @@ class SignInOutRegister(models.Model):
 
     def __str__(self):
         return f"{self.user} - {self.location.name}"
-

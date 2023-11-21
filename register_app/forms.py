@@ -1,6 +1,7 @@
 from django import forms
-from .models import Location, Project, UserProfile
 from django.contrib.auth.models import User
+
+from .models import Location, Project, UserProfile
 
 
 # USER PROFILE FORMS
@@ -10,10 +11,11 @@ class UserRegistrationForm(forms.ModelForm):
     """
     password = forms.CharField(widget=forms.PasswordInput)
     confirm_password = forms.CharField(widget=forms.PasswordInput)
+
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
-        
+
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
@@ -30,7 +32,9 @@ class UserProfileForm(forms.ModelForm):
     A form for creating or updating a user's profile information.
     Includes fields for company name, date of birth, and phone number.
     """
-    company_name = forms.CharField(required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+    company_name = forms.CharField(
+        required=True, widget=forms.TextInput(attrs={'class': 'form-control'}))
+
     class Meta:
         model = UserProfile
         fields = ['company_name', 'date_of_birth', 'phone_number']
@@ -58,28 +62,32 @@ class CreateProjectForm(forms.ModelForm):
     """
     class Meta:
         model = Project
-        can_delete=True,
+        can_delete = True,
         fields = [
             'project_name', 'project_code', 'project_status', 'project_url',
             'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email'
         ]
         widgets = {
-            field: forms.TextInput(attrs={'class': 'form-control mb-2', 'id': field})
+            field: forms.TextInput(
+                attrs={'class': 'form-control mb-2', 'id': field})
             for field in ['project_name', 'project_code', 'project_url', 'site_manager_name', 'site_manager_email', 'project_manager_name', 'project_manager_email']
         }
-        widgets['project_status'] = forms.Select(attrs={'class': 'form-control mb-2', 'id': 'project_status'})
-        
+        widgets['project_status'] = forms.Select(
+            attrs={'class': 'form-control mb-2', 'id': 'project_status'})
+
+
 LocationFormSet = forms.inlineformset_factory(
     Project, Location,
     fields=('name', 'address', 'description', 'is_active'),
     extra=0,
     can_delete=True,
     widgets={'name': forms.TextInput(attrs={'class': 'form-control'}),
-            'address': forms.TextInput(attrs={'class': 'form-control'}),
-            'description': forms.TextInput(attrs={'class': 'form-control'}),
-            'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
-            }
+             'address': forms.TextInput(attrs={'class': 'form-control'}),
+             'description': forms.TextInput(attrs={'class': 'form-control'}),
+             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
+             }
 )
+
 
 class CreateLocationForm(forms.ModelForm):
     """
@@ -89,7 +97,7 @@ class CreateLocationForm(forms.ModelForm):
     """
     class Meta:
         model = Location
-        can_delete=True,
+        can_delete = True,
         fields = ['name', 'address', 'description', 'is_active']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
@@ -101,13 +109,13 @@ class CreateLocationForm(forms.ModelForm):
             'description': False,
         }
 
-        
+
 class EditLocationForm(forms.ModelForm):
     """
     A form used to edit a location instance.
 
     This form includes fields for the location name, address, description, and whether or not the location is active.
-        
+
     """
     class Meta:
         model = Location
@@ -119,33 +127,33 @@ class EditLocationForm(forms.ModelForm):
             'is_active': forms.CheckboxInput(attrs={'class': 'form-check-input'}),
         }
 
-    
+
 class ProjectSelectionForm(forms.Form):
     """
     A form used to select a project and location.
 
     """
     project = forms.ModelChoiceField(
-        queryset=Project.objects.filter(project_status='Active'), 
+        queryset=Project.objects.filter(project_status='Active'),
         label="Select Project",
         widget=forms.Select(attrs={'class': 'form-select'})
     )
     location = forms.ModelChoiceField(
-        queryset=Location.objects.none(), 
+        queryset=Location.objects.none(),
         label="Select Location",
         required=False,
         widget=forms.Select(attrs={'class': 'form-select'})
     )
 
 # LOCATION FORMS
+
+
 class SelectLocationSignInOut(forms.Form):
     """
     A form for selecting a location for sign in/out.
     """
     location = forms.ModelChoiceField(
-        queryset=Location.objects.filter(is_active=True), 
+        queryset=Location.objects.filter(is_active=True),
         label="Select Location",
         widget=forms.Select(attrs={'class': 'form-select'})
     )
-
-    

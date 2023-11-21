@@ -1,19 +1,17 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
-{% block content %}
-
-<body class='landing-page'>
-
-    <div class="hero">
-        <h1>Welcome to QR Code Time Tracker</h1>
-        <p>Your efficient solution for managing work hours.</p>
-        {% if user.is_authenticated %}
-        <a href="{% url 'select_project' %}" class="btn btn-primary">Select Project</a>
-        {% else %}
-        <a href="{% url 'login' %}" class="btn btn-primary">Login</a>
-        {% endif %}
-    </div>
-
+<body class="landing-page">
+  <div class="hero">
+    <h1>Welcome to QR Code Time Tracker</h1>
+    <p>Your efficient solution for managing work hours.</p>
+    {% if user.is_authenticated %}
+    <a href="{% url 'select_project' %}" class="btn btn-warning bt-lg"
+      >Select Project</a
+    >
+    {% else %}
+    <a href="{% url 'login' %}" class="btn btn-primary bt-lg">Login</a>
+    {% endif %}
+  </div>
 </body>
 
 {% endblock %}

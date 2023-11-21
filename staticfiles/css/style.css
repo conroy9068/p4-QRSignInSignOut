@@ -5,12 +5,25 @@
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: #F8F8F8;
-  color: #333333; 
+  color: #2a2a2a; 
   height: 100%; 
-
 }
 
-.landing-page {
+.logo {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 700;
+  font-size: 1.5rem; /* Adjust the font size as desired */
+  color: #2a2a2a;
+}
+
+.navbar-brand .logo {
+  height: auto; /* maintain aspect ratio */
+  width: 100px; /* adjust as necessary */
+  max-width: 100%; /* ensure it is responsive */
+  max-height: 100%; /* ensure it does not exceed the navbar's height */
+}
+
+:root.landing-page, html.landing-page {
   position: relative; /* Needed to position the pseudo-element */
   background-image: url('/static/img/hero-image.webp');
   background-repeat: no-repeat;
@@ -26,7 +39,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  background-color: rgba(255, 255, 255, 0.507); /* White color with opacity */
+  background-color: rgba(255, 255, 255, 0.81); /* White color with opacity */
   z-index: 1; /* Sit on top of the background image */
 }
 
@@ -35,7 +48,6 @@ body {
   position: relative;
   z-index: 2;
 }
-
 
 html {
   height: 100%; 
@@ -47,13 +59,13 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .primary-color {
-  background-color: #333333; 
+  background-color: #2a2a2a; 
   color: #FFD700;
 }
 
 .secondary-color {
   background-color: #FFD700; 
-  color: #333333; 
+  color: #2a2a2a; 
 }
 
 .accent-color {
@@ -73,7 +85,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 footer {
-  height: 150px;
+  height: 20%;
   width: 100%;
   position: relative;
 }
@@ -90,91 +102,18 @@ footer {
 
 .hero { 
   background-size: cover; 
-  padding: 50px 0; 
+  padding: 150px 20px; 
   text-align: center; }
 .feature { padding: 20px; }
-.feature-icon { font-size: 24px; color: #007bff; }
+.feature-icon { font-size: 24px; }
 .footer { background: #333; color: white; padding: 20px 0; text-align: center;
 }
 
- 
-.bd-placeholder-img {
-  font-size: 1.125rem;
-  text-anchor: middle;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-user-select: none;
+.card {
+  border: none; /* Remove default borders */
+  box-shadow: 0 4px 6px 0 rgba(0,0,0,0.1); /* Add subtle shadow for depth */
+  margin-bottom: 2rem; /* Add space between cards */
 }
-
-  .b-example-divider {
-    width: 100%;
-    height: 3rem;
-    background-color: rgba(0, 0, 0, .1);
-    border: solid rgba(0, 0, 0, .15);
-    border-width: 1px 0;
-    box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
-  }
-
-  .b-example-vr {
-    flex-shrink: 0;
-    width: 1.5rem;
-    height: 100vh;
-  }
-
-  .bi {
-    vertical-align: -.125em;
-    fill: currentColor;
-  }
-
-  .nav-scroller {
-    position: relative;
-    z-index: 2;
-    height: 2.75rem;
-    overflow-y: hidden;
-  }
-
-  .nav-scroller .nav {
-    display: flex;
-    flex-wrap: nowrap;
-    padding-bottom: 1rem;
-    margin-top: -1px;
-    overflow-x: auto;
-    text-align: center;
-    white-space: nowrap;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .btn-bd-primary {
-    --bd-violet-bg: #712cf9;
-    --bd-violet-rgb: 112.520718, 44.062154, 249.437846;
-
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: var(--bs-white);
-    --bs-btn-bg: var(--bd-violet-bg);
-    --bs-btn-border-color: var(--bd-violet-bg);
-    --bs-btn-hover-color: var(--bs-white);
-    --bs-btn-hover-bg: #6528e0;
-    --bs-btn-hover-border-color: #6528e0;
-    --bs-btn-focus-shadow-rgb: var(--bd-violet-rgb);
-    --bs-btn-active-color: var(--bs-btn-hover-color);
-    --bs-btn-active-bg: #5a23c8;
-    --bs-btn-active-border-color: #5a23c8;
-  }
-
-  .bd-mode-toggle {
-    z-index: 1500;
-  }
-
-  .bd-mode-toggle .dropdown-menu .active .bi {
-    display: block !important;
-  }
-
-.nav-pills .nav-link {
-    border: 1px solid #ddd; 
-      margin-bottom: 5px; 
-      border-radius: 5px; 
-  }
-
 /* Styles for the create project form and its components */
 form {
   max-width: 600px;
@@ -209,7 +148,6 @@ input, select, textarea {
   text-decoration: none;
 }
 
-
 /* Media query for mobile viewport */
 @media (min-width: 768px) {
   .bd-placeholder-img-lg {
@@ -221,7 +159,8 @@ input, select, textarea {
   .nav-pills .nav-link {
       border: 1px solid #ddd; 
       margin-bottom: 5px; 
-      border-radius: 5px; 
+      border-radius: 5px;
+      text-align: center;
   }
   .navbar-nav {
     justify-content: center;

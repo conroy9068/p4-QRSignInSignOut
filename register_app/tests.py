@@ -1,18 +1,21 @@
-from django.test import TestCase, Client
-from django.urls import reverse
-from django.contrib.auth.models import User
-from register_app.models import Location, UserProfile, Project, SignInOutRegister
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, User
+from django.test import Client, TestCase
+from django.urls import reverse
 from django.utils import timezone
+
+from register_app.models import (Location, Project, SignInOutRegister,
+                                 UserProfile)
 
 
 class ViewTest(TestCase):
     def setUp(self):
         # Set up data for the whole TestCase
         self.client = Client()
-        self.user = User.objects.create_user(username='testuser', password='12345')
-        self.admin_user = User.objects.create_superuser('admin', 'admin@test.com', 'admin123')
+        self.user = User.objects.create_user(
+            username='testuser', password='12345')
+        self.admin_user = User.objects.create_superuser(
+            'admin', 'admin@test.com', 'admin123')
 
     def test_home_view(self):
         response = self.client.get(reverse('home'))
@@ -22,7 +25,7 @@ class ViewTest(TestCase):
     def test_register_view(self):
         response = self.client.get(reverse('register'))
         self.assertEqual(response.status_code, 200)
-        
+
         user_count_before = User.objects.count()
         post_data = {
             'username': 'newuser',
@@ -33,8 +36,9 @@ class ViewTest(TestCase):
             'password2': 'testpass123',
             'company_name': 'Test Company',
         }
-        response = self.client.post(reverse('register'), post_data, follow=True)
-        
+        response = self.client.post(
+            reverse('register'), post_data, follow=True)
+
         # Check if the form had errors
         if response.context and 'form' in response.context:
             form_errors = response.context['form'].errors
@@ -42,14 +46,14 @@ class ViewTest(TestCase):
                 print("Form errors:", form_errors.as_text())
 
         # Check if the user count has increased
-        self.assertEqual(User.objects.count(), user_count_before + 1, "User count did not increase as expected")
+        self.assertEqual(User.objects.count(), user_count_before +
+                         1, "User count did not increase as expected")
 
         # Check the response redirect or content
         if response.status_code == 302:
             self.assertRedirects(response, reverse('user_dashboard'))
         else:
             print("Response content:", response.content.decode())
-
 
     def test_no_access_view(self):
         response = self.client.get(reverse('no_access'))
@@ -64,7 +68,26 @@ class ViewTest(TestCase):
         # Check for the presence of projects and clocked_in_users in context
         self.assertIn('projects', response.context)
         self.assertIn('clocked_in_users', response.context)
-        
 
 
+def test_create_project(self):
+    # Create a user with admin privileges
+    admin_user = User.objects.create_superuser(
+        'admin', 'admin@test.com', 'admin123')
+    self.client.force_login(admin_user)
 
+    # Send a POST request to create a new project
+    response = self.client.post(reverse('create_project'), {
+        'name': 'Test Project',
+        'description': 'This is a test project',
+    })
+
+    # Check if the project was created successfully
+    self.assertEqual(response.status_code, 302)  # Expecting a redirect
+    # Expecting one project to be created
+    self.assertEqual(Project.objects.count(), 1)
+
+    # Check if the user is redirected to the edit project page
+    project = Project.objects.first()
+    self.assertRedirects(response, reverse(
+        'edit_project', kwargs={'project_id': project.id}))

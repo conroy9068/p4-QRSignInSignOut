@@ -234,6 +234,8 @@ Edit Profile
 
 - I would like to break down the app into smaller apps to make it easier to maintain and to add new features. As the app was developed needs changed and the app grew in complexity.
 
+- Geo location, i would like to add the ability to track the users location when they clock in/out. This would allow the admin to see where the user was when they clocked in/out.
+
 ## Technologies Used
 
 <a name="technologies"></a>

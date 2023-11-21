@@ -332,18 +332,58 @@ Github projects was used for the agile development of this project. The purpose 
 
 - Testing was completed manually and with automated testing using Django's built in testing framework.
 
-  Views: Testing HTTP responses, context data, etc.
+### Manual Testing
 
-  Models: Testing database interactions, model methods, and validations.
+- User registration
+  - User registration was tested by creating a new user account and checking that the user was redirected to the user dashboard.
 
-  Forms: Testing form validations and their behavior.
-  Templates: Ensuring that templates render correctly with the given context.
+| **TEST**                      | **ACTION**                                                                                                                                                                                       | **EXPECTATION**                                                                                | **RESULT**              |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | ----------------------- |
+| User Registration             | User registration was tested by creating a new user account and checking that the user was redirected to the user dashboard.                                                                     | User is redirected to the dashboard after successful registration                              | Works as expected       |
+| User Login                    | User login was tested by logging in with a valid user account and checking that the user was redirected to the user dashboard.                                                                   | User is redirected to the dashboard after successful login                                     | Works as expected       |
+| Navigation                    | Navigation was tested by clicking the nav links and checking that the user was redirected to the correct view. Admin link where not visable                                                      | User is redirected to the correct view after clicking the nav link                             | Works as expected       |
+| Admin Navigation Links        | Admin navigation links were tested by logging in with a valid admin account and clicking the nav links and checking that the user was redirected to the correct view. Admin links where visable. | Admin is redirected to the correct view after clicking the nav link                            | Works as expected       |
+| Project Selection             | Project selection was tested by selecting a project and location and checking that the user was redirected to the clock in/out view.                                                             | User is redirected to the clock in/out view after selecting a project                          | Works as expected       |
+| Clocking In                   | After user is brought to the clock in/out view the user can clock in by clicking the clock in button.                                                                                            | The view is updated with the clock in time and the clock in button becomes a clock out button  | Works as expected       |
+| Clocking Out                  | After user is brought to the clock in/out view the user can clock out by clicking the clock out button.                                                                                          | The view is updated with the clock out time and the clock out button becomes a clock in button | Works as expected       |
+| Admin Panel                   | Admin panel was tested by logging in with a valid admin account and clicking the admin nav link to be redirected to the admin panel.                                                             | Admin is redirected to the admin panel successful                                              | Works as expected       |
+| Admin Panel (Projects)        | Admin panel projects view was tested by logging in with a valid admin account and clicking the projects link to be redirected to the projects view.                                              | Admin is redirected to the projects view successful                                            | Works as expected       |
+| Admin Panel (Clock In/Out)    | Admin panel clock in/out view was tested by logging in with a valid admin account and clicking the clock in/out link to be redirected to the clock in/out view.                                  | Admin is redirected to the clock in/out view successful                                        | Works as expected       |
+| Create Project                | Create project was tested by logging in with a valid admin account and clicking the create project link to be redirected to the create project view.                                             | Admin is redirected to the create project view successful                                      | Works as expected       |
+| Edit Project                  | Edit project was tested by logging in with a valid admin account and clicking the edit project link to be redirected to the edit project view.                                                   | Admin is redirected to the edit project view successful                                        | Works as expected       |
+| Add Location                  | Add location was tested by logging in with a valid admin account and clicking the add location link to be redirected to the add location view.                                                   | Admin is redirected to the add location view successful                                        | Works as expected       |
+| Flagging Location as Inactive | Flagging location as inactive was tested by logging in with a valid admin account and removing the check beside active and updating the project                                                  | Location is inactive and not visable in the select location dropdown                           | Not working as expected |
+| Deleting Location             | Deleting location was tested by logging in with a valid admin account and checking the location to delete and then updating the project                                                          | Admin is redirected to the delete location view successful                                     | Works as expected       |
+| Downloading Location QR Code  | Downloading location QR code was tested by logging in with a valid admin account and clicking the download QR code link to download the QR code for the location.                                | QR code is downloaded successful                                                               | Works as expected       |
+| Clocking In with QR Code      | Clocking in with QR code was tested by logging in with a valid user account and scanning the QR code to be redirected to the clock in/out view for that location.                                | User is redirected to the correct location clock in/out view                                   | Works as expected       |
+| Deleting Project              | Deleting project was tested by logging in with a valid admin account and selecting delete project                                                                                                | Project is deleted and admin is redirected to admin panel                                      | Works as expected       |
+| View Profile                  | View profile was tested by logging in with a valid user account and clicking the view profile link to be redirected to the view profile view.                                                    | User is redirected to the view profile view successful                                         | Works as expected       |
+| Edit Profile                  | Edit profile was tested by logging in with a valid user account and clicking the edit profile link to be redirected to the edit profile view.                                                    | User is redirected to the edit profile view successful                                         | Works as expected       |
+| Logout                        | Logout was tested by logging in with a valid user account and clicking the logout link to be redirected to the logout view.                                                                      | User is redirected to the logout view successful                                               | Works as expected       |
 
-  URLs: Checking URL patterns and their resolution.
+### Automated Testing
+
+- I tested some of my views but due to time constraints i was not able to test all of them. I would like to add more tests in the future.
+
+| **TEST**             | **ACTION**                                    | **EXPECTATION**                                                                                      | **RESULT** |
+| -------------------- | --------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------- |
+| Home View            | GET request to home page                      | Status code is 200 and correct template is used                                                      | Passed     |
+| Register View - GET  | GET request to register page                  | Status code is 200                                                                                   | Passed     |
+| Register View - POST | POST request to register with new user data   | User count increases by 1 and redirects to user dashboard                                            | Passed     |
+| No Access View       | GET request to no access page                 | Status code is 200 and correct template is used                                                      | Passed     |
+| Admin Panel View     | GET request to admin panel as admin           | Status code is 200, correct template is used, and context contains 'projects' and 'clocked_in_users' | Passed     |
+| Create Project       | POST request to create a new project as admin | Status code is 302, project count is 1, and redirects to edit project page                           | Passed     |
+
+### CI Python Linter Validation Results
+
+All Python files were validated using Pylint. All files passed.
+![CI Python Linter Validation Results](static/img/readme/pylint.png)
 
 ## Bugs
 
 - Landing page background image not displaying. Was using body tag but it was causing the css validation to fail test.
+
+- Marking location as inactive is not working as expected. The location is not being removed from the select location dropdown.
 
 ## Credits
 

@@ -341,6 +341,10 @@ Github projects was used for the agile development of this project. The purpose 
 
   URLs: Checking URL patterns and their resolution.
 
+## Bugs
+
+- Landing page background image not displaying. Was using body tag but it was causing the css validation to fail test.
+
 ## Credits
 
 <a name="credits"></a>

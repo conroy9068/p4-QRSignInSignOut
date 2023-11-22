@@ -6,31 +6,18 @@
       <form method="post" class="needs-validation" novalidate>
         {% csrf_token %}
         <div class="mb-3">
-          <label for="{{ form.project.id_for_label }}" class="form-label"
-            >{{ form.project.label }}</label
-          >
-          <select
-            class="form-select"
-            id="{{ form.project.id_for_label }}"
-            name="{{ form.project.name }}"
-            required
-          >
+          <label for="{{ form.project.id_for_label }}" class="form-label">{{ form.project.label }}</label>
+          <select class="form-select" id="{{ form.project.id_for_label }}" name="{{ form.project.name }}" required>
             <option value="">Choose a project...</option>
+            <!-- Dropdown containing the active projects -->
             {% for choice in form.project.field.choices %}
             <option value="{{ choice.0 }}">{{ choice.1 }}</option>
             {% endfor %}
           </select>
         </div>
         <div class="mb-4">
-          <label for="{{ form.location.id_for_label }}" class="form-label"
-            >{{ form.location.label }}</label
-          >
-          <select
-            class="form-select"
-            id="{{ form.location.id_for_label }}"
-            name="{{ form.location.name }}"
-            required
-          >
+          <label for="{{ form.location.id_for_label }}" class="form-label">{{ form.location.label }}</label>
+          <select class="form-select" id="{{ form.location.id_for_label }}" name="{{ form.location.name }}" required>
             <option value="">Select a location...</option>
             <!-- Options will be populated based on project selection -->
           </select>
@@ -49,7 +36,7 @@
   // Populate location select based on project selection
   document
     .getElementById("{{ form.project.id_for_label }}")
-    .addEventListener("change", function () {
+    .addEventListener("change", function() {
       fetch(`/get_locations/?project_id=${this.value}`)
         .then((response) => response.json())
         .then((data) => {
@@ -69,22 +56,19 @@
 
 <script>
   //Function to validate form
-  (function () {
+  (function() {
     "use strict";
-
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.querySelectorAll(".needs-validation");
-
     // Loop over them and prevent submission
-    Array.prototype.slice.call(forms).forEach(function (form) {
+    Array.prototype.slice.call(forms).forEach(function(form) {
       form.addEventListener(
         "submit",
-        function (event) {
+        function(event) {
           if (!form.checkValidity()) {
             event.preventDefault();
             event.stopPropagation();
           }
-
           form.classList.add("was-validated");
         },
         false

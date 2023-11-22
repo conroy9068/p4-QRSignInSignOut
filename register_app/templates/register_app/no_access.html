@@ -1,5 +1,5 @@
 {% extends "base.html" %} {% block content %}
 <h2>No access</h2>
 <p>You do not have access to this page.</p>
-<a href="{% url 'login' %}">Go to Login</a>
+<a href="{% url 'login' %}" aria-label="Navigates to login screen" >Go to Login</a>
 {% endblock %}

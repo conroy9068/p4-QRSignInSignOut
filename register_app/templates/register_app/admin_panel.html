@@ -19,7 +19,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h2>Project List</h2>
-                            <table class="table">
+                            <table class="table mobile-stack">
                                 <thead>
                                     <tr>
                                         <th>Project Name</th>
@@ -29,22 +29,23 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                 <!--Display the projects-->
                                     {% for project in projects %}
                                         <tr>
                                             <td>{{ project.project_name }}</td>
                                             <td>{{ project.project_code }}</td>
                                             <td>{{ project.project_status }}</td>
                                             <td>
-                                                <a href="{% url 'edit_project' project.id %}" class="btn btn-primary btn-sm">
+                                                <a href="{% url 'edit_project' project.id %}" class="btn btn-primary btn-sm" aria-label="Opens the edit page for selected project" >
                                                 Edit
                                                 </a>
                                             </td>
                                         </tr>
                                     {% endfor %}
                                 </tbody>
-                            </table>                            
+                            </table>
                             <a class="btn btn-primary" href="{% url 'create_project' %}">Create Project</a></li>
-                            
+
                         </div>
                     </div>
                 </div>
@@ -54,7 +55,7 @@
                     <div class="card">
                         <div class="card-body">
                             <h2>Clocked-in Users</h2>
-                            <table class="table">
+                            <table class="table mobile-stack">
                                 <thead>
                                     <tr>
                                         <th>Name</th>
@@ -64,6 +65,7 @@
                                     </tr>
                                 </thead>
                                 <tbody>
+                                <!--Display clocked in users -->
                                     {% for entry in clocked_in_users %}
                                         <tr>
                                             <td>{{ entry.user.username }}</td>

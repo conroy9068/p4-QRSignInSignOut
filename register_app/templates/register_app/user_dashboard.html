@@ -2,6 +2,7 @@
 <div class="container mt-3">
   <div class="my-5">
     <h1 class="text-center">Your Dashboard</h1>
+    <!-- Display users current clock in -->
     {% if current_signin %}
     <section class="my-4">
       <section class="my-4">
@@ -12,6 +13,7 @@
             </div>
         </div>
     </section>
+    <!-- Show message user is not signed in-->
     {% else %}
     <div class="alert alert-info" role="alert">
       You are currently not signed in to a Project Location.
@@ -32,6 +34,7 @@
                 </tr>
               </thead>
               <tbody>
+                <!-- Loop through past signins -->
                 {% for signin in past_signins %}
                   <tr>
                     <td>{{ signin.location.name }}</td>

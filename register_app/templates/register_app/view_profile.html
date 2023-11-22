@@ -4,17 +4,12 @@
     <div class="col-lg-8">
       <div class="text-center mb-4">
         <h1 class="display-4">Your Profile</h1>
-        {% comment %}
-        <p class="lead">Manage your profile information</p>
-        {% endcomment %}
       </div>
       <div class="card shadow-sm">
         <div class="card-body">
           <div class="d-flex align-items-center justify-content-between mb-3">
             <h5 class="card-title mb-0">{{ user.username }}</h5>
-            <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary"
-              >Edit Profile</a
-            >
+            <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary" aria-label="Navigates to profile edit form">Edit Profile</a>
           </div>
           <h6 class="card-subtitle mb-2 text-muted">{{ user.email }}</h6>
           <hr />

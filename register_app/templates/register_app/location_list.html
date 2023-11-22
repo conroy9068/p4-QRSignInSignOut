@@ -21,7 +21,7 @@
         <h5 class="card-title">{{ location.name }}</h5>
         <p class="card-text">{{ location.description }}</p>
         <p class="card-text">{{ location.address }}</p>
-        <a href="{% url 'view_qr_code' location.id %}" class="btn btn-primary"
+        <a href="{% url 'view_qr_code' location.id %}" class="btn btn-primary" aria-label="Button to download QR Code"
           >View QR Code</a
         >
       </div>

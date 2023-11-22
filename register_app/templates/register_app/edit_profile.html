@@ -8,17 +8,11 @@
           <h2>Edit Profile</h2>
         </div>
         <div class="card-body">
-          <form
-            method="post"
-            action="{% url 'edit_profile' %}"
-            class="needs-validation"
-            novalidate
-          >
+          <form method="post" action="{% url 'edit_profile' %}" class="needs-validation" novalidate>
+            <!--Display form fields -->
             {% csrf_token %} {% for field in form %}
             <div class="mb-3">
-              <label for="{{ field.id_for_label }}" class="form-label"
-                >{{ field.label }}</label
-              >
+              <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
               {{ field }}
               <div class="invalid-feedback">
                 Please enter a valid {{ field.label }}.
@@ -36,18 +30,16 @@
 {% endblock %} {% block extra_js %}
 <script>
   // Function to validate form input
-  (function () {
+  (function() {
     "use strict";
-
     window.addEventListener(
       "load",
-      function () {
+      function() {
         var forms = document.querySelectorAll(".needs-validation");
-
-        Array.prototype.slice.call(forms).forEach(function (form) {
+        Array.prototype.slice.call(forms).forEach(function(form) {
           form.addEventListener(
             "submit",
-            function (event) {
+            function(event) {
               if (!form.checkValidity()) {
                 event.preventDefault();
                 event.stopPropagation();

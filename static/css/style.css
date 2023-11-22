@@ -5,8 +5,8 @@
 body {
   font-family: 'Open Sans', sans-serif;
   background-color: #F8F8F8;
-  color: #2a2a2a; 
-  height: 100%; 
+  color: #2a2a2a;
+  height: 100%;
 }
 
 .logo {
@@ -50,8 +50,8 @@ body {
 }
 
 html {
-  height: 100%; 
-  margin: 0; 
+  height: 100%;
+  margin: 0;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -59,40 +59,40 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .primary-color {
-  background-color: #2a2a2a; 
+  background-color: #2a2a2a;
   color: #FFD700;
 }
 
 .secondary-color {
-  background-color: #FFD700; 
-  color: #2a2a2a; 
+  background-color: #FFD700;
+  color: #2a2a2a;
 }
 
 .accent-color {
-  color: #C0C0C0; 
+  color: #C0C0C0;
 }
 
 .page-container {
   display: flex;
-  flex-direction: column; 
-  min-height: 100%; 
+  flex-direction: column;
+  min-height: 100%;
 }
 
 /* Push the footer to the bottom */
 .content-wrap {
-  flex: 1; 
-  padding-bottom: 60px; 
+  flex: 1;
+  padding-bottom: 60px;
 }
 
 footer {
   height: 20%;
   width: 100%;
-  position: relative;
+  position: bottom;
 }
 
 /* Navbar specific styles */
 .navbar {
-  background-color: #333333; 
+  background-color: #333333;
 }
 
 .navbar .navbar-brand,
@@ -100,9 +100,9 @@ footer {
   color: #333333;
 }
 
-.hero { 
-  background-size: cover; 
-  padding: 150px 20px; 
+.hero {
+  background-size: cover;
+  padding: 150px 20px;
   text-align: center; }
 .feature { padding: 20px; }
 .feature-icon { font-size: 24px; }
@@ -157,8 +157,8 @@ input, select, textarea {
 
 @media (max-width: 990px) {
   .nav-pills .nav-link {
-      border: 1px solid #ddd; 
-      margin-bottom: 5px; 
+      border: 1px solid #ddd;
+      margin-bottom: 5px;
       border-radius: 5px;
       text-align: center;
   }
@@ -168,6 +168,28 @@ input, select, textarea {
 
   .navbar-brand {
     display: none;
+  }
+
+}
+/* Media query for admin panel tables on mobile */
+@media (max-width: 768px) {
+  .mobile-stack thead {
+    display: none;
+  }
+  .mobile-stack td {
+    display: block;
+    width: 100%;
+    text-align: center;
+    box-sizing: border-box;
+  }
+  .mobile-stack td::before {
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    margin-right: 10px;
+  }
+  .mobile-stack td .btn {
+    margin: 10px 0;
   }
 }
 

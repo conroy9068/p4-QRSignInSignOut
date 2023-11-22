@@ -2,22 +2,11 @@
 
 <!-- Button to Open Modal -->
 <div class="d-grid gap-2 m-4">
-  <button
-    type="button"
-    class="btn btn-primary"
-    data-bs-toggle="modal"
-    data-bs-target="#createLocationModal"
-  >
+  <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createLocationModal">
     Create New Location
   </button>
 </div>
-
 <h2 class="center">Current Active Locations</h2>
-
-<div class="row">
-  <!-- loop through locations -->
-</div>
-
 <!-- Modal -->
 <div class="modal" id="createLocationModal">
   <div class="modal-dialog">
@@ -31,11 +20,7 @@
       </div>
       <!-- Modal body -->
       <div class="modal-body">
-        <form
-          id="CreateLocationForm"
-          method="post"
-          action="{% url 'create_location' %}"
-        >
+        <form id="CreateLocationForm" method="post" action="{% url 'create_location' %}">
           {% csrf_token %}
           <div class="form-group">
             <!-- Project Dropdown -->

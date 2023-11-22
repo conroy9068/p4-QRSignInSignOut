@@ -26,6 +26,7 @@
                 required
               />
               <div class="invalid-feedback">Please choose a username.</div>
+              <!--Display form field errors -->
               {% if user_form.username.errors %}
               <div class="alert alert-danger">
                 {{ user_form.username.errors }}
@@ -43,6 +44,7 @@
                 required
               />
               <div class="invalid-feedback">Please enter your first name.</div>
+              <!--Display form field errors -->
               {% if user_form.first_name.errors %}
               <div class="alert alert-danger">
                 {{ user_form.first_name.errors }}
@@ -60,6 +62,7 @@
                 required
               />
               <div class="invalid-feedback">Please enter your last name.</div>
+              <!--Display form field errors -->
               {% if user_form.last_name.errors %}
               <div class="alert alert-danger">
                 {{ user_form.last_name.errors }}
@@ -79,6 +82,8 @@
               <div class="invalid-feedback">
                 Please enter a valid email address.
               </div>
+              <!--Display form field errors -->
+
               {% if user_form.email.errors %}
               <div class="alert alert-danger">{{ user_form.email.errors }}</div>
               {% endif %}
@@ -95,6 +100,7 @@
                 required
               />
               <div class="invalid-feedback">Please enter a password.</div>
+              <!--Display form field errors -->
               {% if user_form.password1.errors %}
               <div class="alert alert-danger">
                 {{ user_form.password1.errors }}
@@ -114,6 +120,7 @@
                 required
               />
               <div class="invalid-feedback">Please confirm your password.</div>
+              <!--Display form field errors -->
               {% if user_form.password2.errors %}
               <div class="alert alert-danger">
                 {{ user_form.password2.errors }}
@@ -134,10 +141,8 @@
   //Function to validate form inputs
   (function () {
     "use strict";
-
     // Fetch all the forms we want to apply custom Bootstrap validation styles to
     var forms = document.querySelectorAll(".needs-validation");
-
     // Loop over them and prevent submission
     Array.prototype.slice.call(forms).forEach(function (form) {
       form.addEventListener(
@@ -147,7 +152,6 @@
             event.preventDefault();
             event.stopPropagation();
           }
-
           form.classList.add("was-validated");
         },
         false

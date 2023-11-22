@@ -2,7 +2,7 @@
 
 ## Screenshot of finished project responsivness
 
-## Emplyee/Subcontractor Clock In/Out App
+## Employee/Subcontractor Clock In/Out App
 
 > This is a simple app that allows employees to clock in and out of work using a QR code or by manual selection. The app enables the user to view their clock in/out history and also allows the admin to view all users clock in/out history. Admin have the ability to add project and the location associated with the project.
 
@@ -34,6 +34,10 @@ Required technologies for this project:
 
 <a name="user-demographic"></a>
 This application is designed for employees and subcontractors to clock in and out of project locations. The app is designed to be used on a mobile device. It will enable companies to track the time spent on projects and the location of the employee/subcontractor.
+
+### User Story
+<a name="user-story"></a>
+  1. User logs in with admin account. Username: admin Password: Trave123456
 
 ### Wireframes
 
@@ -158,58 +162,62 @@ This application is designed for employees and subcontractors to clock in and ou
 ### Existing Features
 
 <a name="existing-features"></a>
-Landing Page
+
+Landing Page, user can register or login.
 ![Landing Page](static/img/readme/app-landing-page.png)
 
-Login
+Register page, user can register with their username, first name, last name, email address, password and confirm password.
+![Register](static/img/readme/app-register-form.png)
+
+Login page, user can login with their username and password.
 ![Login](static/img/readme/app-login.png)
 
-Logout Confirmation
+Logout Confirmation, confirmation message to confirm logout.
 ![Logout](static/img/readme/app-logout.png)
 
-Nav Bar
+Nav Bar, user can navigate to the home page, user dashboard, view profile, edit profile and logout. Admin Panel is only visable to staff users.
 ![Nav Bar](static/img/readme/app-navbar.png)
 
-Footer
+Footer, footer with links to the app github repository and the developer github profile.
 ![Footer](static/img/readme/app-footer.png)
 
-User Dashboard
+User Dashboard, user can see their current clock in/out status and their clock in/out history.
 ![User Dashboard](static/img/readme/app-user-dashboard.png)
 
-Select Project
+Select Project, user can select a project and location to clock in/out.
 ![Select Project](static/img/readme/app-select-project.png)
 
-Clocked Out
+Clocked Out, user can clock in/out of a project and location.
 ![Clock Out](static/img/readme/app-clocked-out.png)
 
-Clocked In
+Clocked In, user can clock in/out of a project and location.
 ![Clock In](static/img/readme/app-clocked-in.png)
 
-Admin Panel (Projects)
+Admin Panel (Projects), admin can view all projects and allows them to select one to edit.
 ![Admin Panel](static/img/readme/app-admin-panel-projects.png)
 
-Admin Panel (Clock In/Out)
+Admin Panel (Clock In/Out), admin can view users that are currently clocked in.
 ![Admin Panel](static/img/readme/app-clockin-register.png)
 
-Create Project
+Create Project, admin can create a new project.
 ![Create Project](static/img/readme/app-create-project.png)
 
-Edit Project and Locations
+Edit Project and Locations, admin can edit a project and add locations to the project.
 ![Edit Project](static/img/readme/app-edit-project.png)
 
-Delete Project
+Delete Project, admin can delete a project.
 ![Delete Project](static/img/readme/app-delete-project.png)
 
-Add Location
+Add Location, admin can add a location to a project.
 ![Add Location](static/img/readme/app-add-location.png)
 
 Location Active & Delete Checkbox and QR Download
 ![Location Active & Delete Checkbox](static/img/readme/app-location-active-checkbox-and-delete-checkbox.png)
 
-View Profile
+View Profile, user can view their profile information.
 ![View Profile](static/img/readme/app-view-profile.png)
 
-Edit Profile
+Edit Profile, user can edit their profile information.
 ![Edit Profile](static/img/readme/app-edit-profile.png)
 
 ### Features Left to Implement
@@ -323,6 +331,8 @@ Frameworks, Libraries & Programs Used
   - Backported and experimental type hints for Python.
 
 ## Agile Development
+<a name="agile-development"></a>
+https://github.com/users/conroy9068/projects/3
 
 Github projects was used for the agile development of this project. The purpose for this was to layout the tasks that needed to be completed and to track the progress of the project.
 
@@ -333,9 +343,6 @@ Github projects was used for the agile development of this project. The purpose 
 - Testing was completed manually and with automated testing using Django's built in testing framework.
 
 ### Manual Testing
-
-- User registration
-  - User registration was tested by creating a new user account and checking that the user was redirected to the user dashboard.
 
 | **TEST**                      | **ACTION**                                                                                                                                                                                       | **EXPECTATION**                                                                                | **RESULT**              |
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------- | ----------------------- |
@@ -376,8 +383,11 @@ Github projects was used for the agile development of this project. The purpose 
 
 ### CI Python Linter Validation Results
 
-All Python files were validated using Pylint. All files passed.
+All Python files were validated using Pylint. All files passed apart from the views.py file. This is because on line 529 and 561 there are URLs that i can not split.
 ![CI Python Linter Validation Results](static/img/readme/pylint.png)
+
+### CSS Validation Results
+![CSS Validation Results](static/img/readme/css-validator-test.png)
 
 ## Bugs
 

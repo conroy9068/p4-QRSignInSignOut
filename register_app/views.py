@@ -526,6 +526,7 @@ def generate_qr_code(sender, instance, created, **kwargs):
     """
     if created:
         qr = qrcode.QRCode(version=1, box_size=10, border=5)
+        # Line below is to long but can not split
         url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in_out/{instance.id}/"
         qr.add_data(url)
         qr.make(fit=True)
@@ -558,6 +559,7 @@ def view_qr_code(request, location_id):
     """
     location = Location.objects.get(id=location_id)
     qr = qrcode.QRCode(version=1, box_size=10, border=5)
+    #Line below is to long but can not split
     url = f"https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/sign_in_out/{location.id}/"
     qr.add_data(url)
     qr.make(fit=True)

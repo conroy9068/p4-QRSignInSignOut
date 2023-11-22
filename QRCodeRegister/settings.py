@@ -31,12 +31,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
+
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get('SECRET_KEY')
+
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG')
 
+
+# Application definition
 ALLOWED_HOSTS = ['qrsigninoutapp-c6f4e2915b2d.herokuapp.com',
                  'localhost', '127.0.0.1']
 
@@ -46,11 +50,9 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),  # Add this line
 ]
-# STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -66,6 +68,7 @@ INSTALLED_APPS = [
 
 
 SITE_ID = 1
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -84,6 +87,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'QRCodeRegister.urls'
 
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
@@ -100,9 +104,12 @@ TEMPLATES = [
     },
 ]
 
+
 WSGI_APPLICATION = 'QRCodeRegister.wsgi.application'
 
+
 INTERNAL_IPS = ('127.0.0.1', '0.0.0.0', 'localhost',)
+
 
 # Login redirect url
 LOGIN_REDIRECT_URL = '/user_dashboard/'
@@ -116,6 +123,7 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+
 
 # Debug toolbar settings
 DEBUG_TOOLBAR_PANELS = [
@@ -136,6 +144,7 @@ DEBUG_TOOLBAR_PANELS = [
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
 # Check if the 'test' command is being used
 if 'test' in sys.argv or 'test_coverage' in sys.argv:  # 'test_coverage' is used if you use coverage.py
     # Using SQLite for tests
@@ -151,6 +160,7 @@ else:
         'default': dj_database_url.parse(os.environ.get('DATABASE_URL'))
     }
 
+
 # DATABASES = {
 #         'default': {
 #             'ENGINE': 'django.db.backends.sqlite3',
@@ -160,6 +170,7 @@ else:
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {

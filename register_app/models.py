@@ -12,7 +12,7 @@ class Role(models.Model):
         name (str): The name of the role.
         description (str): A description of the users job role.
     """
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, null=True)
     description = models.TextField()
 
     def __str__(self):

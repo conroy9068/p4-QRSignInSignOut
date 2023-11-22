@@ -20,6 +20,20 @@ class UserProfileInline(admin.StackedInline):
     verbose_name_plural = 'UserProfile'
 
 
+# Admin class for Role
+
+class RoleAdmin(admin.ModelAdmin):
+    """
+    Admin class for Role model.
+
+    Attributes:
+        list_display (tuple): Fields to display in the admin list view.
+    """
+    list_display = ('name', 'description')
+
+admin.site.register(Role, RoleAdmin)
+
+
 # Custom UserAdmin that includes UserProfile
 class UserAdmin(BaseUserAdmin):
     """

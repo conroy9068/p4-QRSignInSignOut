@@ -2,12 +2,12 @@
 <div class="hero">
   <h1>Welcome to QR Code Time Tracker</h1>
   <p>Your efficient solution for managing work hours.</p>
-  {% comment %} This if shows the select project button if user is logged in {% endcomment %}
+  <!-- This if shows the select project button if user is logged in -->
   {% if user.is_authenticated %}
   <a href="{% url 'select_project' %}" class="btn btn-warning bt-lg" aria-label="Loads the select project and location page to clock in">
     Select Project
   </a>
-  {% comment %} displays the login button if user i not logged in {% endcomment %}
+  <!-- displays the login button if user i not logged in -->
   {% else %}
   <a href="{% url 'login' %}" class="btn btn-primary bt-lg" aria-label="Loads the lgin page">
     Login

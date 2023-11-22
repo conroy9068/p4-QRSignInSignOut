@@ -7,66 +7,49 @@
           <h2>Login</h2>
         </div>
         <div class="card-body">
-          {% comment %} Display error message if login fails {% endcomment %}
-          {% if error_message %}
-          {% if form.non_field_errors %}
-          <div class="alert alert-danger">
-            {% for error in form.non_field_errors %}
-            <p>{{ error }}</p>
-            {% endfor %}
-          </div>
-          {% comment %} Display error message if login fails {% endcomment %}
-          {% endif %} {% for field in form %} {% if field.errors %}
+          {% if form.errors %}
           <div class="alert alert-danger">
             <ul>
+              {% for field in form %}
               {% for error in field.errors %}
               <li><strong>{{ field.label }}:</strong> {{ error }}</li>
               {% endfor %}
+              {% endfor %}
             </ul>
           </div>
-          {% endif %} {% endfor %}
+          {% endif %}
           <form id="loginForm" method="post">
             {% csrf_token %}
             <div class="mb-3">
               <label for="id_username" class="form-label">Username</label>
-              <input
-                type="text"
-                name="username"
-                class="form-control"
-                id="id_username"
-              />
+              <input type="text" name="username" class="form-control" id="id_username">
             </div>
             <div class="mb-3">
               <label for="id_password" class="form-label">Password</label>
-              <input
-                type="password"
-                name="password"
-                class="form-control"
-                id="id_password"
-              />
+              <input type="password" name="password" class="form-control" id="id_password">
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
           </form>
         </div>
         <div class="card-footer text-right">
-          <a href="{% url 'register' %}" aria-label="Registration form for new users" >Register</a>
+          <a href="{% url 'password_reset' %}">Forgot Password?</a><br>
+          <a href="{% url 'register' %}">Register</a>
         </div>
       </div>
     </div>
   </div>
 </div>
-{% endblock %} {% block extra_js %}
+{% endblock %}
+{% block extra_js %}
 <script>
   // Prevent form submission if username or password is empty
-  document.addEventListener("DOMContentLoaded", function () {
+  document.addEventListener("DOMContentLoaded", function() {
     const loginForm = document.getElementById("loginForm");
-
-    loginForm.addEventListener("submit", function (event) {
+    loginForm.addEventListener("submit", function(event) {
       const username = document.getElementById("id_username").value;
       const password = document.getElementById("id_password").value;
       const toast = new bootstrap.Toast(document.getElementById("errorToast"));
       const toastBody = document.getElementById("toastBody");
-
       if (!username || !password) {
         event.preventDefault();
         toastBody.textContent = "Both username and password are required!";

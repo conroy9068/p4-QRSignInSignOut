@@ -461,5 +461,8 @@ All code was written by myself. I used the following resources to help me comple
 - Virtual Environment
   https://www.w3schools.com/django/django_create_virtual_environment.php
 - Code Institue Material
-
+- Bootstrap
+  https://getbootstrap.com/docs/5.0/getting-started/download/
+- Django Documentation
+  https://docs.djangoproject.com/en/3.2/
 

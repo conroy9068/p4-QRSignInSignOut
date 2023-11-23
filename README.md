@@ -6,43 +6,37 @@
 
 > This is a simple app that allows employees to clock in and out of work using a QR code or by manual selection. The app enables the user to view their clock in/out history and also allows the admin to view all users clock in/out history. Admin have the ability to add project and the location associated with the project.
 
-Required technologies for this project:
-
-- HTML, CSS, JavaScript, Python+Django
-- Relational database
-
 # Live App
-
 - https://qrsigninoutapp-c6f4e2915b2d.herokuapp.com/
 
 ## Table of Contents
 
 <a name="contents">Back to top</a>
 
-1. [UX]
-2. [Features]
-3. [Technologies Used]
-4. [Testing]
-5. [Deployment]
-6. [Credits]
+1. [UX](#ux)
+2. [User Demographic](#user-demographic)
+3. [Wireframes](#wireframes)
+4. [Design](#design)
+5. [User Stories](#user-stories)
+6. [Database Schema](#database-schema)
+7. [Features](#features)
+8. [Existing Features](#existing-features)
+9. [Features Left to Implement](#features-left-to-implement)
+10. [Technologies Used](#technologies)
+11. [Agile Development](#agile-development)
+12. [Testing](#testing)
+13. [Bug](#bugs)
+14. [Deployment](#deployment)
+15. [Credits](#credits)
 
 ## UX
-
 <a name="ux"></a>
 
 ### User Demographic
-
 <a name="user-demographic"></a>
 This application is designed for employees and subcontractors to clock in and out of project locations. The app is designed to be used on a mobile device. It will enable companies to track the time spent on projects and the location of the employee/subcontractor.
 
-### User Story
-<a name="user-story"></a>
-  1. User logs in with admin account. Username: admin Password: Trave123456
-
 ### Wireframes
-
-<a name="wireframes"></a>
-
 - Landing Page
   ![Landing Page](static/img/readme/landing-page.png)
 
@@ -62,7 +56,6 @@ This application is designed for employees and subcontractors to clock in and ou
   ![View/Edit Project](static/img/readme/view-edit-profile.png)
 
 ### Design
-
 <a name="design"></a>
 
 - Color Palette
@@ -82,11 +75,10 @@ This application is designed for employees and subcontractors to clock in and ou
   The fonts are selected not only for their visual harmony but also for their high readability, contributing to a user-friendly experience.
 
 ### User Stories
-
 <a name="user-stories"></a>
 
-### Database Schema
 
+### Database Schema
 <a name="database-schema"></a>
 ![Database Schema dbdiagram.io](static/img/readme/database-schema.png)
 
@@ -245,7 +237,6 @@ Edit Profile, user can edit their profile information.
 - Geo location, i would like to add the ability to track the users location when they clock in/out. This would allow the admin to see where the user was when they clocked in/out.
 
 ## Technologies Used
-
 <a name="technologies"></a>
 Languages Used
 
@@ -337,7 +328,6 @@ https://github.com/users/conroy9068/projects/3
 Github projects was used for the agile development of this project. The purpose for this was to layout the tasks that needed to be completed and to track the progress of the project.
 
 ## Testing
-
 <a name="testing"></a>
 
 - Testing was completed manually and with automated testing using Django's built in testing framework.
@@ -386,17 +376,76 @@ Github projects was used for the agile development of this project. The purpose 
 All Python files were validated using Pylint. All files passed apart from the views.py file. This is because on line 529 and 561 there are URLs that i can not split.
 ![CI Python Linter Validation Results](static/img/readme/pylint.png)
 
+### JavaScript Validation Results
+
 ### CSS Validation Results
 ![CSS Validation Results](static/img/readme/css-validator-test.png)
 
-## Bugs
+### HTML Validation Results
+- Each pages source code was placed into the W3C Markup Validation Service. All pages passed apart from the sign-in-out-content.html page. This is because i am using htmx to update the page content.
+![HTML Validation Results](static/img/readme/html-validation.png)
 
+- Page sign-in-out-content.html was not valid due to the use of htmx.
+![HTML Validation Results](static/img/readme/htmx-error-html-validation.png)
+
+### Google Lighthouse Results
+![Google Lighthouse Results](static/img/readme/lighthouse-test.png)
+
+### Responsiveness Testing
+- The app was tested on a range of devices and browsers to ensure compatibility and responsiveness.
+
+
+
+## Bugs
+<a name="bugs"></a>
 - Landing page background image not displaying. Was using body tag but it was causing the css validation to fail test.
 
 - Marking location as inactive is not working as expected. The location is not being removed from the select location dropdown.
 
-## Credits
+## Deployment
+<a name="deployment"></a>
 
+### Heroku Deployment
+1. Create a Heroku account by going to https://signup.heroku.com/
+2. Create a new app by clicking the "New" button in the top right corner and then click "Create new app".
+3. Enter a name for the app and select the region closest to you.
+4. Click the "Create app" button.
+5. Select "settings" from the top menu.
+6. Click the "Reveal Config Vars" button.
+7. Enter the following environment variables with your values:
+  - SECRET_KEY
+  - DEBUG
+  - DATABASE_URL
+8. Click buildpacks from the top menu.
+9. Add the following buildpacks:
+  - heroku/python
+10. Click the "Deploy" tab from the top menu.
+11. Click the "Connect to GitHub" button.
+12. Search for your repository and click the "Connect" button.
+13. Click the "Enable Automatic Deploys" button.
+14. Click the "Deploy Branch" button.
+15. Click the "View" button to launch the app.
+
+
+### Local Deployment
+1. Clone the repository by clicking the "Clone or download" button in github.
+2. In your IDE open a new terminal.
+3. Change the current working directory to the location where you want the cloned directory to be made.
+4. Type git clone, and then paste the URL you copied in Step 2.
+5. Press Enter. Your local clone will be created.
+6. Create a virtual environment by typing python -m venv venv in the terminal.
+7. Activate the virtual environment by typing venv\bin\activate in the terminal.
+8. Install the requirements by typing pip install -r requirements.txt in the terminal.
+9. Create a .env file in the root directory and add the following environment variables:
+  - os.environ.setdefault("DATABASE_URL", "xxxxxxxxx")
+  - os.environ.setdefault("SECRET_KEY", "xxxxxxxxxx")
+  - os.environ.setdefault("DEBUG", "False || True")
+10. Migrate the database by typing python manage.py makemigrations and then python manage.py migrate in the terminal.
+11. Create a superuser by typing python manage.py createsuperuser in the terminal.
+12. Run the app by typing python manage.py runserver in the terminal.
+
+
+## Credits
 <a name="credits"></a>
 
 - Extending user model
@@ -406,3 +455,9 @@ All Python files were validated using Pylint. All files passed apart from the vi
   https://www.geeksforgeeks.org/generate-qr-code-using-qrcode-in-python/
 - Pylint for Django
 - https://stackoverflow.com/questions/71986184/how-can-i-override-str-in-models-py
+- W3 Schools
+  https://www.w3schools.com/django/django_collect_static_files.php
+- Django Debug Toolbar
+  https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
+- Virtual Environment
+  https://www.w3schools.com/django/django_create_virtual_environment.php

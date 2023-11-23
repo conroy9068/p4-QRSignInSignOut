@@ -76,7 +76,8 @@ This application is designed for employees and subcontractors to clock in and ou
 
 ### User Stories
 <a name="user-stories"></a>
-
+User stories can be found in the github projects board.
+[User Stories](https://github.com/users/conroy9068/projects/3/views/1)
 
 ### Database Schema
 <a name="database-schema"></a>
@@ -213,7 +214,6 @@ Edit Profile, user can edit their profile information.
 ![Edit Profile](static/img/readme/app-edit-profile.png)
 
 ### Features Left to Implement
-
 <a name="features-left-to-implement"></a>
 
 - Add a clock in/out button to the user dashboard that will allow the user to open the clock out view of the current clocked in project to save them from having to navigate to the project selection page.
@@ -325,7 +325,7 @@ Frameworks, Libraries & Programs Used
 <a name="agile-development"></a>
 https://github.com/users/conroy9068/projects/3
 
-Github projects was used for the agile development of this project. The purpose for this was to layout the tasks that needed to be completed and to track the progress of the project.
+Github projects was used for the agile development of this project. The purpose for this was to layout the tasks that needed to be completed and to track the progress of the project. All user stories can be found in the github projects board.
 
 ## Testing
 <a name="testing"></a>
@@ -376,8 +376,6 @@ Github projects was used for the agile development of this project. The purpose 
 All Python files were validated using Pylint. All files passed apart from the views.py file. This is because on line 529 and 561 there are URLs that i can not split.
 ![CI Python Linter Validation Results](static/img/readme/pylint.png)
 
-### JavaScript Validation Results
-
 ### CSS Validation Results
 ![CSS Validation Results](static/img/readme/css-validator-test.png)
 
@@ -393,7 +391,6 @@ All Python files were validated using Pylint. All files passed apart from the vi
 
 ### Responsiveness Testing
 - The app was tested on a range of devices and browsers to ensure compatibility and responsiveness.
-
 
 
 ## Bugs
@@ -448,6 +445,8 @@ All Python files were validated using Pylint. All files passed apart from the vi
 ## Credits
 <a name="credits"></a>
 
+All code was written by myself. I used the following resources to help me complete this project.
+
 - Extending user model
   https://docs.djangoproject.com/en/dev/topics/auth/customizing/#extending-the-existing-user-model
   https://stackoverflow.com/questions/42478191/how-to-add-extra-fields-in-user-model-and-display-them-in-django-admin
@@ -461,3 +460,6 @@ All Python files were validated using Pylint. All files passed apart from the vi
   https://django-debug-toolbar.readthedocs.io/en/latest/installation.html
 - Virtual Environment
   https://www.w3schools.com/django/django_create_virtual_environment.php
+- Code Institue Material
+
+

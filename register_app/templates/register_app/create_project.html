@@ -1,13 +1,15 @@
 {% extends "base.html" %} {% load static %} {% block content %}
 <!--Display form field errors -->
 {% if form.errors %}
-{% if form.errors %}
 <ul class="list-unstyled">
-  {% for field, errors in form.errors.items %} {% for error in errors %}
+  {% for field, errors in form.errors.items %}
+   {% for error in errors %}
   <li class="text-danger">{{ error }}</li>
-  {% endfor %} {% endfor %}
+  {% endfor %}
+  {% endfor %}
 </ul>
-{% endif %} {% if formset.errors %}
+{% endif %}
+{% if formset.errors %}
 <ul class="list-unstyled">
   <!--Display form field errors -->
   {% for error in formset.errors %}

@@ -18,36 +18,39 @@
                             <div class="card-body">
                                 <h3 class="card-title">Project Details</h3>
                                 {% for field in form %}
-                                    <div class="mb-3">
-                                        <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
-                                        {{ field }}
-                                        {% if field.errors %}
-                                            <div class="invalid-feedback">
-                                                {{ field.errors.0 }}
-                                            </div>
-                                        {% endif %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    <!--Display form field errors -->
+                                    {% if field.errors %}
+                                    <div class="invalid-feedback">
+                                        {{ field.errors.0 }}
                                     </div>
+                                    {% endif %}
+                                </div>
                                 {% endfor %}
                             </div>
                         </div>
                     </div>
-                     <!-- Location Details Column -->
-                     <div class="col-lg-6 mb-4">
+                    <!-- Location Details Column -->
+                    <div class="col-lg-6 mb-4">
                         <div class="card">
                             <div class="card-body">
                                 <h3 class="card-title">Locations</h3>
                                 <div id="new-location-form" class="list-group">
                                     {{ formset.management_form }}
                                     {% for location_form in formset %}
-                                        <ul class="list-unstyled">
-                                            <li>
-                                                {{ location_form.as_p }}
-                                                {% if location_form.instance.id %}
-                                                    <a href="{% url 'view_qr_code' location_form.instance.id %}" class="btn btn-outline-secondary" download>Download QR</a>
-                                                {% endif %}
-                                            </li>
-                                        </ul>
-                                        <hr>
+                                    <ul class="list-unstyled">
+                                        <li>
+                                            {{ location_form.as_p }}
+                                            <!-- Display form fields -->
+                                            {% if location_form.instance.id %}
+                                            <a href="{% url 'view_qr_code' location_form.instance.id %}"
+                                                class="btn btn-outline-secondary" download>Download QR</a>
+                                            {% endif %}
+                                        </li>
+                                    </ul>
+                                    <hr>
                                     {% endfor %}
                                 </div>
                                 <!-- Create New Location Form -->
@@ -55,11 +58,16 @@
                                     <div class="collapse" id="new-location-form-collapse">
                                         <div class="mb-3">
                                             <label for="new_location_name" class="form-label">Location Name</label>
-                                            <input type="text" class="form-control" id="new_location_name" name="new_location_name">
-                                            <label for="new_location_address" class="form-label">Location Address</label>
-                                            <input type="text" class="form-control" id="new_location_address" name="new_location_address">
-                                            <label for="new_location_description" class="form-label">Location Description</label>
-                                            <textarea class="form-control" id="new_location_description" name="new_location_description" rows="3"></textarea>
+                                            <input type="text" class="form-control" id="new_location_name"
+                                                name="new_location_name">
+                                            <label for="new_location_address" class="form-label">Location
+                                                Address</label>
+                                            <input type="text" class="form-control" id="new_location_address"
+                                                name="new_location_address">
+                                            <label for="new_location_description" class="form-label">Location
+                                                Description</label>
+                                            <textarea class="form-control" id="new_location_description"
+                                                name="new_location_description" rows="3"></textarea>
                                             <div class="invalid-feedback">
                                                 Please fill out all fields.
                                             </div>
@@ -67,45 +75,47 @@
                                     </div>
                                 </div>
 
-                            <!-- Add New Location Button -->
-                            <button type="button" class="btn btn-link text-decoration-none" data-bs-toggle="collapse" data-bs-target="#new-location-form-collapse" aria-expanded="false" aria-controls="new-location-form-collapse">
-                                <i class="fas fa-plus"></i> Add New Location
-                            </button>
+                                <!-- Add New Location Button -->
+                                <button type="button" class="btn btn-link text-decoration-none"
+                                    data-bs-toggle="collapse" data-bs-target="#new-location-form-collapse"
+                                    aria-expanded="false" aria-controls="new-location-form-collapse">
+                                    <i class="fas fa-plus"></i> Add New Location
+                                </button>
 
                             </div>
                         </div>
                     </div>
                 </div>
 
-
-                    </div>
-                </div>
-
-                <div class="text-center mt-4">
-                    <button type="submit" class="btn btn-success">Update Project</button>
-                    <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete Project</button>
-                </div>
-                <!-- Delete Project Modal -->
-                <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                Are you sure you want to delete this project?
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                                <a href="{% url 'delete_project' project.id %}" class="btn btn-danger">Delete</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </form>
         </div>
     </div>
+
+    <div class="text-center mt-4">
+        <button type="submit" class="btn btn-success">Update Project</button>
+        <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteModal">Delete
+            Project</button>
+    </div>
+    <!-- Delete Project Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Confirm Deletion</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to delete this project?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <a href="{% url 'delete_project' project.id %}" class="btn btn-danger">Delete</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    </form>
+</div>
+</div>
 </div>
 
 <script>
@@ -121,17 +131,13 @@
             locationAddressField.required = isFormExpanded;
             locationDescriptionField.required = isFormExpanded;
         }
-
         // Initialize required attributes based on initial form state
         updateRequiredAttributes();
-
         // Event listener for toggling the form
         $('#new-location-form-collapse').on('shown.bs.collapse hidden.bs.collapse', function() {
             updateRequiredAttributes();
         });
     });
 </script>
-
-
 
 {% endblock %}
